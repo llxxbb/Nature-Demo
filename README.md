@@ -24,7 +24,7 @@ INSERT INTO meta ("full_key",description,version,states,fields) VALUES
 ('/B/Logistics/ReceiptForm',NULL,1,NULL,NULL);
 ```
 
-__Notice:__ I used the form "/B/level1/level2/../level_n/your_goal" for each goal.  The "/B" is `Thing Type` for `Businuss`, this is must be the first part of the `full_key`. And the "level1" to "level_n" are used to organize you goals, they are important for a great deal of goals.
+__Notice:__ I used the form "/B/level1/level2/../level_n/your_goal" for each goal.  The "/B" is `Meta Type` for `Businuss`, this is must be the first part of the `full_key`. And the "level1" to "level_n" are used to organize you goals, they are important for a great deal of goals.
 
 __Notice:__  I specified status field for the `OrderStatus` goal, it is the only one for this example.
 
