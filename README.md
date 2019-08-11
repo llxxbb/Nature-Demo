@@ -1,7 +1,17 @@
 # A concrete example
-The whole code of this example you will be find at [Nature_Demo](https://github.com/llxxbb/Nature-Demo) project. 
+At here we would build an Online-Shop based on Nature.  The project will involves order, pay, warehouse and delivery domain. Don't worry about the complexity, we start at simple first, then step by step to achieve the final target. 
 
-Assume we want to implement an Online-Shop  system, and let's start at simple, the processing flow is shown as follow:
+generate order
+
+[delivery](doc/delivery.md)
+
+[Q&A](doc/q&a.md)
+
+
+
+
+
+
 
 ###### ![process flow](doc/processing_flow.png)
 
