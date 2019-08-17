@@ -1,7 +1,13 @@
 # A concrete example
 At here we would build an Online-Shop based on Nature.  The project will involves order, pay, warehouse and delivery domain. Don't worry about the complexity, we start at simple first, then step by step to achieve the final target. 
 
-generate order
+[prepare](doc/prepare.md)
+
+[generate order](doc/order-generate.md)
+
+pay
+
+outbound
 
 [delivery](doc/delivery.md)
 
