@@ -27,6 +27,18 @@ NATURE_SERVER_ADDRESS=http://localhost:8080/redo_task
 
 SERVER_PORT=8080
 ```
+## Create database for nature.sqlite
+
+The script is under the path : Nature-DB/migrations/2019-04-27_init/up.sql. 
+
+If you have diesel_cli installed, you can run the following cmd in you shell window.
+
+```shell
+diesel migration run
+```
+
+When nature.sqlite created. copy it to the path where nature.exe lived in.
+
 ### mysql
 
 By default, we use sqlite to store data for Nature ,  if you want to use mysql,  please edit the Nature's cargo.toml file, use mysql to replace sqlite in the following line and recompile Nature,  then change the `DATABASE_URL` property to mysql in `.env` file.
