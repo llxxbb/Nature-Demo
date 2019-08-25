@@ -28,5 +28,26 @@ In tradition design, order and order state will be fill into one table, in this 
 
 When we input an `Order` from outside, we set a `new` state for this order by converter. Execute the following sql please:
 
+```sqlite
+INSERT INTO one_step_flow
+(from_meta, to_meta, settings)
+VALUES('/B/sale/order:1', '/B/sale/orderState:1', '{"executor":[{"protocol":"LocalRust","url":"nature_demo.dll:order_new","proportion":1}],"use_upstream_id":true}');
+```
 
+Let's see some explanation:
 
+| field     | value description                                            |
+| --------- | ------------------------------------------------------------ |
+| from_meta | The `order` defined in `meta` , the form is [full_key]:[version] |
+| to_meta   | `orderState` defined in `meta` , the form is [full_key]:[version] |
+| settings  | A `JSON` string for converter's setting. It's value described in following table |
+
+Converter settings
+
+| field           | value description                                            |
+| --------------- | ------------------------------------------------------------ |
+| executor        | Who will do the convert job.                                 |
+| use_upstream_id | If this set to "true", the `orderState` instance's id will use `order` instance's id. //TODO |
+|                 |                                                              |
+
+// TODO executor
