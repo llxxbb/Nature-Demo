@@ -62,3 +62,32 @@ Executor settings:
 
 **`use_upstream_id`** property will be convenient for state data. Through the same id, you will get the normal data and state data directly. 
 
+## Define `Order` and other related objects
+
+In project Nature-Demo-Common we need define some business entities which would be used in Nature-Demo and Nature-Demo-Converter, such as `Order`. Let's do it.
+
+```rust
+pub struct Commodity {
+    pub id: u32,
+    pub name: String,
+}
+
+pub struct SelectedCommodity {
+    pub item: Commodity,
+    pub num: u32,
+}
+
+pub struct Order {
+    pub price: u32,
+    pub items: Vec<SelectedCommodity>,
+}
+```
+
+### Nature key points
+
+**You need not to give an id to `Order`, because it will becomes to Nature's `Instance`**. an `Instance` would have it's own id.
+
+
+
+
+
