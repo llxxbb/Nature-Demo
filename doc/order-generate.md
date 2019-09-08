@@ -67,19 +67,24 @@ Executor settings:
 In project Nature-Demo-Common we need define some business entities which would be used in Nature-Demo and Nature-Demo-Converter, such as `Order`. Let's do it.
 
 ```rust
+#[derive(Serialize, Deserialize, Debug, Default, Clone, PartialEq, Eq)]
 pub struct Commodity {
     pub id: u32,
     pub name: String,
 }
 
+#[derive(Serialize, Deserialize, Debug, Default, Clone, PartialEq, Eq)]
 pub struct SelectedCommodity {
     pub item: Commodity,
     pub num: u32,
 }
 
+#[derive(Serialize, Deserialize, Debug, Default, Clone, PartialEq, Eq)]
 pub struct Order {
+    pub user_id: u32,
     pub price: u32,
     pub items: Vec<SelectedCommodity>,
+    pub address: String,
 }
 ```
 
