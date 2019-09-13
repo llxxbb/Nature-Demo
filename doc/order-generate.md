@@ -92,6 +92,10 @@ pub struct Order {
 
 **You need not to give an id to `Order`, because it will becomes to Nature's `Instance`**. an `Instance` would have it's own id.
 
+## Write a converter for Order State::new
+
+
+
 
 
 

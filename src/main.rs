@@ -29,21 +29,22 @@ mod demo {
         // create an order
         let order = create_order();
         // ---- create a instance with meta: "/B/order:1"
-        let mut instance = Instance::new("/order").unwrap();
+        let mut instance = Instance::new("/sale/order").unwrap();
         instance.content = serde_json::to_string(&order).unwrap();
 
         // send
         let response = CLIENT.post(URL_INPUT).json(&instance).send();
         match response {
             Err(e) => { dbg!(e); }
-            Ok(res) => { dbg!(res); }
+            Ok(mut res) => { dbg!(res.text()); }
         };
-//        // check created instance
-//        let response = CLIENT.post(URL_GET_BY_ID).json(&order).send();
-//        match response {
-//            Err(e) => { dbg!(e); }
-//            Ok(res) => { dbg!(res); }
-//        };
+        // check created instance
+
+        let response = CLIENT.post(URL_GET_BY_ID).json(r#"{"id":36859397350548005752481459694972779262}"#).send();
+        match response {
+            Err(e) => { dbg!(e); }
+            Ok(mut res) => { dbg!(res.text()); }
+        };
     }
 
     fn create_order() -> Order {
