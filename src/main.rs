@@ -36,9 +36,12 @@ mod demo {
         let response = CLIENT.post(URL_INPUT).json(&instance).send();
         let id: String = response.unwrap().text().unwrap();
         dbg!(&id);
-        if id.contains(r#""Err":{"#) {
-            return;
-        }
+//        if id.contains(r#""Err":{"#) {
+//            return;
+//        }
+        // send again
+        let response = CLIENT.post(URL_INPUT).json(&instance).send();
+        dbg!(response.unwrap().text().unwrap());
 
 
         // check created instance
