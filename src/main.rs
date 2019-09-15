@@ -34,16 +34,18 @@ mod demo {
 
         // send
         let response = CLIENT.post(URL_INPUT).json(&instance).send();
-        match response {
-            Err(e) => { dbg!(e); }
-            Ok(mut res) => { dbg!(res.text()); }
-        };
-        // check created instance
+        let id: String = response.unwrap().text().unwrap();
+        dbg!(&id);
+        if id.contains(r#""Err":{"#) {
+            return;
+        }
 
-        let response = CLIENT.post(URL_GET_BY_ID).json(r#"{"id":36859397350548005752481459694972779262}"#).send();
+
+        // check created instance
+        let response = CLIENT.post(URL_GET_BY_ID).body("36859397350548005752481459694972779262").send();
         match response {
             Err(e) => { dbg!(e); }
-            Ok(mut res) => { dbg!(res.text()); }
+            Ok(mut res) => { let _ = dbg!(res.text()); }
         };
     }
 
