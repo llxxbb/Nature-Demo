@@ -98,5 +98,17 @@ pub struct Order {
 
 
 
+### Nature key points
+
+call input with same parameter, will only accept once. all other interface have the same mechanism. Nature create task first than save the instance. when instance is same, nature will delete the new task to avoid unnecessary processing.
+
+### Nature key points
+
+order state will used the id same as order because of the converter setting **`use_upstream_id`** 
+
+### Nature key points
+
+order' **new** state will be append automatically.
+
 
 

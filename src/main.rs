@@ -17,7 +17,7 @@ fn main() {
 
 #[cfg(test)]
 mod demo {
-    use nature_common::Instance;
+    use nature_common::{Instance, ParaForQueryByID};
 
     use super::*;
 
@@ -44,12 +44,14 @@ mod demo {
         dbg!(response.unwrap().text().unwrap());
 
 
-        // check created instance
-        let response = CLIENT.post(URL_GET_BY_ID).body("36859397350548005752481459694972779262").send();
+        // check created instance for order
+        let response = CLIENT.post(URL_GET_BY_ID).json(&ParaForQueryByID { id: 36859397350548005752481459694972779262, meta: "/B/sale/order:1".to_string() }).send();
         match response {
             Err(e) => { dbg!(e); }
             Ok(mut res) => { let _ = dbg!(res.text()); }
         };
+
+        // check created instance for order state
     }
 
     fn create_order() -> Order {
