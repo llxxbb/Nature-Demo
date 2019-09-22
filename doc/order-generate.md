@@ -24,6 +24,10 @@ First we will define two `meta`s. please insert the follow data to nature.sqlite
 
 In tradition design, order and order state will be fill into one table, in this condition, new state will overwrite the old one, so it's difficult to trace the changes. **In Nature, normal data and state data are separated strictly**, You must define them separately. And furthermore, Nature will trace every change for the state data.
 
+### Nature key points
+
+You can define complex states in Nature, such as mutex state, grouped state. You can see it at [here](https://github.com/llxxbb/Nature/blob/master/doc/help/concepts.md)
+
 ## Define converter
 
 When we input an `Order` from outside, we set a `new` state for this order by converter. Execute the following sql please:
