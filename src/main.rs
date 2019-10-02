@@ -17,7 +17,9 @@ fn main() {
 
 #[cfg(test)]
 mod demo {
-    use nature_common::{Instance, ParaForQueryByID};
+    use std::str::FromStr;
+
+    use nature_common::{Instance, NatureError, ParaForQueryByID};
 
     use super::*;
 
@@ -31,28 +33,41 @@ mod demo {
         // ---- create a instance with meta: "/B/order:1"
         let mut instance = Instance::new("/sale/order").unwrap();
         instance.content = serde_json::to_string(&order).unwrap();
-        dbg!(&instance);
 
         // send
         let response = CLIENT.post(URL_INPUT).json(&instance).send();
-        let id: String = response.unwrap().text().unwrap();
+        let id_s: String = response.unwrap().text().unwrap();
+        dbg!(&id_s);
+        let id: Result<u128, NatureError> = serde_json::from_str(&id_s).unwrap();
+        let id = id.unwrap();
         dbg!(&id);
-//        if id.contains(r#""Err":{"#) {
-//            return;
-//        }
+
         // send again
         let response = CLIENT.post(URL_INPUT).json(&instance).send();
-        dbg!(response.unwrap().text().unwrap());
+        let msg = response.unwrap().text().unwrap();
+        dbg!(&msg);
+        assert_eq!(msg.contains("DaoDuplicated"), true);
 
 
         // check created instance for order
-        let response = CLIENT.post(URL_GET_BY_ID).json(&ParaForQueryByID { id: 36859397350548005752481459694972779262, meta: "/B/sale/order:1".to_string() }).send();
-        match response {
-            Err(e) => { dbg!(e); }
-            Ok(mut res) => { let _ = dbg!(res.text()); }
-        };
+        let response = CLIENT.post(URL_GET_BY_ID).json(&ParaForQueryByID { id, meta: "/B/sale/order:1".to_string() }).send();
+        let msg = response.unwrap().text().unwrap();
+        dbg!(&msg);
+        assert_eq!(msg.contains(&id_s), true);
 
         // check created instance for order state
+        let response = CLIENT.post(URL_GET_BY_ID).json(&ParaForQueryByID { id, meta: "/B/sale/order:1".to_string() }).send();
+        let msg = response.unwrap().text().unwrap();
+        dbg!(&msg);
+        assert_eq!(msg.contains(&id_s), true);
+    }
+
+    #[test]
+    fn temp_test() {
+        let response = CLIENT.post(URL_GET_BY_ID).json(&ParaForQueryByID { id: 23161777138351926403917145131788703064, meta: "/B/sale/orderState:1".to_string() }).send();
+        let msg = response.unwrap().text().unwrap();
+        dbg!(&msg);
+        assert_eq!(msg.contains("23161777138351926403917145131788703064"), true);
     }
 
     fn create_order() -> Order {
@@ -71,5 +86,15 @@ mod demo {
             ],
             address: "a.b.c".to_string(),
         }
+    }
+
+    #[test]
+    fn u128_test() {
+        let id = "23161777138351926403917145131788703064";
+        let result = u128::from_str(id).unwrap();
+        assert_eq!(result, 23161777138351926403917145131788703064);
+        let id = r#"{"Ok":23161777138351926403917145131788703064}"#;
+        let result: Result<u128, NatureError> = serde_json::from_str(&id).unwrap();
+        assert_eq!(result.unwrap(), 23161777138351926403917145131788703064);
     }
 }
