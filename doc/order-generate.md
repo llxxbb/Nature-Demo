@@ -33,9 +33,9 @@ You can define complex states in Nature, such as mutex state, grouped state. You
 When we input an `Order` from outside, we set a `new` state for this order by converter. Execute the following sql please:
 
 ```sqlite
-INSERT INTO one_step_flow
+INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/sale/order:1', '/B/sale/orderState:1', '{"executor":[{"protocol":"LocalRust","url":"nature_demo_converter.dll:order_new","proportion":1}],"use_upstream_id":true}');
+VALUES('/B/sale/order:1', '/B/sale/orderState:1', '{"executor":[{"protocol":"LocalRust","url":"nature_demo_converter.dll:order_new","proportion":1}],"use_upstream_id":true,"target_states":{"add":["new"]}}');
 ```
 
 Let's see some explanation:
@@ -52,7 +52,7 @@ Converter settings
 | --------------- | ------------------------------------------------------------ |
 | executor        | Who will do the convert job, it's a list. The following table show the detail for it's item. |
 | use_upstream_id | If this is set to "true", the `orderState` instance's id will use `order` instance's id. |
-|                 |                                                              |
+| target_states   | after convert Nature will add and or remove the states which target_states defined. |
 
 Executor settings: 
 

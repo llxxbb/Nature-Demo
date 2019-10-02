@@ -31,6 +31,7 @@ mod demo {
         // ---- create a instance with meta: "/B/order:1"
         let mut instance = Instance::new("/sale/order").unwrap();
         instance.content = serde_json::to_string(&order).unwrap();
+        dbg!(&instance);
 
         // send
         let response = CLIENT.post(URL_INPUT).json(&instance).send();
