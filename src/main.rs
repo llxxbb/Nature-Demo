@@ -37,7 +37,6 @@ mod demo {
         // send
         let response = CLIENT.post(URL_INPUT).json(&instance).send();
         let id_s: String = response.unwrap().text().unwrap();
-        dbg!(&id_s);
         let id: Result<u128, NatureError> = serde_json::from_str(&id_s).unwrap();
         let id = id.unwrap();
         dbg!(&id);
@@ -53,13 +52,13 @@ mod demo {
         let response = CLIENT.post(URL_GET_BY_ID).json(&ParaForQueryByID { id, meta: "/B/sale/order:1".to_string() }).send();
         let msg = response.unwrap().text().unwrap();
         dbg!(&msg);
-        assert_eq!(msg.contains(&id_s), true);
+        assert_eq!(msg.contains(&id.to_string()), true);
 
         // check created instance for order state
         let response = CLIENT.post(URL_GET_BY_ID).json(&ParaForQueryByID { id, meta: "/B/sale/orderState:1".to_string() }).send();
         let msg = response.unwrap().text().unwrap();
         dbg!(&msg);
-        assert_eq!(msg.contains(&id_s), true);
+        assert_eq!(msg.contains(&id.to_string()), true);
     }
 
     #[test]
