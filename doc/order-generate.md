@@ -64,7 +64,9 @@ Executor settings:
 
 ### Nature key points
 
-**`use_upstream_id`** property will be convenient for state data. Through the same id, you will get the normal data and state data directly. 
+**`use_upstream_id`** property will be convenient for state data and it can only used to **state data**, because converter can return many **normal data**, the same id would make them conflict.
+
+Through the same id, you will get the normal data and state data directly, do not need a foreign key be translated like relation database does. 
 
 ## Define `Order` and other related objects
 
