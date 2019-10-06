@@ -2,9 +2,11 @@
 
 We suppose the user have goods selected, and use it to generate an order.
 
-### Define `meta`s
+## Define `meta`s
 
-First we will define two `meta`s. please insert the follow data to nature.sqlite.
+[Here](https://github.com/llxxbb/Nature/blob/master/doc/help/concept-meta.md) you can know more about `meta`.
+
+First we will define two `meta`s. please insert the follow data to nature.sqlite. 
 
 - /B/sale/order: includes normal order properties.
 
@@ -19,14 +21,14 @@ First we will define two `meta`s. please insert the follow data to nature.sqlite
   (full_key, description, version, states, fields, config)
   VALUES('/B/sale/orderState', 'order state', 1, 'new,paid,picked,outbound,dispatching,signed', '', '{}');
   ```
-
+  
 ### Nature key points
 
 In tradition design, order and order state will be fill into one table, in this condition, new state will overwrite the old one, so it's difficult to trace the changes. **In Nature, normal data and state data are separated strictly**, You must define them separately. And furthermore, Nature will trace every change for the state data.
 
 ### Nature key points
 
-You can define complex states in Nature, such as mutex state, grouped state. You can see it at [here](https://github.com/llxxbb/Nature/blob/master/doc/help/concepts.md)
+You can define complex states in Nature, such as mutex state, grouped state. 
 
 ## Define converter
 
@@ -98,11 +100,67 @@ pub struct Order {
 
 **You need not to give an id to `Order`, because it will becomes to Nature's `Instance`**. an `Instance` would have it's own id.
 
+## Commit an `Order` to Nature
+
+In project Nature-Demo we create an `Order` which include a phone and two battery.
+
+```rust
+    fn create_order() -> Order {
+        Order {
+            user_id: 123,
+            price: 100,
+            items: vec![
+                SelectedCommodity {
+                    item: Commodity { id: 1, name: "phone".to_string() },
+                    num: 1,
+                },
+                SelectedCommodity {
+                    item: Commodity { id: 2, name: "battery".to_string() },
+                    num: 2,
+                }
+            ],
+            address: "a.b.c".to_string(),
+        }
+    }
+```
+
+And boxed it into an `Instance` of `meta` "/B/order:1"
+
+```rust
+        // create an order
+        let order = create_order();
+        // ---- create a instance with meta: "/B/order:1"
+        let mut instance = Instance::new("/sale/order").unwrap();
+        instance.content = serde_json::to_string(&order).unwrap();
+```
+
+
+
 ## Write a converter for Order State::new
 
+In project Nature-Demo-Converter we will create a converter which can convert a `Order` to `OrderState`. The main code :
+
+```rust
+#[no_mangle]
+pub extern fn order_new(_para: &CallOutParameter) -> ConverterReturned {
+    let mut instance = Instance::default();
+    instance.data.content = "".to_string();
+    ConverterReturned::Instances(vec![instance])
+}
+
+```
 
 
 
+
+
+### Nature key points
+
+There is no struct defined for `OrderState`, it is only defined as a `meta` and the `meta` hold its whole states, it does not need to have a body to contain any other things.
+
+### Nature key points
+
+In [here](https://github.com/llxxbb/Nature/blob/master/doc/help/howto_localRustConverter.md) you will learn how to create a local-converter.
 
 ### Nature key points
 
