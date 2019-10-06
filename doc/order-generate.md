@@ -26,8 +26,6 @@ First we will define two `meta`s. please insert the follow data to nature.sqlite
 
 In tradition design, order and order state will be fill into one table, in this condition, new state will overwrite the old one, so it's difficult to trace the changes. **In Nature, normal data and state data are separated strictly**, You must define them separately. And furthermore, Nature will trace every change for the state data.
 
-### Nature key points
-
 You can define complex states in Nature, such as mutex state, grouped state. 
 
 ## Define converter
@@ -134,7 +132,24 @@ And boxed it into an `Instance` of `meta` "/B/order:1"
         instance.content = serde_json::to_string(&order).unwrap();
 ```
 
+Then send it to Nature
 
+```rust
+        let response = CLIENT.post(URL_INPUT).json(&instance).send();
+        let id_s: String = response.unwrap().text().unwrap();
+        let id: Result<u128, NatureError> = serde_json::from_str(&id_s).unwrap();
+        let id = id.unwrap();
+```
+
+The `URL_INPUT` would be "http://{server}:{port}/input".  Nature will save the `Order` and return the `instance`'s id if it success. At the same time Nature will call the converter to generate the `OrderState` `instance`.
+
+#### Nature key points
+
+Nature only accept JSON data of `instance` and it's `meta` must be registered or use `Dynamic-Meta`.
+
+You can call `input` many time when failed with the same parameter, but nature will only accept once, it is idempotent. 
+
+If you did not provide the id Nature will generated one based on 128-bits hash algorithm for you.
 
 ## Write a converter for Order State::new
 
@@ -142,37 +157,38 @@ In project Nature-Demo-Converter we will create a converter which can convert a 
 
 ```rust
 #[no_mangle]
-pub extern fn order_new(_para: &CallOutParameter) -> ConverterReturned {
+pub extern fn order_new(_para: &ConverterParameter) -> ConverterReturned {
     let mut instance = Instance::default();
     instance.data.content = "".to_string();
     ConverterReturned::Instances(vec![instance])
 }
-
 ```
-
-
-
-
 
 ### Nature key points
 
 There is no struct defined for `OrderState`, it is only defined as a `meta` and the `meta` hold its whole states, it does not need to have a body to contain any other things.
 
-### Nature key points
-
 In [here](https://github.com/llxxbb/Nature/blob/master/doc/help/howto_localRustConverter.md) you will learn how to create a local-converter.
 
-### Nature key points
+Like `input` interface of Nature, converter must return `instance` , but a array of instance.  there are some rules for the array.
 
-call input with same parameter, will only accept once. all other interface have the same mechanism. Nature create task first than save the instance. when instance is same, nature will delete the new task to avoid unnecessary processing.
+- If the converter's target is a state `meta` you can return only one instance.
+- You can not return empty array unless the target `meta type` is Null
 
-### Nature key points
+After convert Nature will do the following thing for you.
 
-order state will used the id same as order because of the converter setting **`use_upstream_id`** 
+- If `ConverterReturned` is a state instance, Nature will automatic increase the `state_version` value based on the last one.
+- fill the `instance.meta` value with the `relation`'s target `meta`.
+- order state will used the id same as the order's id because of the converter setting **`use_upstream_id`** 
+- **"new"** state will be append to the instance automatically, because of the converter setting `target_states`
 
-### Nature key points
+## Different with traditional development
 
-order' **new** state will be append automatically.
+To finish a business logic you must separate it into two part clearly:  
 
+- Business logic define, 
+- Business logic implement
 
+Who can finish business logic define need not to be a developer maybe a business designer. **That is great for collaboration: less argument strong constrain** and easy for each other. Traditional way is not that clear, the developer do the tow parts all. And the "definitions" coupled to the code very tightly that make the business system complex and difficult to maintain.
 
+Compare to traditional the business logic implement is easy. you need not to take care about database work, transaction, idempotent and retries etcetera. Nature separate it into pieces and that make it easy too to dev and maintain. More easy more correctable and more stable. 

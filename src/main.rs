@@ -59,6 +59,8 @@ mod demo {
         let msg = response.unwrap().text().unwrap();
         dbg!(&msg);
         assert_eq!(msg.contains(&id.to_string()), true);
+        assert_eq!(msg.contains(r#"["new"]"#), true);
+        assert_eq!(msg.contains("/B/sale/order:1"), true);
     }
 
     #[test]
