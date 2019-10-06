@@ -19,17 +19,13 @@ In the whole demo description. there are some sections titled with **"Nature key
 
 [generate order](doc/order-generate.md)
 
-pay
+[pay the bill](doc/pay-the-bill.md)
 
 outbound
 
 [delivery](doc/delivery.md)
 
 [Q&A](doc/q&a.md)
-
-
-
-更新版本
 
 
 
@@ -86,16 +82,6 @@ The `from_meta`, `from_version`, `to_meta`, `to_version` represent the arrow's d
 
 
 Just like the table name, each row only flow one step. and we can connect the rows to the picture above.
-
-
-
-
-
-
-
-## Unfinished
-
-When there is a `Order` we want to generate an `OrderStatus` and marked with `new`
 
 
 

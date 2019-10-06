@@ -2,7 +2,7 @@
 
 We suppose the user have goods selected, and use it to generate an order.
 
-## Define `meta`s
+## Define `meta`
 
 [Here](https://github.com/llxxbb/Nature/blob/master/doc/help/concept-meta.md) you can know more about `meta`.
 
@@ -19,16 +19,16 @@ First we will define two `meta`s. please insert the follow data to nature.sqlite
   
   INSERT INTO meta
   (full_key, description, version, states, fields, config)
-  VALUES('/B/sale/orderState', 'order state', 1, 'new,paid,picked,outbound,dispatching,signed', '', '{}');
+  VALUES('/B/sale/orderState', 'order state', 1, 'new|paid|picked|outbound|dispatching|signed|canceling|canceled', '', '{}');
   ```
   
 ### Nature key points
 
 In tradition design, order and order state will be fill into one table, in this condition, new state will overwrite the old one, so it's difficult to trace the changes. **In Nature, normal data and state data are separated strictly**, You must define them separately. And furthermore, Nature will trace every change for the state data.
 
-You can define complex states in Nature, such as mutex state, grouped state. 
+mutex state are separated by "|". 
 
-## Define converter
+## Define `converter`
 
 When we input an `Order` from outside, we set a `new` state for this order by converter. Execute the following sql please:
 
@@ -192,3 +192,5 @@ To finish a business logic you must separate it into two part clearly:
 Who can finish business logic define need not to be a developer maybe a business designer. **That is great for collaboration: less argument strong constrain** and easy for each other. Traditional way is not that clear, the developer do the tow parts all. And the "definitions" coupled to the code very tightly that make the business system complex and difficult to maintain.
 
 Compare to traditional the business logic implement is easy. you need not to take care about database work, transaction, idempotent and retries etcetera. Nature separate it into pieces and that make it easy too to dev and maintain. More easy more correctable and more stable. 
+
+There is a disadvantage in Nature that Nature do all the job in asynchronized way except the fist `instance` you inputted.
