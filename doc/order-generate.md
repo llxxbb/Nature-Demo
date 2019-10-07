@@ -68,7 +68,7 @@ Executor settings:
 
 Through the same id, you will get the normal data and state data directly, do not need a foreign key be translated like relation database does. 
 
-## Define `Order` and other related objects
+## Define `Order` and other related business objects
 
 In project Nature-Demo-Common we need define some business entities which would be used in Nature-Demo and Nature-Demo-Converter, such as `Order`. Let's do it.
 
