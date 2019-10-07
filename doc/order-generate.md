@@ -19,7 +19,7 @@ First we will define two `meta`s. please insert the follow data to nature.sqlite
   
   INSERT INTO meta
   (full_key, description, version, states, fields, config)
-  VALUES('/B/sale/orderState', 'order state', 1, 'new|paid|picked|outbound|dispatching|signed|canceling|canceled', '', '{}');
+  VALUES('/B/sale/orderState', 'order state', 1, 'new|paid|picked|outbound|dispatching|signed|canceling|canceled', '', '{"is_empty_content":true}');
   ```
   
 ### Nature key points
@@ -35,7 +35,7 @@ When we input an `Order` from outside, we set a `new` state for this order by co
 ```sqlite
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/sale/order:1', '/B/sale/orderState:1', '{"executor":[{"protocol":"LocalRust","url":"nature_demo_converter.dll:order_new","proportion":1}],"use_upstream_id":true,"target_states":{"add":["new"]}}');
+VALUES('/B/sale/order:1', '/B/sale/orderState:1', '{"executor":[],"use_upstream_id":true,"target_states":{"add":["new"]}}');
 ```
 
 Let's see some explanation:
@@ -50,17 +50,8 @@ Converter settings
 
 | field           | value description                                            |
 | --------------- | ------------------------------------------------------------ |
-| executor        | Who will do the convert job, it's a list. The following table show the detail for it's item. |
 | use_upstream_id | If this is set to "true", the `orderState` instance's id will use `order` instance's id. |
 | target_states   | after convert Nature will add and or remove the states which target_states defined. |
-
-Executor settings: 
-
-| field      | value description                                            |
-| ---------- | ------------------------------------------------------------ |
-| protocol   | how to communicate with the executor: `LocalRust` or `http`, to simplify this demo, we use `LocalRust` |
-| url        | where to find the executor                                   |
-| proportion | weight value among the executor list. high weight will get high chance to process the job. |
 
 ### Nature key points
 
