@@ -28,7 +28,7 @@ pub fn send_order_to_nature() -> u128 {
 fn create_order_object() -> Order {
     Order {
         user_id: 123,
-        price: 100,
+        price: 1000,
         items: vec![
             SelectedCommodity {
                 item: Commodity { id: 1, name: "phone".to_string() },
