@@ -35,7 +35,7 @@ When we input an `Order` from outside, we set a `new` state for this order by co
 ```sqlite
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/sale/order:1', '/B/sale/orderState:1', '{"executor":[],"use_upstream_id":true,"target_states":{"add":["new"]}}');
+VALUES('/B/sale/order:1', '/B/sale/orderState:1', '{"use_upstream_id":true,"target_states":{"add":["new"]}}');
 ```
 
 Let's see some explanation:
