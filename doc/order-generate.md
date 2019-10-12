@@ -24,9 +24,11 @@ First we will define two `meta`s. please insert the follow data to nature.sqlite
   
 ### Nature key points
 
-In tradition design, order and order state will be fill into one table, in this condition, new state will overwrite the old one, so it's difficult to trace the changes. **In Nature, normal data and state data are separated strictly**, You must define them separately. And furthermore, Nature will trace every change for the state data.
+In tradition design, order and order state will be fill into one table, in this condition, new state will overwrite the old one, so it's difficult to trace the changes. **In Nature, normal data and state data are separated strictly**, You must define them separately. And furthermore, Nature will trace every change for the state data by state version.
 
 mutex state are separated by "|". 
+
+`is_empty_content` means you need not to implement converters for "/B/sale/orderState",  but converter definitions are necessary still. Because it's body is empty, Nature can convert it for you automatically.
 
 ## Define `converter`
 
@@ -89,6 +91,8 @@ pub struct Order {
 
 **You need not to give an id to `Order`, because it will becomes to Nature's `Instance`**. an `Instance` would have it's own id.
 
+There is no struct defined for `OrderState`, it is only defined as a `meta` and the `meta` hold its whole states, it does not need to have a body to contain any other things.
+
 ## Commit an `Order` to Nature
 
 In project Nature-Demo we create an `Order` which include a phone and two battery.
@@ -136,42 +140,18 @@ The `URL_INPUT` would be "http://{server}:{port}/input".  Nature will save the `
 
 #### Nature key points
 
-Nature only accept JSON data of `instance` and it's `meta` must be registered or use `Dynamic-Meta`.
+Nature only accept JSON data of `instance` and it's `meta` must be registered or use `Dynamic-Meta`, if the `meta` did not register Nature will reject it.
 
 You can call `input` many time when failed with the same parameter, but nature will only accept once, it is idempotent. 
 
 If you did not provide the id Nature will generated one based on 128-bits hash algorithm for you.
 
-## Write a converter for Order State::new
+## What did Nature do after commit
 
-In project Nature-Demo-Converter we will create a converter which can convert a `Order` to `OrderState`. The main code :
-
-```rust
-#[no_mangle]
-pub extern fn order_new(_para: &ConverterParameter) -> ConverterReturned {
-    let mut instance = Instance::default();
-    instance.data.content = "".to_string();
-    ConverterReturned::Instances(vec![instance])
-}
-```
-
-### Nature key points
-
-There is no struct defined for `OrderState`, it is only defined as a `meta` and the `meta` hold its whole states, it does not need to have a body to contain any other things.
-
-In [here](https://github.com/llxxbb/Nature/blob/master/doc/help/howto_localRustConverter.md) you will learn how to create a local-converter.
-
-Like `input` interface of Nature, converter must return `instance` , but a array of instance.  there are some rules for the array.
-
-- If the converter's target is a state `meta` you can return only one instance.
-- You can not return empty array unless the target `meta type` is Null
-
-After convert Nature will do the following thing for you.
-
-- If `ConverterReturned` is a state instance, Nature will automatic increase the `state_version` value based on the last one.
+- If target `meta` is a state, Nature will automatic increase the `instance.state_version` value based on the last one.
 - fill the `instance.meta` value with the `relation`'s target `meta`.
 - order state will used the id same as the order's id because of the converter setting **`use_upstream_id`** 
-- **"new"** state will be append to the instance automatically, because of the converter setting `target_states`
+- **"new"** state will be append to the instance of "/B/sale/orderState:1" automatically, because of the setting `target_states` in converter definition.
 
 ## Different with traditional development
 
@@ -182,6 +162,6 @@ To finish a business logic you must separate it into two part clearly:
 
 Who can finish business logic define need not to be a developer maybe a business designer. **That is great for collaboration: less argument strong constrain** and easy for each other. Traditional way is not that clear, the developer do the tow parts all. And the "definitions" coupled to the code very tightly that make the business system complex and difficult to maintain.
 
-Compare to traditional the business logic implement is easy. you need not to take care about database work, transaction, idempotent and retries etcetera. Nature separate it into pieces and that make it easy too to dev and maintain. More easy more correctable and more stable. 
+Compare to traditional the business logic implement is easy. you need not to take care about database work, transaction, idempotent and retries. Nature separate it into pieces and that make it easy too to dev and maintain. Even more Nature may automatically generate state data. More easy more correctable and more stable!
 
-There is a disadvantage in Nature that Nature do all the job in asynchronized way except the fist `instance` you inputted.
+There is also a disadvantage in Nature that is Nature do all the job in asynchronized way except the fist `instance` you inputted.
