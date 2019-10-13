@@ -12,7 +12,7 @@ explanation following:
 
 use the upstream instance and last target status.
 
-
+If target `meta` is a state, Nature will automatic increase the `instance.state_version` value based on the last one.
 
 ## Define `converter`
 

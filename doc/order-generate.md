@@ -146,12 +146,9 @@ You can call `input` many time when failed with the same parameter, but nature w
 
 If you did not provide the id Nature will generated one based on 128-bits hash algorithm for you.
 
-## What did Nature do after commit
+## What did Nature do for you after committing
 
-- If target `meta` is a state, Nature will automatic increase the `instance.state_version` value based on the last one.
-- fill the `instance.meta` value with the `relation`'s target `meta`.
-- order state will used the id same as the order's id because of the converter setting **`use_upstream_id`** 
-- **"new"** state will be append to the instance of "/B/sale/orderState:1" automatically, because of the setting `target_states` in converter definition.
+Automatically generate an `orderState` instance.  It's id is same with `order`' instance because of the converter setting **`use_upstream_id`**, and it will has a **"new"** state will because of the setting `target_states` in converter definition. The demo will queried it and show it for you.
 
 ## Different with traditional development
 
