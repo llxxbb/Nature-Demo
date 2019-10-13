@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use reqwest::Client;
 use serde::Serialize;
 
@@ -11,8 +13,13 @@ pub static URL_INPUT: &str = "http://localhost:8080/input";
 pub static URL_GET_BY_ID: &str = "http://localhost:8080/get_by_id";
 
 pub fn send_instance<T>(meta_key: &str, bo: &T) -> Result<u128> where T: Serialize {
+    send_instance_with_context(meta_key, bo, &HashMap::new())
+}
+
+pub fn send_instance_with_context<T>(meta_key: &str, bo: &T, context: &HashMap<String, String>) -> Result<u128> where T: Serialize {
     let mut instance = Instance::new(meta_key).unwrap();
     instance.content = serde_json::to_string(bo).unwrap();
+    instance.context = context.clone();
 
     let response = CLIENT.post(URL_INPUT).json(&instance).send();
     let id_s: String = response.unwrap().text().unwrap();

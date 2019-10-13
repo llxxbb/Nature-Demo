@@ -22,17 +22,17 @@ VALUES('/B/finance/orderAccount', 'order account', 1, 'unpaid|partial|paid', '',
 -- order --> orderAccount
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/sale/order:1', '/B/finance/orderAccount:1', '{"executor":[{"protocol":"LocalRust","url":"nature_demo_converter.dll:order_receivable","proportion":1}],"use_upstream_id":true,"target_states":{"add":["unpaid"]}}');
+VALUES('/B/sale/order:1', '/B/finance/orderAccount:1', '{"executor":[{"protocol":"LocalRust","url":"nature_demo_converter.dll:order_receivable"}],"use_upstream_id":true,"target_states":{"add":["unpaid"]}}');
 
 -- payment --> orderAccount
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/finance/payment:1', '/B/finance/orderAccount:1', '{"executor":[{"protocol":"LocalRust","url":"nature_demo_converter.dll:pay_count","proportion":1}]');
+VALUES('/B/finance/payment:1', '/B/finance/orderAccount:1', '{"executor":[{"protocol":"LocalRust","url":"nature_demo_converter.dll:pay_count"}]}');
 
 -- orderAccount --> orderState
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/finance/orderAccount:1', '/B/sale/orderState:1', '{"selector":{"source_state_include":["paid"]},"executor":[{"protocol":"LocalRust","url":"nature_demo_converter.dll:order_paid","proportion":1}],"use_upstream_id":true,"target_states":{"add":["paid"]}}');
+VALUES('/B/finance/orderAccount:1', '/B/sale/orderState:1', '{"selector":{"source_state_include":["paid"]},"target_states":{"add":["paid"]}}');
 ```
 
 ## Business objects and pay logic
@@ -40,6 +40,10 @@ VALUES('/B/finance/orderAccount:1', '/B/sale/orderState:1', '{"selector":{"sourc
 ```
 
 ```
+
+
+
+
 
 
 
@@ -69,5 +73,7 @@ Like `input` interface of Nature, converter must return `instance` , but a array
 ## unfinished
 
 all version of OrderAccount will be seen;
+
+developer doesn't care about `orderState`'s value. this is done by Nature automatically.  like a cashier that she only do her own work. It's easy and correctable and stable.
 
 
