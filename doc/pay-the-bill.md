@@ -72,6 +72,8 @@ Like `input` interface of Nature, converter must return `instance` , but a array
 
 ## unfinished
 
+state version conflict will auto fix by recall converter
+
 all version of OrderAccount will be seen;
 
 developer doesn't care about `orderState`'s value. this is done by Nature automatically.  like a cashier that she only do her own work. It's easy and correctable and stable.

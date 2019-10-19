@@ -11,9 +11,9 @@ use crate::{get_instance_by_id, send_instance, send_instance_with_context};
 pub fn send_payment_to_nature(order_id: u128) {
     wait_until_order_account_is_ready(order_id);
     let _first = pay(order_id, 100, "a");
-//    let _second = pay(order_id, 200, "b");
-//    let _third = pay(order_id, 700, "c");
-//    check_order_state(order_id);
+    let _second = pay(order_id, 200, "b");
+    let _third = pay(order_id, 700, "c");
+    check_order_state(order_id);
 }
 
 fn wait_until_order_account_is_ready(order_id: u128) {
