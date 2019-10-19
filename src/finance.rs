@@ -6,7 +6,7 @@ use chrono::prelude::*;
 
 use nature_demo_common::Payment;
 
-use crate::{get_instance_by_id, send_instance, send_instance_with_context};
+use crate::{get_instance_by_id, send_instance_with_context};
 
 pub fn send_payment_to_nature(order_id: u128) {
     wait_until_order_account_is_ready(order_id);
