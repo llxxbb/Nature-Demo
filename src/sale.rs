@@ -9,7 +9,6 @@ pub fn send_order_to_nature() -> u128 {
     // create an order
     let order = create_order_object();
     let id = send_instance("/sale/order", &order).unwrap();
-    dbg!(id);
 
     // send again
     let msg = send_instance("/sale/order", &order).err().unwrap().to_string();

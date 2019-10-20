@@ -10,9 +10,11 @@ use crate::{get_instance_by_id, send_instance_with_context};
 
 pub fn send_payment_to_nature(order_id: u128) {
     wait_until_order_account_is_ready(order_id);
-    let _first = pay(order_id, 100, "a");
-    let _second = pay(order_id, 200, "b");
-    let _third = pay(order_id, 700, "c");
+    let _first = pay(order_id, 100, "a", Local::now().timestamp_millis());
+    let time = Local::now().timestamp_millis();
+    let _second = pay(order_id, 200, "b", time);
+    let _third = pay(order_id, 700, "c", Local::now().timestamp_millis());
+    let _second_repeat = pay(order_id, 200, "b", time);
     check_order_state(order_id);
 }
 
@@ -26,12 +28,12 @@ fn wait_until_order_account_is_ready(order_id: u128) {
     }
 }
 
-fn pay(id: u128, num: u32, account: &str) -> u128 {
+fn pay(id: u128, num: u32, account: &str, time: i64) -> u128 {
     let payment = Payment {
         order: id,
         from_account: account.to_string(),
         paid: num,
-        pay_time: Local::now().timestamp_millis(),
+        pay_time: time,
     };
     let mut context: HashMap<String, String> = HashMap::new();
     context.insert("sys.target".to_string(), id.to_string());

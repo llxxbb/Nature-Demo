@@ -23,7 +23,6 @@ pub fn send_instance_with_context<T>(meta_key: &str, bo: &T, context: &HashMap<S
 
     let response = CLIENT.post(URL_INPUT).json(&instance).send();
     let id_s: String = response.unwrap().text().unwrap();
-    dbg!(&id_s);
     if id_s.contains("Err") {
         return Err(NatureError::VerifyError(id_s));
     }
@@ -33,7 +32,6 @@ pub fn send_instance_with_context<T>(meta_key: &str, bo: &T, context: &HashMap<S
 pub fn get_instance_by_id(id: u128, meta_full: &str) -> Option<Instance> {
     let response = CLIENT.post(URL_GET_BY_ID).json(&ParaForQueryByID { id, meta: meta_full.to_string() }).send();
     let msg = response.unwrap().text().unwrap();
-    dbg!(&msg);
     if msg.eq(r#"{"Ok":null}"#) {
         return None;
     }
