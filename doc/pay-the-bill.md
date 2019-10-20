@@ -32,7 +32,7 @@ VALUES('/B/finance/payment:1', '/B/finance/orderAccount:1', '{"executor":[{"prot
 -- orderAccount --> orderState
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/finance/orderAccount:1', '/B/sale/orderState:1', '{"selector":{"source_state_include":["paid"]},"target_states":{"add":["paid"]}}');
+VALUES('/B/finance/orderAccount:1', '/B/sale/orderState:1', '{"selector":{"source_state_include":["paid"]},"use_upstream_id":true,"target_states":{"add":["paid"]}}');
 ```
 
 ## Business objects and pay logic
@@ -72,9 +72,7 @@ Like `input` interface of Nature, converter must return `instance` , but a array
 
 ## unfinished
 
-start retry
-
-
+payment how to find which instance of OrderAccound to operate
 
 pay idempotent
 
