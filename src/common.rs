@@ -30,7 +30,7 @@ pub fn send_instance_with_context<T>(meta_key: &str, bo: &T, context: &HashMap<S
 }
 
 pub fn get_instance_by_id(id: u128, meta_full: &str) -> Option<Instance> {
-    let response = CLIENT.post(URL_GET_BY_ID).json(&ParaForQueryByID { id, meta: meta_full.to_string() }).send();
+    let response = CLIENT.post(URL_GET_BY_ID).json(&ParaForQueryByID::new(id, meta_full)).send();
     let msg = response.unwrap().text().unwrap();
     if msg.eq(r#"{"Ok":null}"#) {
         return None;

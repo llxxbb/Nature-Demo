@@ -37,12 +37,16 @@ fn pay(id: u128, num: u32, account: &str, time: i64) -> u128 {
     };
     let mut context: HashMap<String, String> = HashMap::new();
     context.insert("sys.target".to_string(), id.to_string());
-    send_instance_with_context("/finance/payment", &payment, &context).unwrap()
+    match send_instance_with_context("/finance/payment", &payment, &context) {
+        Ok(id) => id,
+        _ => 0
+    }
 }
 
 fn check_order_state(id: u128) {
     match get_instance_by_id(id, "/B/sale/orderState:1") {
         Some(ins) => {
+            dbg!(&ins.states);
             assert_eq!(ins.states.contains("paid"), true);
         }
         None => panic!("Should get instance")
