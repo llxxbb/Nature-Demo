@@ -30,7 +30,16 @@ pub fn send_instance_with_context<T>(meta_key: &str, bo: &T, context: &HashMap<S
 }
 
 pub fn get_instance_by_id(id: u128, meta_full: &str) -> Option<Instance> {
-    let response = CLIENT.post(URL_GET_BY_ID).json(&ParaForQueryByID::new(id, meta_full)).send();
+    get_state_instance_by_id(id, meta_full, 0)
+}
+
+pub fn get_state_instance_by_id(id: u128, meta_full: &str, sta_ver: i32) -> Option<Instance> {
+    let response = CLIENT.post(URL_GET_BY_ID).json(&ParaForQueryByID {
+        id,
+        meta: meta_full.to_string(),
+        state_version_from: sta_ver,
+        limit: 1,
+    }).send();
     let msg = response.unwrap().text().unwrap();
     if msg.eq(r#"{"Ok":null}"#) {
         return None;
@@ -38,6 +47,7 @@ pub fn get_instance_by_id(id: u128, meta_full: &str) -> Option<Instance> {
     let x: Result<Instance> = serde_json::from_str(&msg).unwrap();
     Some(x.unwrap())
 }
+
 
 //#[cfg(test)]
 ////mod test {

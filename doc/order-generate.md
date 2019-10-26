@@ -28,7 +28,7 @@ In tradition design, order and order state will be fill into one table, in this 
 
 mutex state are separated by "|". 
 
-`is_empty_content` means you need not to implement converters for "/B/sale/orderState",  but converter definitions are necessary still. Because it's body is empty, Nature can convert it for you automatically.
+`is_empty_content` means you need not to implement converters for `orderState`,  but converter definitions are necessary still. Because it's body is empty, Nature can convert it for you automatically.
 
 ## Define `converter`
 
@@ -63,7 +63,7 @@ Through the same id, you will get the normal data and state data directly, do no
 
 ## Define `Order` and other related business objects
 
-In project Nature-Demo-Common we need define some business entities which would be used in Nature-Demo and Nature-Demo-Converter, such as `Order`. Let's do it.
+In project `Nature-Demo-Common` we need define some business entities. They would be used in `Nature-Demo` project.
 
 ```rust
 #[derive(Serialize, Deserialize, Debug, Default, Clone, PartialEq, Eq)]
@@ -98,23 +98,23 @@ There is no struct defined for `OrderState`, it is only defined as a `meta` and 
 In project Nature-Demo we create an `Order` which include a phone and two battery.
 
 ```rust
-    fn create_order() -> Order {
-        Order {
-            user_id: 123,
-            price: 100,
-            items: vec![
-                SelectedCommodity {
-                    item: Commodity { id: 1, name: "phone".to_string() },
-                    num: 1,
-                },
-                SelectedCommodity {
-                    item: Commodity { id: 2, name: "battery".to_string() },
-                    num: 2,
-                }
-            ],
-            address: "a.b.c".to_string(),
-        }
+fn create_order() -> Order {
+    Order {
+        user_id: 123,
+        price: 1000,
+        items: vec![
+            SelectedCommodity {
+                item: Commodity { id: 1, name: "phone".to_string() },
+                num: 1,
+            },
+            SelectedCommodity {
+                item: Commodity { id: 2, name: "battery".to_string() },
+                num: 2,
+            }
+        ],
+        address: "a.b.c".to_string(),
     }
+}
 ```
 
 And boxed it into an `Instance` of `meta` "/B/order:1"
@@ -148,7 +148,7 @@ If you did not provide the id Nature will generated one based on 128-bits hash a
 
 ## What did Nature do for you after committing
 
-Automatically generate an `orderState` instance.  It's id is same with `order`' instance because of the converter setting **`use_upstream_id`**, and it will has a **"new"** state will because of the setting `target_states` in converter definition. The demo will queried it and show it for you.
+Nature generate an `orderState` instance Automatically.  It's id is same with `order`' instance because of the converter setting **`use_upstream_id`**, and it will has a **"new"** state will because of the setting `target_states` in converter definition. The demo will queried it and show it for you.
 
 ## Different with traditional development
 

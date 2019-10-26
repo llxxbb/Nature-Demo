@@ -6,9 +6,9 @@ use chrono::prelude::*;
 
 use nature_demo_common::Payment;
 
-use crate::{get_instance_by_id, send_instance_with_context};
+use crate::{get_instance_by_id, get_state_instance_by_id, send_instance_with_context};
 
-pub fn send_payment_to_nature(order_id: u128) {
+pub fn user_pay(order_id: u128) {
     wait_until_order_account_is_ready(order_id);
     let _first = pay(order_id, 100, "a", Local::now().timestamp_millis());
     let time = Local::now().timestamp_millis();
@@ -44,11 +44,11 @@ fn pay(id: u128, num: u32, account: &str, time: i64) -> u128 {
 }
 
 fn check_order_state(id: u128) {
-    match get_instance_by_id(id, "/B/sale/orderState:1") {
-        Some(ins) => {
-            dbg!(&ins.states);
-            assert_eq!(ins.states.contains("paid"), true);
+    loop {
+        if let Some(_) = get_state_instance_by_id(id, "/B/sale/orderState:1", 2)  {
+            break;
+        } else {
+            sleep(Duration::from_nanos(200000))
         }
-        None => panic!("Should get instance")
     }
 }

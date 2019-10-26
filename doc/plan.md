@@ -1,58 +1,20 @@
 # plan for demo
 
-## create order
 
-explanation following:
 
-```
-{"is_empty_content":true}
-```
+payment how to fint orderAccount
 
-## pay for an order
+## return instance 
 
-use the upstream instance and last target status.
-
-If target `meta` is a state, Nature will automatic increase the `instance.state_version` value based on the last one.
+You can not return empty array unless the target `meta type` is Null
 
 ## Define `converter`
 
-When we input an `Order` from outside, we set a `new` state for this order by converter. Execute the following sql please:
-
-```sqlite
-INSERT INTO relation
-(from_meta, to_meta, settings)
-VALUES('/B/sale/order:1', '/B/sale/orderState:1', '{"executor":[{"protocol":"LocalRust","url":"nature_demo_converter.dll:order_new","proportion":1}],"use_upstream_id":true,"target_states":{"add":["new"]}}');
-```
-
-Let's see some explanation:
-
-| field     | value description                                            |
-| --------- | ------------------------------------------------------------ |
-| from_meta | The `order` defined in `meta` , the form is [full_key]:[version] |
-| to_meta   | `orderState` defined in `meta` , the form is [full_key]:[version] |
-| settings  | A `JSON` string for converter's setting. It's value described in following table |
-
-Converter settings
-
-| field           | value description                                            |
-| --------------- | ------------------------------------------------------------ |
-| executor        | Who will do the convert job, it's a list. The following table show the detail for it's item. |
-| use_upstream_id | If this is set to "true", the `orderState` instance's id will use `order` instance's id. |
-| target_states   | after convert Nature will add and or remove the states which target_states defined. |
-
-Executor settings: 
-
 | field      | value description                                            |
 | ---------- | ------------------------------------------------------------ |
-| protocol   | how to communicate with the executor: `LocalRust` or `http`, to simplify this demo, we use `LocalRust` |
-| url        | where to find the executor                                   |
 | proportion | weight value among the executor list. high weight will get high chance to process the job. |
 
-### Nature key points
 
-**`use_upstream_id`** property will be convenient for state data and it can only used to **state data**, because converter can return many **normal data**, the same id would make them conflict.
-
-Through the same id, you will get the normal data and state data directly, do not need a foreign key be translated like relation database does. 
 
 ## refund
 
