@@ -211,20 +211,12 @@ fn pay(id: u128, num: u32, account: &str, time: i64) -> u128 {
 
 Are you remember the question above? the secret is **"sys.target"** of instance's context! That indicate which `orderAccount` would be load.
 
-## unfinished
+## Different with traditional development
 
-we finished the complex logic by use less than 100 lines of code. 
+We finished the complex logic by use about 100 lines of code, include concurrent, state version conflict control and retry policy etcetera, it's very hard for traditional development mode.
 
-you will see, we add `orderAccount` without modify already exists logic. in traditional dev mode this is impossible. That mean your work are stable, extensible and easy to maintain.
+You can see, we add `orderAccount` without modify already exists logic for `order` which is in previous chapter, this is impossible for traditional mode, that means Nature will make your work stable, extensible and easy to maintain.
 
-payment how to find which instance of OrderAccound to operate
+You will never mind `orderAccount`'s state_version is what and each change how to go,  they are trivial mater for Nature to take care of.
 
-pay idempotent
-
-state version conflict will auto fix by recall converter
-
-all version of OrderAccount will be seen;
-
-developer doesn't care about `orderState`'s value. this is done by Nature automatically.  like a cashier that she only do her own work. It's easy and correctable and stable.
-
-
+More importantly there is no logical code written  for `orderState`, but you can see a version 2 of it lying in the database table, and it's state changed to "paid" automatically. It was not the developer's work any more, product manager just do it well.
