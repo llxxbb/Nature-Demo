@@ -19,7 +19,7 @@ First we will define two `meta`s. please insert the follow data to nature.sqlite
   
   INSERT INTO meta
   (full_key, description, version, states, fields, config)
-  VALUES('/B/sale/orderState', 'order state', 1, 'new|paid|picked|outbound|dispatching|signed|canceling|canceled', '', '{"is_empty_content":true}');
+  VALUES('/B/sale/orderState', 'order state', 1, 'new|paid|picked|outbound|dispatching|signed|canceling|canceled', '', '{"master":"/B/sale/order:1"}');
   ```
   
 ### Nature key points
@@ -28,7 +28,7 @@ In tradition design, order and order state will be fill into one table, in this 
 
 mutex state are separated by "|". 
 
-`is_empty_content` means you need not to implement converters for `orderState`,  but converter definitions are necessary still. Because it's body is empty, Nature can convert it for you automatically.
+`master` means if you did not appoint a `executor` for `orderState`,  Nature will give a default convert with empty body. You will see a implement `executor` in the next chapter.
 
 ## Define `converter`
 

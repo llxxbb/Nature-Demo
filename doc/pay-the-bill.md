@@ -16,7 +16,7 @@ VALUES('/B/finance/orderAccount', 'order account', 1, 'unpaid|partial|paid', '',
 
 The `payment` will record the user each pay info. 
 
-The `orderAccount` is used to mark the order pay state. It's also a state `meta`. but it's body is not empty!  That mean it need implement converter manually.
+The `orderAccount` is used to mark the order pay state. It's also a state `meta`.
 
 ## Define `converter`
 
