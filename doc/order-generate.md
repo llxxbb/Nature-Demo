@@ -12,15 +12,15 @@ First we will define two `meta`s. please insert the follow data to nature.sqlite
 
 - /B/sale/orderState: the status for new, paid, outbound, dispatching, signed etcetera.
 
-  ```sqlite
-  INSERT INTO meta
-  (full_key, description, version, states, fields, config)
-  VALUES('/B/sale/order', 'order', 1, '', '', '{}');
-  
-  INSERT INTO meta
-  (full_key, description, version, states, fields, config)
-  VALUES('/B/sale/orderState', 'order state', 1, 'new|paid|picked|outbound|dispatching|signed|canceling|canceled', '', '{"master":"/B/sale/order:1"}');
-  ```
+```sqlite
+INSERT INTO meta
+(full_key, description, version, states, fields, config)
+VALUES('/B/sale/order', 'order', 1, '', '', '{}');
+
+INSERT INTO meta
+(full_key, description, version, states, fields, config)
+VALUES('/B/sale/orderState', 'order state', 1, 'new|paid|picked|outbound|dispatching|signed|canceling|canceled', '', '{"master":"/B/sale/order:1"}');
+```
   
 ### Nature key points
 
@@ -37,7 +37,7 @@ When we input an `Order` from outside, we set a `new` state for this order by co
 ```sqlite
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/sale/order:1', '/B/sale/orderState:1', '{"use_upstream_id":true,"target_states":{"add":["new"]}}');
+VALUES('/B/sale/order:1', '/B/sale/orderState:1', '{"target_states":{"add":["new"]}}');
 ```
 
 Let's see some explanation:
