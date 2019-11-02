@@ -54,8 +54,6 @@ There we need several converters outside of Nature to accomplish our task:
 
 **orderAccount --> orderState** is a `auto-converter`, Nature will generate `orderState` instance with "paid" state for you automatically, this is done because of the setting: **"source_state_include":["paid"]**. 
 
-[**"use_upstream_id":true**] must be used too, otherwise the `orderState`'s will use a new generated id, this id will be different from from the `orderAccount`.
-
 ## Define business objects
 
 In project `Nature-Demo-Common` we need define some business entities which would be used in `Nature-Demo` and `Nature-Demo-Converter`.
@@ -209,13 +207,15 @@ fn pay(id: u128, num: u32, account: &str, time: i64) -> u128 {
 }
 ```
 
+### Nature key points
+
 Are you remember the question above? the secret is **"sys.target"** of instance's context! That indicate which `orderAccount` would be load.
 
 ## Different with traditional development
 
 We finished the complex logic by use about 100 lines of code, include concurrent, state version conflict control and retry policy etcetera, it's very hard for traditional development mode.
 
-You can see, we add `orderAccount` without modify already exists logic for `order` which is in previous chapter, this is impossible for traditional mode, that means Nature will make your work stable, extensible and easy to maintain.
+You can see, we add `orderAccount` without modify already exists logic for `order` which is in previous chapter, this is impossible for traditional mode, that means Nature will make your work pluggable, extensible and easy to maintain.
 
 You will never mind `orderAccount`'s state_version is what and each change how to go,  they are trivial mater for Nature to take care of.
 

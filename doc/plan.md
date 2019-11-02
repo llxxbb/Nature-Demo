@@ -1,6 +1,6 @@
 # plan for demo
 
-generate order : replace use_upstream_id with master
+find a use case for use_upstream_id
 
 
 
