@@ -30,6 +30,8 @@ The following unfinished yet.
 
 [delivery](doc/delivery.md): parameterization input
 
+signed: Null `MetaType`
+
 multi-warehouse: `meta` version control
 
 

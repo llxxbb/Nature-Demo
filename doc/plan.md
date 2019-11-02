@@ -2,10 +2,23 @@
 
 generate order : replace use_upstream_id with master
 
+
+
+## Converter settings
+
+use_upstream_id
+
+| field           | value description                                            |
+| --------------- | ------------------------------------------------------------ |
+| use_upstream_id | If this is set to "true", the `orderState` instance's id will use `order` instance's id. |
+
+### Nature key points
+
+**`use_upstream_id`** property will be convenient for state data and it can only used to **state data**, because converter can return many **normal data**, the same id would make them conflict.
+
+
+
 ## Context
-
-
-## belong-to
 
 generate order
 

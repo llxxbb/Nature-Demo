@@ -11,7 +11,7 @@ VALUES('/B/finance/payment', 'order payment', 1, '', '', '{}');
 
 INSERT INTO meta
 (full_key, description, version, states, fields, config)
-VALUES('/B/finance/orderAccount', 'order account', 1, 'unpaid|partial|paid', '', '{}');
+VALUES('/B/finance/orderAccount', 'order account', 1, 'unpaid|partial|paid', '', '{"master":"/B/sale/order:1"}');
 ```
 
 The `payment` will record the user each pay info. 
@@ -24,7 +24,7 @@ The `orderAccount` is used to mark the order pay state. It's also a state `meta`
 -- order --> orderAccount
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/sale/order:1', '/B/finance/orderAccount:1', '{"executor":[{"protocol":"LocalRust","url":"nature_demo_converter.dll:order_receivable"}],"use_upstream_id":true,"target_states":{"add":["unpaid"]}}');
+VALUES('/B/sale/order:1', '/B/finance/orderAccount:1', '{"executor":[{"protocol":"LocalRust","url":"nature_demo_converter.dll:order_receivable"}],"target_states":{"add":["unpaid"]}}');
 
 -- payment --> orderAccount
 INSERT INTO relation
@@ -34,7 +34,7 @@ VALUES('/B/finance/payment:1', '/B/finance/orderAccount:1', '{"executor":[{"prot
 -- orderAccount --> orderState
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/finance/orderAccount:1', '/B/sale/orderState:1', '{"selector":{"source_state_include":["paid"]},"use_upstream_id":true,"target_states":{"add":["paid"]}}');
+VALUES('/B/finance/orderAccount:1', '/B/sale/orderState:1', '{"selector":{"source_state_include":["paid"]},"target_states":{"add":["paid"]}}');
 ```
 
 There we need several converters outside of Nature to accomplish our task:
