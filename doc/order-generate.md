@@ -19,7 +19,7 @@ VALUES('/B/sale/order', 'order', 1, '', '', '{}');
 
 INSERT INTO meta
 (full_key, description, version, states, fields, config)
-VALUES('/B/sale/orderState', 'order state', 1, 'new|paid|picked|outbound|dispatching|signed|canceling|canceled', '', '{"master":"/B/sale/order:1"}');
+VALUES('/B/sale/orderState', 'order state', 1, 'new|paid|outbound|dispatching|signed|canceling|canceled', '', '{"master":"/B/sale/order:1"}');
 ```
 
 ### Nature key points

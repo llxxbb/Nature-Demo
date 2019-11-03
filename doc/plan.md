@@ -1,8 +1,10 @@
 # plan for demo
 
-find a use case for use_upstream_id
+## find use case
 
+use_upstream_id
 
+self convert to self, 
 
 ## Converter settings
 

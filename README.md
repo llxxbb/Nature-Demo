@@ -17,26 +17,22 @@ In the whole demo description. there are some sections titled with **"Nature key
 
 ## Let‘s begin
 
-| chapter                                 | digest                                                     | key points                                                   |
-| --------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------ |
-| [prepare](doc/prepare.md)               | prepare for the demo                                       | how to run Nature                                            |
-| [generate order](doc/order-generate.md) | user commit an order into to Nature                        | define `Meta`, `Converter`  and how to commit business object to Nature |
-| [pay the bill](doc/pay-the-bill.md)     | user can pay many times for the big bill.                  | upstream select and state conflict control                   |
-| [stock-out](doc/stock-out.md)           | bad communication environment between e-mall and warehouse | callback,  belong-to                                         |
+| chapter                                 | digest                                    | key points                                                   |
+| --------------------------------------- | ----------------------------------------- | ------------------------------------------------------------ |
+| [prepare](doc/prepare.md)               | prepare for the demo                      | how to run Nature                                            |
+| [generate order](doc/order-generate.md) | user commit an order into to Nature       | `Meta`, master `meta`, `Converter`  and how to commit business object to Nature |
+| [pay for the bill](doc/pay-the-bill.md) | user can pay many times for the big bill. | upstream select, state conflict control                      |
+
 
 The following unfinished yet.
 
-[stock-out](doc/stock-out.md): call back for long time process
-
-[delivery](doc/delivery.md): parameterization input
-
-signed: Null `MetaType`
-
-multi-warehouse: `meta` version control
-
-
-
-
+| chapter                       | digest                                                    | key points                                                   |
+| ----------------------------- | --------------------------------------------------------- | ------------------------------------------------------------ |
+| [stock-out](doc/stock-out.md) | the warehouse system is slow to process the order's goods | Null `MetaType`, master instance,  input state instance, callback |
+| [delivery](doc/delivery.md)   | collaborate with the third-party                          | parameterization input                                       |
+| signed                        | user received the goods                                   |                                                              |
+| e-book                        | extend category with need not delivery but can download   | context, `meta`                                              |
+| logistic bill                 | one order split into many logistic bill                   | user appointed id,  grey deploy                              |
 
 [Q&A](doc/q&a.md)
 

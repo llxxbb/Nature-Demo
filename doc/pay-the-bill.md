@@ -1,4 +1,4 @@
-# Pay the bill
+# Pay for the bill
 
 Now the user will pay for the order.  Here we make it a little complex,  we suppose any one of the user's card is not enough to pay for the bill, but the total of three of them is ok. Let's define the business logic.
 
