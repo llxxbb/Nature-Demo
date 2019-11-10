@@ -12,8 +12,14 @@ In real conditions, an order's may include variant goods, these goods may involv
 -- orderState:paid --> Null
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/sale/orderState:1', '/N:1', '{"source_state_include":["paid"]},"executor":[{"protocol":"LocalRust","url":"nature_demo_converter.dll:send_to_stock"}]}');
+VALUES('/B/sale/orderState:1', '/N:1', '{"source_state_include":["paid"]},"executor":[{"protocol":"http","url":"http://localhost:8082/send_to_warehouse"}]}');
 ```
+
+### Nature key points
+
+`MetaType::Null` : when you just want to call the converter and the downstream is meaningless, you can use "/N:1" as the to-meta.  
+
+`Protocol::http`: Nature can post a request to a restful implement converter.
 
 ## The process flow
 

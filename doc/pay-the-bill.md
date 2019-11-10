@@ -52,7 +52,9 @@ There we need several converters outside of Nature to accomplish our task:
 | protocol | how to communicate with the executor: `LocalRust` or `http`, to simplify this demo, we use `LocalRust` |
 | url      | where to find the executor                                   |
 
-**orderAccount --> orderState** is a `auto-converter`, Nature will generate `orderState` instance with "paid" state for you automatically, this is done because of the setting: **"source_state_include":["paid"]**. 
+`source_state_include`: it is a filter, only `orderAccount`'s state include "paid" state that the converter can be run.
+
+**orderAccount --> orderState** is a `auto-converter`, because there is no `executor` is defined. this is like "order --> orderState" in the previous chapter.
 
 ## Define business objects
 
