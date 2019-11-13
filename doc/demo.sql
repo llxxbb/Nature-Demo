@@ -40,4 +40,4 @@ VALUES('/B/finance/orderAccount:1', '/B/sale/orderState:1', '{"selector":{"sourc
 -- orderState:paid --> Null
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/sale/orderState:1', '/N:1', '{"source_state_include":["paid"]},"executor":[{"protocol":"http","url":"http://localhost:8082/send_to_warehouse"}]}');
+VALUES('/B/sale/orderState:1', '/N:1', '{"source_state_include":["paid"],"executor":[{"protocol":"Http","url":"http://localhost:8082/send_to_warehouse"}]}');
