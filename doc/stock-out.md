@@ -21,7 +21,7 @@ VALUES('/B/sale/orderState:1', '/N:1', '{"source_state_include":["paid"],"execut
 
 `MetaType::Null` : when you just want to call the converter and the downstream is meaningless, you can use "/N:1" as the to-meta.  
 
-`Protocol::http`: Nature can post a request to a restful implement converter.
+`Protocol::Http`: Nature can post a request to a restful implement converter.
 
 ## The process flow
 
