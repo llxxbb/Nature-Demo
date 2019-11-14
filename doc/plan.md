@@ -6,6 +6,12 @@ use_upstream_id
 
 self convert to self, 
 
+task_error : can't finish the task
+
+## `MetaType::Null`
+
+This `converter` does not generate any thing to Nature, the reason is `to_meta` is "**/N:1**", it's `MetaType::Null`.  But why this is usable?  in this demo, we want to notify the warehouse,  and Nature can achieve it **reliably**.  
+
 ## Converter settings
 
 use_upstream_id

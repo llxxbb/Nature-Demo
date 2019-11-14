@@ -5,7 +5,7 @@ VALUES('/B/sale/order', 'order', 1, '', '', '{}');
 
 INSERT INTO meta
 (full_key, description, version, states, fields, config)
-VALUES('/B/sale/orderState', 'order state', 1, 'new|paid|outbound|dispatching|signed|canceling|canceled', '', '{"master":"/B/sale/order:1"}');
+VALUES('/B/sale/orderState', 'order state', 1, 'new|paid|package|outbound|dispatching|signed|canceling|canceled', '', '{"master":"/B/sale/order:1"}');
 
 -- order --> orderState
 INSERT INTO relation
@@ -37,7 +37,7 @@ INSERT INTO relation
 VALUES('/B/finance/orderAccount:1', '/B/sale/orderState:1', '{"selector":{"source_state_include":["paid"]},"target_states":{"add":["paid"]}}');
 
 -- stock out  ---------------------------------------------
--- orderState:paid --> Null
+-- orderState:paid --> orderState:package
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/sale/orderState:1', '/N:1', '{"selector":{"source_state_include":["paid"]},"executor":[{"protocol":"Http","url":"http://localhost:8082/send_to_warehouse"}]}');
+VALUES('/B/sale/orderState:1', '/B/sale/orderState:1', '{"selector":{"source_state_include":["paid"]},"executor":[{"protocol":"Http","url":"http://localhost:8082/send_to_warehouse"}],"target_states":{"add":["package"]}}');
