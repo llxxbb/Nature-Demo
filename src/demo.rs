@@ -1,11 +1,12 @@
 use nature_common::ParaForQueryByID;
 
-use crate::{CLIENT, send_order_to_nature, user_pay, URL_GET_BY_ID};
+use crate::{CLIENT, send_order_to_nature, user_pay, URL_GET_BY_ID, outbound};
 
 #[test]
 fn demo_all_test() {
     let id = send_order_to_nature();
     user_pay(id);
+    outbound(id);
 }
 
 #[test]

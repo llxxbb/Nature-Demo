@@ -3,15 +3,15 @@ use std::time::Duration;
 
 use nature_demo_common::{Commodity, Order, SelectedCommodity};
 
-use crate::{get_instance_by_id, send_instance};
+use crate::{get_instance_by_id, send_business_object};
 
 pub fn send_order_to_nature() -> u128 {
     // create an order
     let order = create_order_object();
-    let id = send_instance("/sale/order", &order).unwrap();
+    let id = send_business_object("/sale/order", &order).unwrap();
 
     // send again
-    let msg = send_instance("/sale/order", &order).err().unwrap().to_string();
+    let msg = send_business_object("/sale/order", &order).err().unwrap().to_string();
     assert_eq!(msg.contains("DaoDuplicated"), true);
 
     // check created instance for order

@@ -19,7 +19,7 @@ VALUES('/B/sale/orderState:1', '/B/sale/orderState:1', '{"selector":{"source_sta
 
 ### Nature key points
 
-`Protocol::Http`: Nature can post a request to a restful implement converter.
+`Protocol::http`: Nature can post a request to a restful implement converter.
 
 ## The process flow
 
@@ -68,3 +68,19 @@ Another point is the real result `converter` returned must be `DelayedInstances`
 ## Give outbound info to Nature
 
 Now the warehouse packaged the goods and make it outbound, and then tell this info to Nature, so that Nature can driver the following steps to run.
+
+```rust
+	let last = wait_for_packaged(order_id);    
+	let mut instance = Instance::new("/sale/orderState").unwrap();
+    instance.id = last.id;
+    instance.state_version = last.state_version + 1;
+    instance.states.clear();
+    instance.states.insert("outbound".to_string());
+    let rtn = send_instance(&instance);
+```
+
+### Nature key points
+
+Like normal input to Nature, but here you must use `last`'s id, otherwise Nature will generate one for you,  then your `order` will not find it's outbound info anymore.
+
+`state_version` must add one, otherwise it will conflict.

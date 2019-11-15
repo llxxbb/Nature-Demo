@@ -6,7 +6,7 @@ use chrono::prelude::*;
 
 use nature_demo_common::Payment;
 
-use crate::{get_instance_by_id, get_state_instance_by_id, send_instance_with_context};
+use crate::{get_instance_by_id, get_state_instance_by_id, send_business_object_with_context};
 
 pub fn user_pay(order_id: u128) {
     wait_until_order_account_is_ready(order_id);
@@ -37,7 +37,7 @@ fn pay(id: u128, num: u32, account: &str, time: i64) -> u128 {
     };
     let mut context: HashMap<String, String> = HashMap::new();
     context.insert("sys.target".to_string(), id.to_string());
-    match send_instance_with_context("/finance/payment", &payment, &context) {
+    match send_business_object_with_context("/finance/payment", &payment, &context) {
         Ok(id) => id,
         _ => 0
     }
