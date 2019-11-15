@@ -24,12 +24,12 @@ VALUES('/B/finance/orderAccount', 'order account', 1, 'unpaid|partial|paid', '',
 -- order --> orderAccount
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/sale/order:1', '/B/finance/orderAccount:1', '{"executor":[{"protocol":"LocalRust","url":"nature_demo_converter.dll:order_receivable"}],"target_states":{"add":["unpaid"]}}');
+VALUES('/B/sale/order:1', '/B/finance/orderAccount:1', '{"executor":[{"protocol":"localRust","url":"nature_demo_converter.dll:order_receivable"}],"target_states":{"add":["unpaid"]}}');
 
 -- payment --> orderAccount
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/finance/payment:1', '/B/finance/orderAccount:1', '{"executor":[{"protocol":"LocalRust","url":"nature_demo_converter.dll:pay_count"}]}');
+VALUES('/B/finance/payment:1', '/B/finance/orderAccount:1', '{"executor":[{"protocol":"localRust","url":"nature_demo_converter.dll:pay_count"}]}');
 
 -- orderAccount --> orderState
 INSERT INTO relation
@@ -40,4 +40,4 @@ VALUES('/B/finance/orderAccount:1', '/B/sale/orderState:1', '{"selector":{"sourc
 -- orderState:paid --> orderState:package
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/sale/orderState:1', '/B/sale/orderState:1', '{"selector":{"source_state_include":["paid"]},"executor":[{"protocol":"Http","url":"http://localhost:8082/send_to_warehouse"}],"target_states":{"add":["package"]}}');
+VALUES('/B/sale/orderState:1', '/B/sale/orderState:1', '{"selector":{"source_state_include":["paid"]},"executor":[{"protocol":"http","url":"http://localhost:8082/send_to_warehouse"}],"target_states":{"add":["package"]}}');
