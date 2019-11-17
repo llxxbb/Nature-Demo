@@ -13,7 +13,6 @@ pub fn outbound(order_id: u128) {
     instance.states.clear();
     instance.states.insert("outbound".to_string());
     let rtn = send_instance(&instance);
-    dbg!(&rtn);
     assert_eq!(rtn.is_ok(), true);
 }
 
