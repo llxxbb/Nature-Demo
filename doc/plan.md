@@ -2,6 +2,8 @@
 
 ## find use case
 
+assign: delay execute.
+
 use_upstream_id
 
 self convert to self, 
