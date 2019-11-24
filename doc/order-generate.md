@@ -12,23 +12,23 @@ First we will define two `meta`s. please insert the follow data to nature.sqlite
 
 - /B/sale/orderState: the status for new, paid, outbound, dispatching, signed etcetera.
 
-  ```sqlite
-  INSERT INTO meta
-  (full_key, description, version, states, fields, config)
-  VALUES('/B/sale/order', 'order', 1, '', '', '{}');
-  
-  INSERT INTO meta
-  (full_key, description, version, states, fields, config)
-  VALUES('/B/sale/orderState', 'order state', 1, 'new|paid|picked|outbound|dispatching|signed|canceling|canceled', '', '{"is_empty_content":true}');
-  ```
-  
+```sqlite
+INSERT INTO meta
+(full_key, description, version, states, fields, config)
+VALUES('/B/sale/order', 'order', 1, '', '', '{}');
+
+INSERT INTO meta
+(full_key, description, version, states, fields, config)
+VALUES('/B/sale/orderState', 'order state', 1, 'new|paid|package|outbound|dispatching|signed|canceling|canceled', '', '{"master":"/B/sale/order:1"}');
+```
+
 ### Nature key points
 
 In tradition design, order and order state will be fill into one table, in this condition, new state will overwrite the old one, so it's difficult to trace the changes. **In Nature, normal data and state data are separated strictly**, You must define them separately. And furthermore, Nature will trace every change for the state data by state version.
 
 mutex state are separated by "|". 
 
-`is_empty_content` means you need not to implement converters for `orderState`,  but converter definitions are necessary still. Because it's body is empty, Nature can convert it for you automatically.
+`master` means if you did not appoint a `executor` for `orderState`,  Nature will give a default conversion with empty body, and it's id will be same as `/B/sale/order`. You will see a `converter` that need a implement in the next chapter.
 
 ## Define `converter`
 
@@ -37,29 +37,17 @@ When we input an `Order` from outside, we set a `new` state for this order by co
 ```sqlite
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/sale/order:1', '/B/sale/orderState:1', '{"use_upstream_id":true,"target_states":{"add":["new"]}}');
+VALUES('/B/sale/order:1', '/B/sale/orderState:1', '{"target_states":{"add":["new"]}}');
 ```
 
 Let's see some explanation:
 
-| field     | value description                                            |
-| --------- | ------------------------------------------------------------ |
-| from_meta | The `order` defined in `meta` , the form is [full_key]:[version] |
-| to_meta   | `orderState` defined in `meta` , the form is [full_key]:[version] |
-| settings  | A `JSON` string for converter's setting. It's value described in following table |
-
-Converter settings
-
 | field           | value description                                            |
 | --------------- | ------------------------------------------------------------ |
-| use_upstream_id | If this is set to "true", the `orderState` instance's id will use `order` instance's id. |
-| target_states   | after convert Nature will add and or remove the states which target_states defined. |
-
-### Nature key points
-
-**`use_upstream_id`** property will be convenient for state data and it can only used to **state data**, because converter can return many **normal data**, the same id would make them conflict.
-
-Through the same id, you will get the normal data and state data directly, do not need a foreign key be translated like relation database does. 
+| from_meta       | The `order` defined in `meta` , the form is [full_key]:[version] |
+| to_meta         | `orderState` defined in `meta` , the form is [full_key]:[version] |
+| settings        | A `JSON` string for converter's setting. It's value described in following table |
+| `target_states` | After instance converted, Nature will add and (or) remove the states which target_states defined. this is only take affect on state-meta |
 
 ## Define `Order` and other related business objects
 
@@ -148,17 +136,14 @@ If you did not provide the id Nature will generated one based on 128-bits hash a
 
 ## What did Nature do for you after committing
 
-Nature generate an `orderState` instance Automatically.  It's id is same with `order`' instance because of the converter setting **`use_upstream_id`**, and it will has a **"new"** state will because of the setting `target_states` in converter definition. The demo will queried it and show it for you.
+Nature generate an `orderState` instance Automatically.  It's id is same with `order`' instance because of the `orderState`'s `master` setting , and it will has a **"new"** state because of the setting `target_states` in converter definition. The demo will queried it and show it for you.
 
 ## Different with traditional development
 
-To finish a business logic you must separate it into two part clearly:  
+Nature use design impose **strong** constrains on implement. In traditional way the design is wake. because when we write the code we re-write the design again at the same. In Nature the code can't overwrite the design and needn't also yet. The Strong constrains will make team less argument and easy for each other, then save your money and time. 
 
-- Business logic define, 
-- Business logic implement
+In other way. you need not to take care about database work, transaction, idempotent and retries, Nature will take care of them. Even more Nature may automatically generate state data. More easy more correctable and more stable!
 
-Who can finish business logic define need not to be a developer maybe a business designer. **That is great for collaboration: less argument strong constrain** and easy for each other. Traditional way is not that clear, the developer do the tow parts all. And the "definitions" coupled to the code very tightly that make the business system complex and difficult to maintain.
-
-Compare to traditional the business logic implement is easy. you need not to take care about database work, transaction, idempotent and retries. Nature separate it into pieces and that make it easy too to dev and maintain. Even more Nature may automatically generate state data. More easy more correctable and more stable!
+In this example you can get `order` and `orderState` by the same id, and in the next chapter you will see the same id can get `orderAccount` also. In tradition way the ids would be different and connected them together by the the relation-tables or foreign-keys.
 
 There is also a disadvantage in Nature that is Nature do all the job in asynchronized way except the fist `instance` you inputted.

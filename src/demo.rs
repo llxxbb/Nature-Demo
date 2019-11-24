@@ -1,11 +1,17 @@
 use nature_common::ParaForQueryByID;
 
-use crate::{CLIENT, send_order_to_nature, user_pay, URL_GET_BY_ID};
+use crate::{CLIENT, outbound, send_order_to_nature, URL_GET_BY_ID, user_pay, wait_for_order_state};
 
 #[test]
 fn demo_all_test() {
+    dbg!("generate order");
     let id = send_order_to_nature();
+    dbg!("pay for order");
     user_pay(id);
+    dbg!("package and outbound");
+    outbound(id);
+    dbg!("delay for auto signed");
+    let _ = wait_for_order_state(id, 5);
 }
 
 #[test]

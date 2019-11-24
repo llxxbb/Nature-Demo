@@ -1,4 +1,4 @@
-# Pay the bill
+# Pay for the bill
 
 Now the user will pay for the order.  Here we make it a little complex,  we suppose any one of the user's card is not enough to pay for the bill, but the total of three of them is ok. Let's define the business logic.
 
@@ -11,12 +11,12 @@ VALUES('/B/finance/payment', 'order payment', 1, '', '', '{}');
 
 INSERT INTO meta
 (full_key, description, version, states, fields, config)
-VALUES('/B/finance/orderAccount', 'order account', 1, 'unpaid|partial|paid', '', '{}');
+VALUES('/B/finance/orderAccount', 'order account', 1, 'unpaid|partial|paid', '', '{"master":"/B/sale/order:1"}');
 ```
 
 The `payment` will record the user each pay info. 
 
-The `orderAccount` is used to mark the order pay state. It's also a state `meta`. but it's body is not empty!  That mean it need implement converter manually.
+The `orderAccount` is used to mark the order pay state. It's also a state `meta`.
 
 ## Define `converter`
 
@@ -24,17 +24,17 @@ The `orderAccount` is used to mark the order pay state. It's also a state `meta`
 -- order --> orderAccount
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/sale/order:1', '/B/finance/orderAccount:1', '{"executor":[{"protocol":"LocalRust","url":"nature_demo_converter.dll:order_receivable"}],"use_upstream_id":true,"target_states":{"add":["unpaid"]}}');
+VALUES('/B/sale/order:1', '/B/finance/orderAccount:1', '{"executor":[{"protocol":"localRust","url":"nature_demo_converter.dll:order_receivable"}],"target_states":{"add":["unpaid"]}}');
 
 -- payment --> orderAccount
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/finance/payment:1', '/B/finance/orderAccount:1', '{"executor":[{"protocol":"LocalRust","url":"nature_demo_converter.dll:pay_count"}]}');
+VALUES('/B/finance/payment:1', '/B/finance/orderAccount:1', '{"executor":[{"protocol":"localRust","url":"nature_demo_converter.dll:pay_count"}]}');
 
 -- orderAccount --> orderState
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/finance/orderAccount:1', '/B/sale/orderState:1', '{"selector":{"source_state_include":["paid"]},"use_upstream_id":true,"target_states":{"add":["paid"]}}');
+VALUES('/B/finance/orderAccount:1', '/B/sale/orderState:1', '{"selector":{"source_state_include":["paid"]},"target_states":{"add":["paid"]}}');
 ```
 
 There we need several converters outside of Nature to accomplish our task:
@@ -52,9 +52,9 @@ There we need several converters outside of Nature to accomplish our task:
 | protocol | how to communicate with the executor: `LocalRust` or `http`, to simplify this demo, we use `LocalRust` |
 | url      | where to find the executor                                   |
 
-**orderAccount --> orderState** is a `auto-converter`, Nature will generate `orderState` instance with "paid" state for you automatically, this is done because of the setting: **"source_state_include":["paid"]**. 
+`source_state_include`: it is a filter, only `orderAccount`'s state include "paid" state that the converter can be run.
 
-[**"use_upstream_id":true**] must be used too, otherwise the `orderState`'s will use a new generated id, this id will be different from from the `orderAccount`.
+**orderAccount --> orderState** is a `auto-converter`, because there is no `executor` is defined. this is like "order --> orderState" in the previous chapter.
 
 ## Define business objects
 
@@ -209,13 +209,15 @@ fn pay(id: u128, num: u32, account: &str, time: i64) -> u128 {
 }
 ```
 
+### Nature key points
+
 Are you remember the question above? the secret is **"sys.target"** of instance's context! That indicate which `orderAccount` would be load.
 
 ## Different with traditional development
 
 We finished the complex logic by use about 100 lines of code, include concurrent, state version conflict control and retry policy etcetera, it's very hard for traditional development mode.
 
-You can see, we add `orderAccount` without modify already exists logic for `order` which is in previous chapter, this is impossible for traditional mode, that means Nature will make your work stable, extensible and easy to maintain.
+You can see, we add `orderAccount` without modify already exists logic for `order` which is in previous chapter, this is impossible for traditional mode, that means Nature will make your work pluggable, extensible and easy to maintain.
 
 You will never mind `orderAccount`'s state_version is what and each change how to go,  they are trivial mater for Nature to take care of.
 

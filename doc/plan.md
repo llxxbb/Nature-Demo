@@ -1,10 +1,38 @@
 # plan for demo
 
+## find use case
+
+assign: delay execute.
+
+use_upstream_id
+
+self convert to self, 
+
+task_error : can't finish the task
+
+## `MetaType::Null`
+
+This `converter` does not generate any thing to Nature, the reason is `to_meta` is "**/N:1**", it's `MetaType::Null`.  But why this is usable?  in this demo, we want to notify the warehouse,  and Nature can achieve it **reliably**.  
+
+## Converter settings
+
+use_upstream_id
+
+| field           | value description                                            |
+| --------------- | ------------------------------------------------------------ |
+| use_upstream_id | If this is set to "true", the `orderState` instance's id will use `order` instance's id. |
+
+### Nature key points
+
+**`use_upstream_id`** property will be convenient for state data and it can only used to **state data**, because converter can return many **normal data**, the same id would make them conflict.
 
 
-payment how to fint orderAccount
 
-## return instance 
+## Context
+
+generate order
+
+## Null instance 
 
 You can not return empty array unless the target `meta type` is Null
 
