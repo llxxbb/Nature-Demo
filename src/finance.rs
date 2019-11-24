@@ -6,7 +6,7 @@ use chrono::prelude::*;
 
 use nature_demo_common::Payment;
 
-use crate::{get_instance_by_id, get_state_instance_by_id, send_business_object_with_context};
+use crate::{get_instance_by_id, send_business_object_with_context, wait_for_order_state};
 
 pub fn user_pay(order_id: u128) {
     wait_until_order_account_is_ready(order_id);
@@ -15,7 +15,7 @@ pub fn user_pay(order_id: u128) {
     let _second = pay(order_id, 200, "b", time);
     let _third = pay(order_id, 700, "c", Local::now().timestamp_millis());
     let _second_repeat = pay(order_id, 200, "b", time);
-    check_order_state(order_id);
+    let _ = wait_for_order_state(order_id, 2);
 }
 
 fn wait_until_order_account_is_ready(order_id: u128) {
@@ -43,12 +43,3 @@ fn pay(id: u128, num: u32, account: &str, time: i64) -> u128 {
     }
 }
 
-fn check_order_state(id: u128) {
-    loop {
-        if let Some(_) = get_state_instance_by_id(id, "/B/sale/orderState:1", 2)  {
-            break;
-        } else {
-            sleep(Duration::from_nanos(200000))
-        }
-    }
-}

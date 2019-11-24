@@ -24,15 +24,15 @@ In the whole demo description. there are some sections titled with **"Nature key
 | [pay for the bill](doc/pay-the-bill.md) | user can pay many times for the big bill.                 | upstream select, state conflict control                      |
 | [stock-out](doc/stock-out.md)           | the warehouse system is slow to process the order's goods | input state instance, callback                               |
 | [delivery](doc/delivery.md)             | collaborate with the third-party                          | parameterization input                                       |
+| [signed](doc/signed.md)                 | user received the goods                                   | delay converter                                              |
 
 
 The following unfinished yet.
 
-| chapter                 | digest                                                  | key points                      |
-| ----------------------- | ------------------------------------------------------- | ------------------------------- |
-| [signed](doc/signed.md) | user received the goods                                 | delay converter                 |
-| e-book                  | extend category with need not delivery but can download | context                         |
-| logistic bill           | one order split into many logistic bill                 | user appointed id,  grey deploy |
+| chapter       | digest                                                  | key points                      |
+| ------------- | ------------------------------------------------------- | ------------------------------- |
+| e-book        | extend category with need not delivery but can download | context                         |
+| logistic bill | one order split into many logistic bill                 | user appointed id,  grey deploy |
 
 [Q&A](doc/q&a.md)
 

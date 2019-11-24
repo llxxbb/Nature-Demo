@@ -10,6 +10,10 @@ Before we start, we need nature can be run on you local machine. Nature is writt
 - https://github.com/llxxbb/Nature-DB
 - https://github.com/llxxbb/Nature-Retry
 - https://github.com/llxxbb/Nature-Integrate-test-converter
+- https://github.com/llxxbb/Nature-Demo
+- https://github.com/llxxbb/Nature-Demo-Converter
+- https://github.com/llxxbb/Nature-Demo-Common
+- https://github.com/llxxbb/Nature-Demo-Converter-Restful
 
 When the compiling finished, there will be tow execute files generated in Nature's target directory, you can run it directly according to your needs. for window that would be:
 

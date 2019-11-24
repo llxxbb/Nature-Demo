@@ -18,7 +18,7 @@ VALUES('/B/sale/orderSign', 'order finished', 1, '', '', '{}');
 -- orderState:dispatching --> orderSign
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/sale/orderState:1', '/B/sale/orderSign:1', '{"selector":{"source_state_include":["dispatching"]}, "executor":[{"protocol":"localRust","url":"nature_demo_converter.dll:auto_sign"}]}');
+VALUES('/B/sale/orderState:1', '/B/sale/orderSign:1', '{"delay":1,"selector":{"source_state_include":["dispatching"]}, "executor":[{"protocol":"localRust","url":"nature_demo_converter.dll:auto_sign"}]}');
 
 -- orderSign --> orderState:signed
 INSERT INTO relation
@@ -26,3 +26,6 @@ INSERT INTO relation
 VALUES('/B/sale/orderSign:1', '/B/sale/orderState:1', '{"target_states":{"add":["signed"]}}');
 ```
 
+### Nature key points
+
+`delay`: will tell Nature execute this conversion after appointed time.  notice that,  delayed task only can be picked up by `Nature-Retry` project , so you need to start it up.

@@ -1,4 +1,6 @@
 use std::collections::HashMap;
+use std::thread::sleep;
+use std::time::Duration;
 
 use reqwest::Client;
 use serde::Serialize;
@@ -42,7 +44,7 @@ pub fn get_instance_by_id(id: u128, meta_full: &str) -> Option<Instance> {
     get_state_instance_by_id(id, meta_full, 0)
 }
 
-pub fn get_state_instance_by_id(id: u128, meta_full: &str, sta_ver: i32) -> Option<Instance> {
+fn get_state_instance_by_id(id: u128, meta_full: &str, sta_ver: i32) -> Option<Instance> {
     let response = CLIENT.post(URL_GET_BY_ID).json(&ParaForQueryByID {
         id,
         meta: meta_full.to_string(),
@@ -57,3 +59,12 @@ pub fn get_state_instance_by_id(id: u128, meta_full: &str, sta_ver: i32) -> Opti
     Some(x.unwrap())
 }
 
+pub fn wait_for_order_state(order_id: u128, state_ver: i32) -> Instance {
+    loop {
+        if let Some(ins) = get_state_instance_by_id(order_id, "/B/sale/orderState:1", state_ver) {
+            return ins;
+        } else {
+            sleep(Duration::from_nanos(200000))
+        }
+    }
+}
