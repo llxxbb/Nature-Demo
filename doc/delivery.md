@@ -28,6 +28,26 @@ VALUES('/B/third/waybill:1', '/B/sale/orderState:1', '{"target_states":{"add":["
 
 ## Converter Implement
 
-### 
+```rust
+#[no_mangle]
+#[allow(unused_attributes)]
+#[allow(improper_ctypes)]
+pub extern fn go_express(para: &ConverterParameter) -> ConverterReturned {
+    // "any one" will be correct by Nature after returned
+    let mut ins = Instance::new("any one").unwrap();
+    ins.context.insert("sys.target".to_owned(), para.from.id.to_string());
+    // ... some code to  submit package info to the express company,
+    // ... and wait it to return an id.
+    // the follow line simulate the express company name and the waybill id returned
+    ins.para = "/ems/".to_owned() + &generate_id(&para.master.clone().unwrap().data).unwrap().to_string();
+    // return the waybill
+    ConverterReturned::Instances(vec![ins])
+}
+```
 
-"any one"
+### Nature key points
+
+`Instance.para`： here we set `Instance.para` property, this will hold **"company id + waybill id"** for you. at same time the `Instance.id` property will be set to 0, so that you can search this `Instance` just only by `para`.
+
+`sys.target`: once again we used this in context, this time we used it in `converter`. but there is a bit queer, the target `meta` is `waybill` ,  why we need it here?. The reason is that **waybill --> orderState:dispatching** is an auto converter, that is Nature need to know which `orderState` will be updated. but the `waybill` can not tell it,  so must get it from `context`.
+

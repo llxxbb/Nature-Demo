@@ -1,0 +1,28 @@
+## Signed
+
+This is the last step, user receive goods and sign the waybill, but express company will not give the signed info to our system, so we need the custom login to our system and signed it manually. but many of them do not do that at all, how do we to accomplish it? An idea is we will wait fortnight, when there is no complaint, we will signed it automatically.
+
+For our benefit, we make fortnight to 1 seconds, so that you can see the result quickly.
+
+## Define `meta`
+
+```sqlite
+INSERT INTO meta
+(full_key, description, version, states, fields, config)
+VALUES('/B/sale/orderSign', 'order finished', 1, '', '', '{}');
+```
+
+## Define converter
+
+```sqlite
+-- orderState:dispatching --> orderSign
+INSERT INTO relation
+(from_meta, to_meta, settings)
+VALUES('/B/sale/orderState:1', '/B/sale/orderSign:1', '{"selector":{"source_state_include":["dispatching"]}, "executor":[{"protocol":"localRust","url":"nature_demo_converter.dll:auto_sign"}]}');
+
+-- orderSign --> orderState:signed
+INSERT INTO relation
+(from_meta, to_meta, settings)
+VALUES('/B/sale/orderSign:1', '/B/sale/orderState:1', '{"target_states":{"add":["signed"]}}');
+```
+
