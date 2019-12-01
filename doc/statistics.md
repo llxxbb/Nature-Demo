@@ -7,7 +7,7 @@ After paid we want to make statistics for the products, and analysis them by mul
 ```sqlite
 INSERT INTO meta
 (full_key, description, version, states, fields, config)
-VALUES('/P/statistics/productConsume/task', 'total sold every hour', 1, '', '', '{}');
+VALUES('/P/statistics/productConsume/task', 'total sold every hour', 1, '', '', '{"multi_meta":{"keys":["minute","hour"]}}');
 
 INSERT INTO meta
 (full_key, description, version, states, fields, config)
@@ -42,7 +42,7 @@ There is a way to do it is that we count it every minute. to do that we should g
 
 ### Nature key points
 
-
+"/P" `metaType` : express `multi-meta ` which will be processed parallelly, each key is defined in the `multi_meta.keys` property. This `metaType` can greatly reduce the calculation and IO resource,
 
 ## Define converter
 
