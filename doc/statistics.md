@@ -40,6 +40,10 @@ If we we increase the counter for every order use `state-instance`, there would 
 
 There is a way to do it is that we count it every minute. to do that we should generate one none state task-instance for every minute. 
 
+### Nature key points
+
+
+
 ## Define converter
 
 ```sqlite
