@@ -34,9 +34,10 @@ Nature have provide all implement for this demo. you will find all of them in th
 
 The following unfinished yet.
 
-| chapter                         | digest                                         | key points                        |
-| ------------------------------- | ---------------------------------------------- | --------------------------------- |
-| [statistics](doc/statistics.md) | make statistics freely, extensible, no coding. | context, plugin, embedded counter |
+| chapter                              | digest                                                       | key points                                |
+| ------------------------------------ | ------------------------------------------------------------ | ----------------------------------------- |
+| [sale statistics](doc/statistics.md) | from goods view, make statistics freely, extensible, no coding. | context, embedded counter, serial process |
+| user consumption data                | make data which can be got by user id, such as order list    | parallel process                          |
 
 [Q&A](doc/q&a.md)
 
