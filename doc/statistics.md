@@ -7,7 +7,7 @@ After paid we want to make statistics for the products, and analysis them by mul
 ```sqlite
 INSERT INTO meta
 (full_key, description, version, states, fields, config)
-VALUES('/P/statistics/orderTask', 'total sold every hour', 1, '', '', '{"multi_meta":{"keys":["minute","hour"]}, "conflict_avoid": true}');
+VALUES('/M/statistics/orderTask', 'total sold every hour', 1, '', '', '{"multi_meta":{"keys":["minute","hour"]}, "conflict_avoid": true}');
 ```
 
 ### how to make statistics
@@ -18,11 +18,11 @@ There is a way to do it is that we count it every minute for minute data and eve
 
 ### Nature key points
 
-**"/P"** `metaType` : express `multi-meta ` which will be processed parallelly, each key is defined in the `multi_meta.keys` property. For this demo, after converted Nature will save two instances.
+**"/M"** `metaType` : express `multi-meta ` which will be processed parallelly, each key is defined in the `multi_meta.keys` property. For this demo, after converted Nature will save two instances.
 
 ```
-/B/statistics/orderTask/minute with para: current minute
-/B/statistics/orderTask/hour with para: current hour
+B:statistics/orderTask/minute with para: current minute
+B:statistics/orderTask/hour with para: current hour
 ```
 
 **"conflict_avoid"** setting tell Nature that the same instances will generated many times and Nature should cache it and check it befor save. If `false`(default) is set would lead to a large number of duplicated insertions. so the performance would be very bad.
@@ -33,7 +33,7 @@ There is a way to do it is that we count it every minute for minute data and eve
 -- orderState:paid --> task
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/sale/orderState:1', '/P/statistics/orderTask:1', '{"selector":{"source_state_include":["paid"]},"executor":[{"protocol":"localRust","url":"nature_demo_converter.dll:statistics_task"}]}');
+VALUES('B:sale/orderState:1', '/M/statistics/orderTask:1', '{"selector":{"source_state_include":["paid"]},"executor":[{"protocol":"localRust","url":"nature_demo_converter.dll:statistics_task"}]}');
 ```
 
 
@@ -60,6 +60,6 @@ Another question is how to give multi-dimensions info to the following converter
 -- orderSign --> orderState:signed
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/statistics/consume/input:1', '/B/statistics/consume/product/total/minute:1', '{"target_states":{"add":["signed"]}}');
+VALUES('B:statistics/consume/input:1', 'B:statistics/consume/product/total/minute:1', '{"target_states":{"add":["signed"]}}');
 ```
 

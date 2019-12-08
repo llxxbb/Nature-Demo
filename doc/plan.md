@@ -5,23 +5,23 @@
 ```sql
 INSERT INTO meta
 (full_key, description, version, states, fields, config)
-VALUES('/B/statistics/productConsume/total/minute', 'total sold every minute', 1, '', '', '{}');
+VALUES('B:statistics/productConsume/total/minute', 'total sold every minute', 1, '', '', '{}');
 
 INSERT INTO meta
 (full_key, description, version, states, fields, config)
-VALUES('/B/statistics/productConsume/sex/minute', 'total sold every minute', 1, '', '', '{}');
+VALUES('B:statistics/productConsume/sex/minute', 'total sold every minute', 1, '', '', '{}');
 
 INSERT INTO meta
 (full_key, description, version, states, fields, config)
-VALUES('/B/statistics/productConsume/ageRange/minute', 'total sold every minute', 1, '', '', '{}');
+VALUES('B:statistics/productConsume/ageRange/minute', 'total sold every minute', 1, '', '', '{}');
 
 INSERT INTO meta
 (full_key, description, version, states, fields, config)
-VALUES('/B/statistics/productConsume/total/hour', 'total sold every minute', 1, '', '', '{}');
+VALUES('B:statistics/productConsume/total/hour', 'total sold every minute', 1, '', '', '{}');
 
 INSERT INTO meta
 (full_key, description, version, states, fields, config)
-VALUES('/B/statistics/productConsume/sex/hour', 'total sold every minute', 1, '', '', '{}');
+VALUES('B:statistics/productConsume/sex/hour', 'total sold every minute', 1, '', '', '{}');
 
 INSERT INTO meta
 (full_key, description, version, states, fields, config)
@@ -42,6 +42,16 @@ self convert to self,
 task_error : can't finish the task
 
 context
+
+### 对“/” 分隔符的作用
+
+用于可视化业务领域的分级管理
+
+## 查分
+
+业务情景，通过一个学生ID 利用`converter` 查询各科的成绩，然后求这个ID的总分。
+
+Nature 技术点： after_finished 转换器设置。
 
 ## `MetaType::Null`
 
