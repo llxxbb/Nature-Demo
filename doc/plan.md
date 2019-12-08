@@ -30,7 +30,7 @@ VALUES('/B/statistics/productConsume/ageRange/hour', 'total sold every minute', 
 -- orderState:paid --> consumeInput
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/statistics/product/consumeInput:1', '/M/statistics/productConsume/task/minute:1', '{"delay":70, "executor":[{"protocol":"localRust","url":"nature_demo_converter.dll:consume_input"}]}');
+VALUES('/B/statistics/product/consumeInput:1', 'M:statistics/productConsume/task/minute:1', '{"delay":70, "executor":[{"protocol":"localRust","url":"nature_demo_converter.dll:consume_input"}]}');
 ```
 
 ## find use case
