@@ -2,9 +2,9 @@
 
 我们假设用户已经选择了商品，并以此生成订单。
 
-## 定义元数据
+## 定义 `Meta`
 
-你可以在[这里](https://github.com/llxxbb/Nature/blob/master/doc_zh/help/concept-meta.md)了解元数据的信息。首先我们需要定义两个元数据，请执行下面的sql脚本
+你可以在[这里](https://github.com/llxxbb/Nature/blob/master/doc_zh/help/concept-meta.md)了解 `Meta` 的信息。首先我们需要定义两个 `Meta`，请执行下面的sql脚本
 
 ```sqlite
 INSERT INTO meta
@@ -16,21 +16,23 @@ INSERT INTO meta
 VALUES('B', 'sale/orderState', 'order state', 1, 'new|paid|package|outbound|dispatching|signed|canceling|canceled', '', '{"master":"B:sale/order:1"}');
 ```
 
-- B:sale/order: includes normal order properties.
+- B:sale/order: 为订单 `Meta`。里面包含了商品，用户等信息.
 
-- B:sale/orderState: the status for new, paid, outbound, dispatching, signed etcetera.
+- B:sale/orderState: 为订单状态`Meta`。里面定义了订单所用到的各种状态信息.
 
-### Nature key points
+### Nature 关键点
 
-In tradition design, order and order state will be fill into one table, in this condition, new state will overwrite the old one, so it's difficult to trace the changes. **In Nature, normal data and state data are separated strictly**, You must define them separately. And furthermore, Nature will trace every change for the state data by state version.
+在传统的设计方式里，“订单”和“订单状态”一般情况下会放到一张数据表中，新的状态会覆盖掉旧的状态，所以要跟踪这些状态变化是一件比较困难的事。但 **Nature 不建议这么做**，因为订单里有很多内容，而状态改变只会影响非常少的数据，所以 这里将订单信息拆分成常规数据和状态数据两个部分。
 
-mutex state are separated by "|". 
+**常规数据一旦生成将不允许改变或者删除，而状态数据的每次变化都会生成一个新的状态版本数据，并不会覆盖掉旧的数据。**这样既满足了状态跟踪需求，又减少了存储空间，而这个复杂性对Nature的使用人员来讲是无感知的。
 
-`master` means if you did not appoint a `executor` for `orderState`,  Nature will give a default conversion with empty body, and it's id will be same as `B:sale/order`. You will see a `converter` that need a implement in the next chapter.
+**“|”**：表示 `orderState` 的状态是**互斥**的，既当生成一个 `paid` 状态的`orderState` 实例时，这个实例的状态不允许包含诸如 `new`等的其它状态。Nature 对互斥支持的很好，如果你输入一个状态，她自动会替换掉与之互斥的其它状态。
 
-## Define `converter`
+`master` 说明 `orderState` 依附于 `order`，这是个非常重要的属性，如果应用的好，你只需定义 `converter` 而可无需实现 `converter` 就可以实现`Meta`间示例的转换，请看下面小节的说明。
 
-When we input an `Order` from outside, we set a `new` state for this order by converter. Execute the following sql please:
+## 定义 `converter`
+
+当你从外部输入一个`order`实例到 Nature 后，我们需要设置这个 `order` 的状态为 `new`。要实现这个功能我们需要定义一个 `converter`， 请执行下面的 sql。
 
 ```sqlite
 INSERT INTO relation
@@ -38,14 +40,16 @@ INSERT INTO relation
 VALUES('B:sale/order:1', 'B:sale/orderState:1', '{"target_states":{"add":["new"]}}');
 ```
 
-Let's see some explanation:
+`relation`数据表用于存储 `converter` 的定义，相关说明如下：
 
-| field           | value description                                            |
+| 字段或属性      | 说明                                                         |
 | --------------- | ------------------------------------------------------------ |
-| from_meta       | The `order` defined in `meta` , the form is [full_key]:[version] |
-| to_meta         | `orderState` defined in `meta` , the form is [full_key]:[version] |
-| settings        | A `JSON` string for converter's setting. It's value described in following table |
-| `target_states` | After instance converted, Nature will add and (or) remove the states which target_states defined. this is only take affect on state-meta |
+| from_meta       | `converter`的输入，格式为 [`MetaType`]:[key]:[version]       |
+| to_meta         | `converter`的输出，格式同 from_meta                          |
+| settings        | 是一个 `JSON` 形式的配置对象， 详细说明请看[这里](https://github.com/llxxbb/Nature/blob/master/doc_zh/help/converter.md)。 |
+| `target_states` | 当 `converter` 转换完成后，会自动在返回的实例上添加或移除状态。 |
+
+`master` means if you did not appoint a `executor` for `orderState`,  Nature will give a default conversion with empty body, and it's id will be same as `B:sale/order`. You will see a `converter` that need a implement in the next chapter.
 
 ## Define `Order` and other related business objects
 
