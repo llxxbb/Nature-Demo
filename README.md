@@ -1,48 +1,39 @@
-# A concrete example
+# Nature 应用示例
+[English](README_EN.md)|中文
 
-English|[中文](README.ZH.md)
+如果你是第一次了解 Nature , 建议你从头到尾阅读这些 Demo。 每个章节都包含一些不同的 **Nature 要点**，以帮助你更好的了解 Nature 以及如何用 Nature 独有的方式来解决问题；同时阐述Nature 是如何简化技术性代码，使开发人员的聚焦于业务本身。下面为 Demo 相关的项目列表。
 
-At here we would build an Online-Shop based on Nature.  The project will involves order, pay, warehouse and delivery domain. Even more we make some statistics through multi-dimensions. 
+- [示例的入口](https://github.com/llxxbb/Nature-Demo)
+- [服务于示例的一些通用封装](https://github.com/llxxbb/Nature-Demo-Common)
+- [示例项目的转换器实现](https://github.com/llxxbb/Nature-Demo-Converter)
+- [基于Restful的转换器实现](https://github.com/llxxbb/Nature-Demo-Converter-Restful)
 
-Don't worry about the complexity, we start at simple first, then step by step to achieve the final target.  Even thou I think the code lines are great reduced compare to the traditional development, conservative estimate they are less than half.
+如何启动 Nature 项目请参考：[项目准备](doc_zh/prepare.md)
 
-## How to read it
+## 网上商城 DEMO
 
-If you are the first time to know Nature,  It's best to view this demo from top to bottom.
+这个Demo涉及的场景比较多，如订单，支付，库房，配送以及多维度的销售统计等。
 
-Each chapter include little key-points of Nature, this let you come to know Nature.
+这并不是一个完整的用于实际生产的例子，我们只关注业务核心逻辑。
 
-In the whole demo description. there are some sections titled with **"Nature key points"** that would mind your attention how to do the thing in Nature way.
+| 章节                                 | 内容摘要                                   | Nature 要点                                                  |
+| ------------------------------------ | ------------------------------------------ | ------------------------------------------------------------ |
+| [生成订单](doc_zh/order-generate.md) | 用户向 Nature 提交一个订单                 | `Meta`, master `meta`, target-state, `Converter` ，提交`Instance`到Nature. |
+| [订单支付](doc_zh/pay-the-bill.md)   | 用户可以对一个金额比较大的订单进行多次支付 | 选择上游, 并发冲突控制                                       |
+| [出库](doc_zh/stock-out.md)          | 库房的系统比较老旧，处理订单比较慢         | 提交状态`Instance` 到Nature，回调                            |
+| [配送](doc_zh/delivery.md)           | 和第三方协作                               | 参数化输入                                                   |
+| [签收](doc_zh/signed.md)             | 用户接收了订单中的货物                     | 延迟转换                                                     |
 
-## Demo projects
+[Q&A](doc_zh/q&a.md)
 
-Nature have provide all implement for this demo. you will find all of them in the following projects.
+## 查分
 
-- [test entry](https://github.com/llxxbb/Nature-Demo)
-- [common defines](https://github.com/llxxbb/Nature-Demo-Common)
-- [converter](https://github.com/llxxbb/Nature-Demo-Converter)
-- [restful-converter](https://github.com/llxxbb/Nature-Demo-Converter-Restful)
+因为Nature 的所有特性不能在网上商城上都能体现出来，"查分"可以弥补一下这些批处理特性介绍。
 
-## Let‘s begin
+下列内容还没有完成
 
-| chapter                                 | digest                                                    | key points                                                   |
-| --------------------------------------- | --------------------------------------------------------- | ------------------------------------------------------------ |
-| [prepare](doc/prepare.md)               | prepare for the demo                                      | how to run Nature                                            |
-| [generate order](doc/order-generate.md) | user commit an order into to Nature                       | `Meta`, master `meta`, define target-state, `Converter`  and how to commit business object to Nature |
-| [pay for the bill](doc/pay-the-bill.md) | user can pay many times for the big bill.                 | upstream select, state conflict control                      |
-| [stock-out](doc/stock-out.md)           | the warehouse system is slow to process the order's goods | input state instance, callback                               |
-| [delivery](doc/delivery.md)             | collaborate with the third-party                          | parameterization input                                       |
-| [signed](doc/signed.md)                 | user received the goods                                   | delay converter                                              |
-
-
-The following unfinished yet.
-
-| chapter                              | digest                                                       | key points                                |
-| ------------------------------------ | ------------------------------------------------------------ | ----------------------------------------- |
-| [sale statistics](doc/statistics.md) | from goods view, make statistics freely, extensible, no coding. | context, embedded counter, serial process |
-| user consumption data                | make data which can be got by user id, such as order list    | parallel process                          |
-
-[Q&A](doc/q&a.md)
-
-
+| chapter                                 | digest                                                       | key points                                |
+| --------------------------------------- | ------------------------------------------------------------ | ----------------------------------------- |
+| [sale statistics](doc_zh/statistics.md) | from goods view, make statistics freely, extensible, no coding. | context, embedded counter, serial process |
+| user consumption data                   | make data which can be got by user id, such as order list    | parallel process                          |
 

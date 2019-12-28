@@ -61,7 +61,7 @@ fn get_state_instance_by_id(id: u128, meta_full: &str, sta_ver: i32) -> Option<I
 
 pub fn wait_for_order_state(order_id: u128, state_ver: i32) -> Instance {
     loop {
-        if let Some(ins) = get_state_instance_by_id(order_id, "/B/sale/orderState:1", state_ver) {
+        if let Some(ins) = get_state_instance_by_id(order_id, "B:sale/orderState:1", state_ver) {
             return ins;
         } else {
             sleep(Duration::from_nanos(200000))
