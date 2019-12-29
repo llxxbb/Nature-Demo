@@ -1,14 +1,16 @@
-# stock-out
+# 出库
 
-When the order was paid we should carry out the contract. The first step is stock-out. But we suppose that the warehouse system is old and slow, and that would cause timeout, so we need another mechanism to resolve the problem: callback.
+当订单支付完成后，我们就需要履行合同了。第一步就是出库。我们假设库房管理系统已经存在且比较老旧，运行缓慢，不能直接和Nature进行通信。为了使它能够和Nature能够进行通讯，库房的开发工程师封装了一个中间层并将它部署到库房里。因为库房是一个独立的系统，所以我们就不需要库房相关的`Meta`定义了。
 
-## Some limited
+我们在这里假设库房管理系统与Nature的通讯往往要超时，所以我们在本示例里采用一种新的机制来面对这个问题：回调。
 
-In real conditions, an order's may include variant goods, these goods may involves many warehouses,  and each of them need to be traced separately. I don't want to make this chapter too complex, so I suppose there is only one warehouse can be used.
+## 一些限制说明
 
-Another thing is, a warehouse process `stock-out-application` instead of `order` in usually. To simplify this demo  let's suppose the warehouse system is already exists before Nature and can process business by `order` info, so we need not to define `meta` for warehouse.
+在真实的情况中，一个订单可能包含不同的商品，而这些商品也可能分布在不同的库房中。一般情况下每个库房的商品都需要单独跟踪。本示例为了简单起见，假定所有的商品都在同一个库房里。
 
-## Define `converter`
+## 定义`Converter`
+
+只要将订单下传到库房管理系统，我们就认为订单正在打包了。
 
 ```sqlite
 -- orderState:paid --> orderState:package
@@ -17,34 +19,35 @@ INSERT INTO relation
 VALUES('B:sale/orderState:1', 'B:sale/orderState:1', '{"selector":{"source_state_include":["paid"]},"executor":[{"protocol":"http","url":"http://localhost:8082/send_to_warehouse"}],"target_states":{"add":["package"]}}');
 ```
 
-### Nature key points
+### Nature 要点
 
-`Protocol::http`: Nature can post a request to a restful implement converter.
+`Protocol::http`: Nature 可以通过Http协议与外部的`executor`进行通讯。
 
-## The process flow
+## 处理流程示意图
 
 ```mermaid
 graph LR
-	order:paid-->send[send to warehouse]
-	send-->wh[warehouse process]
+	order:paid-->send[出库申请]
+	send-->wh[出库处理]
 	wh-->order:outbound	
 ```
 
-## Implement the converter
+## 实现`executor`
 
-The main code is list below:
+下面这个`executor`的实现主要是将订单信息下传到库房：
 
 ```rust
 fn send_to_warehouse(para: Json<ConverterParameter>) -> HttpResponse {
     thread::spawn(move || send_to_warehouse_thread(para.0));
-    // wait 60 seconds to simulate the process of warehouse business.
+    // 让Nature等待60s,如果60s内没有响应，Nature将会重试。
     HttpResponse::Ok().json(ConverterReturned::Delay(60))
 }
 
 fn send_to_warehouse_thread(para: ConverterParameter) {
-    // wait 50ms
+    // TODO 将订单下传给库房管理系统。
+    // 等待 50ms， 以模拟上面的下传操作时间。
     thread::sleep(Duration::new(0, 50000));
-    // send result to Nature
+    // 返回库房的处理结果
     let rtn = DelayedInstances {
         task_id: para.task_id,
         result: ConverterReturned::Instances(vec![para.from]),
@@ -59,28 +62,32 @@ fn send_to_warehouse_thread(para: ConverterParameter) {
 }
 ```
 
-### Nature key points
+上面的代码并没有写出业务逻辑来，真正的业务逻辑需要在新起的线程里异步处理。这里只是给出了如何和Nature进行异步通信的方法。
 
-`callback`: `converter` can processed asynchronously for a long-time-task, in this situation converter need return immediately with `ConverterReturned::Delay(seconds)` , this tell Nature the `converter` will return the real result before the **seconds** passed, if not Nature will try again.
+### Nature 要点
 
-Another point is the real result `converter` returned must be `DelayedInstances` but not `ConverterReturned`. And the  `DelayedInstances.task_id` must be  `para.task_id`, this will tell Nature to restore the unfinished task and go on.
+`callback`：`executor`可以异步执行一个需要长时间运行的任务，在这种情况下，`executor`需要立即返回`ConverterReturned::Delay(seconds)` 给Nature，此返回值的意思是，挂起当前的处理并等待通知，如在等待指定的时间内还没有反馈，则进行重试,
 
-## Give outbound info to Nature
+当`executor`处理完后需要将正式的结果通过`DelayedInstances` 来告知Nature 而不是`ConverterReturned`。并且`DelayedInstances.task_id` 的值一定是`para.task_id`的值，Nature 可以通过这个 task_id 来唤起挂起的任务。
 
-Now the warehouse packaged the goods and make it outbound, and then tell this info to Nature, so that Nature can driver the following steps to run.
+## 将出库信息反馈给Nature
+
+接收了出库申请后，库房管理人员或机器人要依据订单地内容进行拣货和打包和出库。此时中间层应该通知Nature 改变订单地状态，以驱动后面的流程。示例代码如下：
 
 ```rust
-	let last = wait_for_packaged(order_id);    
 	let mut instance = Instance::new("/sale/orderState").unwrap();
-    instance.id = last.id;
-    instance.state_version = last.state_version + 1;
-    instance.states.clear();
+    instance.id = one_order.id;
+    instance.state_version = one_order.state_version + 1;
     instance.states.insert("outbound".to_string());
     let rtn = send_instance(&instance);
 ```
 
-### Nature key points
+### Nature 要点
 
-Like normal input to Nature, but here you must use `last`'s id, otherwise Nature will generate one for you,  then your `order` will not find it's outbound info anymore.
+一定要设置`instance.id `为要出库的订单ID，否则Nature 会分配一个新的ID，这将导致订单在系统中无法出库。
 
-`state_version` must add one, otherwise it will conflict.
+`state_version` 必须要在原有的基础上加一，否则会引起冲突，无法处理.
+
+## 与传统开发方式的区别
+
+Nature 能够强有力的对逻辑实现进行肢解，大幅度降低彼此之间的耦合，这样就为基于分布式的异构系统间的业务往来提供了良好的协作平台，即便是老旧的系统仍然可以发挥应有的价值。
