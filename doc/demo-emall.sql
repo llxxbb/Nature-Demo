@@ -42,14 +42,33 @@ INSERT INTO relation
 (from_meta, to_meta, settings)
 VALUES('B:sale/orderState:1', 'B:sale/orderState:1', '{"selector":{"source_state_include":["paid"]},"executor":[{"protocol":"http","url":"http://localhost:8082/send_to_warehouse"}],"target_states":{"add":["package"]}}');
 
--- stock out  ---------------------------------------------
+-- delivery  ---------------------------------------------
+INSERT INTO meta
+(meta_type, meta_key, description, version, states, fields, config)
+VALUES('B', 'third/waybill', 'waybill', 1, '', '', '{}');
 
 -- orderState:outbound --> waybill
+INSERT INTO relation
+(from_meta, to_meta, settings)
+VALUES('B:sale/orderState:1', 'B:third/waybill:1', '{"selector":{"source_state_include":["outbound"]}, "executor":[{"protocol":"localRust","url":"nature_demo_converter.dll:go_express"}]}');
 
 -- waybill --> orderState:dispatching
+INSERT INTO relation
+(from_meta, to_meta, settings)
+VALUES('B:third/waybill:1', 'B:sale/orderState:1', '{"target_states":{"add":["dispatching"]}}');
 
 -- signed  ---------------------------------------------
+INSERT INTO meta
+(meta_type, meta_key, description, version, states, fields, config)
+VALUES('B', 'sale/orderSign', 'order finished', 1, '', '', '{}');
 
 -- orderState:dispatching --> orderSign
+INSERT INTO relation
+(from_meta, to_meta, settings)
+VALUES('B:sale/orderState:1', 'B:sale/orderSign:1', '{"delay":1,"selector":{"source_state_include":["dispatching"]}, "executor":[{"protocol":"localRust","url":"nature_demo_converter.dll:auto_sign"}]}');
 
 -- orderSign --> orderState:signed
+INSERT INTO relation
+(from_meta, to_meta, settings)
+VALUES('B:sale/orderSign:1', 'B:sale/orderState:1', '{"target_states":{"add":["signed"]}}');
+

@@ -1,10 +1,12 @@
-## Signed
+## 签收
 
-This is the last step, user receive goods and sign the waybill, but express company will not give the signed info to our system, so we need the custom login to our system and signed it manually. but many of them do not do that at all, how do we to accomplish it? An idea is we will wait fortnight, when there is no complaint, we will signed it automatically.
+这是订单处理流程的最后一步：签收。但是物流公司并不主动将签收信号反馈给我们，我们需要用户登录到我们的系统上来，然后点击签收按钮，但是他们中的很多人根本不这么做。那么我们怎么完成这些订单呢?一个可行的方法是，我们等待两个星期，如果这期间没有投诉，我们就自动签收它。
 
-For our benefit, we make fortnight to 1 seconds, so that you can see the result quickly.
+为了我们的时间着想，示例中我们将两星期压缩到1s，这样你就能够很快的看到结果。
 
-## Define `meta`
+
+
+## 定义`meta`
 
 ```sqlite
 INSERT INTO meta
@@ -12,7 +14,7 @@ INSERT INTO meta
 VALUES('B', 'sale/orderSign', 'order finished', 1, '', '', '{}');
 ```
 
-## Define converter
+## 定义converter
 
 ```sqlite
 -- orderState:dispatching --> orderSign
@@ -26,6 +28,8 @@ INSERT INTO relation
 VALUES('B:sale/orderSign:1', 'B:sale/orderState:1', '{"target_states":{"add":["signed"]}}');
 ```
 
-### Nature key points
+### Nature 要点
 
-`delay`: will tell Nature execute this conversion after appointed time.  notice that,  delayed task only can be picked up by `Nature-Retry` project , so you need to start it up.
+`delay`：这个属性告诉Nature 不要让执行器立即执行任务，而是要等待指定的时间后再执行。
+
+被推迟的任务只能通过`Nature-Retry`项目才能重新执行，所以本示例你需要将它启动起来。

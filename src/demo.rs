@@ -10,8 +10,10 @@ fn demo_all_test() {
     user_pay(id);
     dbg!("package and outbound");
     outbound(id);
-    dbg!("delay for auto signed");
+    dbg!("delivery");
     let _ = wait_for_order_state(id, 5);
+    dbg!("delay for auto signed");
+    let _ = wait_for_order_state(id, 6);
 }
 
 #[test]
