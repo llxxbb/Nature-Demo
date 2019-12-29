@@ -42,7 +42,5 @@ The following unfinished yet.
 | [sale statistics](doc/EN/emall/emall-6-statistics.md) | from goods view, make statistics freely, extensible, no coding. | context, embedded counter, serial process |
 | user consumption data                | make data which can be got by user id, such as order list    | parallel process                          |
 
-[Q&A](doc/EN/q&a.md)
-
 
 

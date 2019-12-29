@@ -8,7 +8,7 @@
 - [示例项目的转换器实现](https://github.com/llxxbb/Nature-Demo-Converter)
 - [基于Restful的转换器实现](https://github.com/llxxbb/Nature-Demo-Converter-Restful)
 
-如何启动 Nature 项目请参考：[项目准备](doc/ZH/prepare.md)
+如何启动 Nature 项目请参考：[项目准备](doc/unfinished/prepare.md)
 
 ## 网上商城 DEMO
 
@@ -24,13 +24,9 @@
 | [配送](doc/ZH/emall/emall-4-delivery.md)           | 和第三方协作                               | 参数化输入                                                   |
 | [签收](doc/ZH/emall/emall-5-signed.md)             | 用户接收了订单中的货物                     | 延迟转换                                                     |
 
-[Q&A](doc/ZH/q&a.md)
+## 统计DEMO
 
-## 查分
-
-因为Nature 的所有特性不能在网上商城上都能体现出来，"查分"可以弥补一下这些批处理特性介绍。
-
-下列内容还没有完成
+可以把Nature 看做一个简单的流式统计框架。
 
 | chapter                                 | digest                                                       | key points                                |
 | --------------------------------------- | ------------------------------------------------------------ | ----------------------------------------- |
