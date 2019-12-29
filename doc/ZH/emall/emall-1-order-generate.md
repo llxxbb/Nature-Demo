@@ -4,7 +4,7 @@
 
 ## 定义 `Meta`
 
-你可以在[这里](https://github.com/llxxbb/Nature/blob/master/doc_zh/help/meta.md)了解 `Meta` 的信息。首先我们需要定义两个 `Meta`，请执行下面的sql脚本
+首先我们需要定义两个 `Meta`，请执行下面的sql脚本
 
 ```sqlite
 INSERT INTO meta
@@ -47,7 +47,7 @@ VALUES('B:sale/order:1', 'B:sale/orderState:1', '{"target_states":{"add":["new"]
 | --------------- | ------------------------------------------------------------ |
 | from_meta       | `converter`的输入，格式为 [`MetaType`]:[key]:[version]       |
 | to_meta         | `converter`的输出，格式同 from_meta                          |
-| settings        | 是一个 `JSON` 形式的配置对象， 详细说明请看[这里](https://github.com/llxxbb/Nature/blob/master/doc_zh/help/relation.md)。 |
+| settings        | 是一个 `JSON` 形式的配置对象，用于说明如何这个关系。         |
 | `target_states` | 当 `converter` 转换完成后，该属性会要求 Nature 在返回的实例上添加或移除状态。 |
 
 ## 定义`Order`和相关的业务对象
@@ -109,9 +109,9 @@ fn create_order() -> Order {
 并且把这个实例的JSON形式绑定到 `Instance。content` 上，这个`Instance`的 `MetaType` 为 "/B/order:1"。
 
 ```rust
-        // create an order
+        // 创建一个订单对象
         let order = create_order();
-        // ---- create a instance with meta: "/B/order:1"
+        // ---- 闯将一个 instance, 其 meta 为: "B:order:1"
         let mut instance = Instance::new("/sale/order").unwrap();
         instance.content = serde_json::to_string(&order).unwrap();
 ```
@@ -145,7 +145,7 @@ Nature 通过 `Order` 的 `Relation`会好到 `OrderState` ，因为 `Relation` 
 
 ### Nature 要点
 
-在这个示例中 order 和 orderState 的 `Instance` 具有相同的 ID， 这样做的好处就是，我可以用一个ID就可以将所有相关联的业务数据一次性提取出来。而传统数据库的设计方式往往是需要外键转换的，这对并发是不友好的。
+在这个示例中 order 和 orderState 的 `Instance` 具有相同的 ID， 这样做的好处就是，我可以用一个ID就可以将所有相关联的业务数据一次性提取出来。而传统数据库的设计方式往往是需要外键转换的，这会影响性能。
 
 ## 与传统开发方式的区别
 

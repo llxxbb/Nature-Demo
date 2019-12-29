@@ -8,7 +8,7 @@
 - [示例项目的转换器实现](https://github.com/llxxbb/Nature-Demo-Converter)
 - [基于Restful的转换器实现](https://github.com/llxxbb/Nature-Demo-Converter-Restful)
 
-如何启动 Nature 项目请参考：[项目准备](doc_zh/prepare.md)
+如何启动 Nature 项目请参考：[项目准备](doc/ZH/prepare.md)
 
 ## 网上商城 DEMO
 
@@ -16,15 +16,15 @@
 
 这并不是一个完整的用于实际生产的例子，我们只关注业务核心逻辑。
 
-| 章节                                 | 内容摘要                                   | Nature 要点                                                  |
-| ------------------------------------ | ------------------------------------------ | ------------------------------------------------------------ |
-| [生成订单](doc_zh/order-generate.md) | 用户向 Nature 提交一个订单                 | `Meta`, master `meta`, target-state, `Converter` ，提交`Instance`到Nature. |
-| [订单支付](doc_zh/pay-the-bill.md)   | 用户可以对一个金额比较大的订单进行多次支付 | 选择上游, 并发冲突控制                                       |
-| [出库](doc_zh/stock-out.md)          | 库房的系统比较老旧，处理订单比较慢         | 提交状态`Instance` 到Nature，回调                            |
-| [配送](doc_zh/delivery.md)           | 和第三方协作                               | 参数化输入                                                   |
-| [签收](doc_zh/signed.md)             | 用户接收了订单中的货物                     | 延迟转换                                                     |
+| 章节                                               | 内容摘要                                   | Nature 要点                                                  |
+| -------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------ |
+| [生成订单](doc/ZH/emall/emall-1-order-generate.md) | 用户向 Nature 提交一个订单                 | `Meta`, master `meta`, target-state, `Converter` ，提交`Instance`到Nature. |
+| [支付订单](doc/ZH/emall/emall-2-pay-the-bill.md)   | 用户可以对一个金额比较大的订单进行多次支付 | 选择上游, 并发冲突控制                                       |
+| [出库](doc/ZH/emall/emall-3-stock-out.md)          | 库房的系统比较老旧，处理订单比较慢         | 提交状态`Instance` 到Nature，回调                            |
+| [配送](doc/ZH/emall/emall-4-delivery.md)           | 和第三方协作                               | 参数化输入                                                   |
+| [签收](doc/ZH/emall/emall-5-signed.md)             | 用户接收了订单中的货物                     | 延迟转换                                                     |
 
-[Q&A](doc_zh/q&a.md)
+[Q&A](doc/ZH/q&a.md)
 
 ## 查分
 
@@ -34,6 +34,6 @@
 
 | chapter                                 | digest                                                       | key points                                |
 | --------------------------------------- | ------------------------------------------------------------ | ----------------------------------------- |
-| [sale statistics](doc_zh/statistics.md) | from goods view, make statistics freely, extensible, no coding. | context, embedded counter, serial process |
+| [sale statistics](doc/ZH/emall/emall-6-statistics.md) | from goods view, make statistics freely, extensible, no coding. | context, embedded counter, serial process |
 | user consumption data                   | make data which can be got by user id, such as order list    | parallel process                          |
 

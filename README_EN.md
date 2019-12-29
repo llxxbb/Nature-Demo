@@ -27,22 +27,22 @@ Nature have provide all implement for this demo. you will find all of them in th
 
 | chapter                                 | digest                                                    | key points                                                   |
 | --------------------------------------- | --------------------------------------------------------- | ------------------------------------------------------------ |
-| [prepare](doc/prepare.md)               | prepare for the demo                                      | how to run Nature                                            |
-| [generate order](doc/order-generate.md) | user commit an order into to Nature                       | `Meta`, master `meta`, define target-state, `Converter`  and how to commit business object to Nature |
-| [pay for the bill](doc/pay-the-bill.md) | user can pay many times for the big bill.                 | upstream select, state conflict control                      |
-| [stock-out](doc/stock-out.md)           | the warehouse system is slow to process the order's goods | input state instance, callback                               |
-| [delivery](doc/delivery.md)             | collaborate with the third-party                          | parameterization input                                       |
-| [signed](doc/signed.md)                 | user received the goods                                   | delay converter                                              |
+| [prepare](doc/EN/prepare.md)               | prepare for the demo                                      | how to run Nature                                            |
+| [generate order](doc/EN/emall/emall-1-order-generate.md) | user commit an order into to Nature                       | `Meta`, master `meta`, define target-state, `Converter`  and how to commit business object to Nature |
+| [pay for the bill](doc/EN/emall/emall-2-pay-the-bill.md) | user can pay many times for the big bill.                 | upstream select, state conflict control                      |
+| [stock-out](doc/EN/emall/emall-3-stock-out.md)           | the warehouse system is slow to process the order's goods | input state instance, callback                               |
+| [delivery](doc/EN/emall/emall-4-delivery.md)             | collaborate with the third-party                          | parameterization input                                       |
+| [signed](doc/EN/emall/emall-5-signed.md)                 | user received the goods                                   | delay converter                                              |
 
 
 The following unfinished yet.
 
 | chapter                              | digest                                                       | key points                                |
 | ------------------------------------ | ------------------------------------------------------------ | ----------------------------------------- |
-| [sale statistics](doc/statistics.md) | from goods view, make statistics freely, extensible, no coding. | context, embedded counter, serial process |
+| [sale statistics](doc/EN/emall/emall-6-statistics.md) | from goods view, make statistics freely, extensible, no coding. | context, embedded counter, serial process |
 | user consumption data                | make data which can be got by user id, such as order list    | parallel process                          |
 
-[Q&A](doc/q&a.md)
+[Q&A](doc/EN/q&a.md)
 
 
 

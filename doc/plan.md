@@ -1,7 +1,5 @@
 # plan for demo
 
-进化的例子
-
 ## statistics
 
 ```sql
@@ -85,7 +83,7 @@ use_upstream_id
 
 ## unfinished
 
-###### ![process flow](processing_flow.png)
+###### ![process flow](ZH/processing_flow.png)
 
 ## plan goals
 
@@ -114,7 +112,7 @@ __Notice:__  I specified status field for the `OrderStatus` goal, it is the only
 
 The second step is design path from one goal to another, let's see:
 
-![how](how.png)
+![how](ZH/how.png)
 
 I drew the picture intent to make you understand easily. in actually the data makes up this picture comes from another table: `one_step_flow`. Let's see:
 

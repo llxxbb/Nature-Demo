@@ -6,8 +6,8 @@ use crate::{CLIENT, outbound, send_order_to_nature, URL_GET_BY_ID, user_pay, wai
 fn demo_all_test() {
     dbg!("generate order");
     let id = send_order_to_nature();
-//    dbg!("pay for order");
-//    user_pay(id);
+    dbg!("pay for order");
+    user_pay(id);
 //    dbg!("package and outbound");
 //    outbound(id);
 //    dbg!("delay for auto signed");

@@ -37,7 +37,7 @@ fn pay(id: u128, num: u32, account: &str, time: i64) -> u128 {
     };
     let mut context: HashMap<String, String> = HashMap::new();
     context.insert("sys.target".to_string(), id.to_string());
-    match send_business_object_with_context("/finance/payment", &payment, &context) {
+    match send_business_object_with_context("finance/payment", &payment, &context) {
         Ok(id) => id,
         _ => 0
     }
