@@ -9,7 +9,7 @@ For our benefit, we make fortnight to 1 seconds, so that you can see the result 
 ```sqlite
 INSERT INTO meta
 (full_key, description, version, states, fields, config)
-VALUES('/B/sale/orderSign', 'order finished', 1, '', '', '{}');
+VALUES('B:sale/orderSign', 'order finished', 1, '', '', '{}');
 ```
 
 ## Define converter
@@ -18,12 +18,12 @@ VALUES('/B/sale/orderSign', 'order finished', 1, '', '', '{}');
 -- orderState:dispatching --> orderSign
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/sale/orderState:1', '/B/sale/orderSign:1', '{"delay":1,"selector":{"source_state_include":["dispatching"]}, "executor":[{"protocol":"localRust","url":"nature_demo_converter.dll:auto_sign"}]}');
+VALUES('B:sale/orderState:1', 'B:sale/orderSign:1', '{"delay":1,"selector":{"source_state_include":["dispatching"]}, "executor":[{"protocol":"localRust","url":"nature_demo_converter.dll:auto_sign"}]}');
 
 -- orderSign --> orderState:signed
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/sale/orderSign:1', '/B/sale/orderState:1', '{"target_states":{"add":["signed"]}}');
+VALUES('B:sale/orderSign:1', 'B:sale/orderState:1', '{"target_states":{"add":["signed"]}}');
 ```
 
 ### Nature key points

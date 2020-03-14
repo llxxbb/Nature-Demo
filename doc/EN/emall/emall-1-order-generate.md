@@ -8,18 +8,18 @@ We suppose the user have goods selected, and use it to generate an order.
 
 First we will define two `meta`s. please insert the follow data to nature.sqlite. 
 
-- /B/sale/order: includes normal order properties.
+- B:sale/order: includes normal order properties.
 
-- /B/sale/orderState: the status for new, paid, outbound, dispatching, signed etcetera.
+- B:sale/orderState: the status for new, paid, outbound, dispatching, signed etcetera.
 
 ```sqlite
 INSERT INTO meta
 (full_key, description, version, states, fields, config)
-VALUES('/B/sale/order', 'order', 1, '', '', '{}');
+VALUES('B:sale/order', 'order', 1, '', '', '{}');
 
 INSERT INTO meta
 (full_key, description, version, states, fields, config)
-VALUES('/B/sale/orderState', 'order state', 1, 'new|paid|package|outbound|dispatching|signed|canceling|canceled', '', '{"master":"/B/sale/order:1"}');
+VALUES('B:sale/orderState', 'order state', 1, 'new|paid|package|outbound|dispatching|signed|canceling|canceled', '', '{"master":"B:sale/order:1"}');
 ```
 
 ### Nature key points
@@ -28,7 +28,7 @@ In tradition design, order and order state will be fill into one table, in this 
 
 mutex state are separated by "|". 
 
-`master` means if you did not appoint a `executor` for `orderState`,  Nature will give a default conversion with empty body, and it's id will be same as `/B/sale/order`. You will see a `converter` that need a implement in the next chapter.
+`master` means if you did not appoint a `executor` for `orderState`,  Nature will give a default conversion with empty body, and it's id will be same as `B:sale/order`. You will see a `converter` that need a implement in the next chapter.
 
 ## Define `converter`
 
@@ -37,7 +37,7 @@ When we input an `Order` from outside, we set a `new` state for this order by co
 ```sqlite
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/sale/order:1', '/B/sale/orderState:1', '{"target_states":{"add":["new"]}}');
+VALUES('B:sale/order:1', '/B/sale/orderState:1', '{"target_states":{"add":["new"]}}');
 ```
 
 Let's see some explanation:

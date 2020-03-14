@@ -10,15 +10,17 @@ fn demo_all_test() {
     user_pay(id);
     dbg!("package and outbound");
     outbound(id);
-    dbg!("delay for auto signed");
+    dbg!("delivery");
     let _ = wait_for_order_state(id, 5);
+    dbg!("delay for auto signed");
+    let _ = wait_for_order_state(id, 6);
 }
 
 #[test]
 fn temp_test() {
     let response = CLIENT.post(URL_GET_BY_ID).json(&ParaForQueryByID {
         id: 271448073389351988786345053349058430028,
-        meta: "/B/sale/orderState:1".to_string(),
+        meta: "B:sale/orderState:1".to_string(),
         state_version_from: 0,
         limit: 1,
     }).send();

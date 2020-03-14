@@ -20,7 +20,7 @@ pub fn user_pay(order_id: u128) {
 
 fn wait_until_order_account_is_ready(order_id: u128) {
     loop {
-        if let Some(_) = get_instance_by_id(order_id, "/B/finance/orderAccount:1") {
+        if let Some(_) = get_instance_by_id(order_id, "B:finance/orderAccount:1") {
             break;
         } else {
             sleep(Duration::from_nanos(200000))
@@ -37,7 +37,7 @@ fn pay(id: u128, num: u32, account: &str, time: i64) -> u128 {
     };
     let mut context: HashMap<String, String> = HashMap::new();
     context.insert("sys.target".to_string(), id.to_string());
-    match send_business_object_with_context("/finance/payment", &payment, &context) {
+    match send_business_object_with_context("finance/payment", &payment, &context) {
         Ok(id) => id,
         _ => 0
     }

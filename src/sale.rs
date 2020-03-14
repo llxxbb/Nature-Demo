@@ -15,7 +15,7 @@ pub fn send_order_to_nature() -> u128 {
     assert_eq!(msg.contains("DaoDuplicated"), true);
 
     // check created instance for order
-    let rtn = get_instance_by_id(id, "/B/sale/order:1").unwrap();
+    let rtn = get_instance_by_id(id, "B:sale/order:1").unwrap();
     assert_eq!(rtn.id, id);
 
     // check created instance for order state
@@ -24,11 +24,11 @@ pub fn send_order_to_nature() -> u128 {
 
 fn wait_until_order_state_is_ready(order_id: u128) -> u128 {
     loop {
-        if let Some(ins) = get_instance_by_id(order_id, "/B/sale/orderState:1") {
+        if let Some(ins) = get_instance_by_id(order_id, "B:sale/orderState:1") {
             assert_eq!(ins.id, order_id);
             assert_eq!(ins.states.contains("new"), true);
             let from = ins.from.as_ref().unwrap();
-            assert_eq!(from.meta, "/B/sale/order:1");
+            assert_eq!(from.meta, "B:sale/order:1");
             return ins.id;
         } else {
             sleep(Duration::from_nanos(200000))
