@@ -1,6 +1,4 @@
-# Statistics
-
-After paid we want to make statistics for the products, and analysis them by multi-dimensions, but we are lazy to writing the code. Luckily Nature can do that for you.
+# 统计班内每个人的总分
 
 ## Define `meta`
 

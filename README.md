@@ -1,14 +1,7 @@
 # Nature 应用示例
 [English](README_EN.md)|中文
 
-如果你是第一次了解 Nature , 建议你从头到尾阅读这些 Demo。 每个章节都包含一些不同的 **Nature 要点**，以帮助你更好的了解 Nature 以及如何用 Nature 独有的方式来解决问题；同时阐述Nature 是如何简化技术性代码，使开发人员的聚焦于业务本身。下面为 Demo 相关的项目列表。
-
-- [示例的入口](https://github.com/llxxbb/Nature-Demo)
-- [服务于示例的一些通用封装](https://github.com/llxxbb/Nature-Demo-Common)
-- [示例项目的转换器实现](https://github.com/llxxbb/Nature-Demo-Converter)
-- [基于Restful的转换器实现](https://github.com/llxxbb/Nature-Demo-Converter-Restful)
-
-如何启动 Nature 项目请参考：[项目准备](doc/unfinished/prepare.md)
+如果你是第一次了解 Nature , 建议你从头到尾阅读这些 Demo。 每个章节都包含一些不同的 **Nature 要点**，以帮助你更好的了解 Nature 以及如何用 Nature 独有的方式来解决问题；同时阐述Nature 是如何简化技术性代码，使开发人员的聚焦于业务本身。如何启动 Nature 项目请参考：[项目准备](doc/ZH/prepare.md)
 
 ## 网上商城 DEMO
 
@@ -26,10 +19,17 @@
 
 ## 统计DEMO
 
-可以把Nature 看做一个简单的流式统计框架。
+可以把Nature 看做一个简单的流式计算框架。
 
-| chapter                                 | digest                                                       | key points                                |
-| --------------------------------------- | ------------------------------------------------------------ | ----------------------------------------- |
-| [sale statistics](doc/ZH/emall/emall-6-statistics.md) | from goods view, make statistics freely, extensible, no coding. | context, embedded counter, serial process |
-| user consumption data                   | make data which can be got by user id, such as order list    | parallel process                          |
+下面给出一个班级成绩统计的例子，具体需求是这样的。
+
+- 求出每个人各科的总分
+- 求出班级每科的Top
+- 求出班级总分的top
+
+| chapter                                                      | digest                             | key points         |
+| ------------------------------------------------------------ | ---------------------------------- | ------------------ |
+| [求出每个人各科的总分](doc/ZH/score/score_1_persion_total.md) | 利用状态数据完成个人所有科目的统计 | 参数化输入状态数据 |
+| 求出班级每科的Top                                            |                                    |                    |
+| 求出班级总分的top                                            |                                    |                    |
 
