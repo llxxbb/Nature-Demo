@@ -12,7 +12,7 @@
 | 章节                                               | 内容摘要                                   | Nature 要点                                                  |
 | -------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------ |
 | [生成订单](doc/ZH/emall/emall-1-order-generate.md) | 用户向 Nature 提交一个订单                 | `Meta`, master `meta`, target-state, `Converter` ，提交`Instance`到Nature。 |
-| [支付订单](doc/ZH/emall/emall-2-pay-the-bill.md)   | 用户可以对一个金额比较大的订单进行多次支付 | 选择上游，上下文（sys.target）, 并发冲突控制                 |
+| [支付订单](doc/ZH/emall/emall-2-pay-the-bill.md)   | 用户可以对一个金额比较大的订单进行多次支付 | 选择上游，系统上下文（target.id）, 并发冲突控制                 |
 | [出库](doc/ZH/emall/emall-3-stock-out.md)          | 库房的系统比较老旧，处理订单比较慢         | 提交`state-instance` ，回调，与已有系统的对接。              |
 | [配送](doc/ZH/emall/emall-4-delivery.md)           | 和第三方协作                               | 参数化输入                                                   |
 | [签收](doc/ZH/emall/emall-5-signed.md)             | 用户接收了订单中的货物                     | 延迟转换                                                     |

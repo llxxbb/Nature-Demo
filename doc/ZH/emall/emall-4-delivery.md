@@ -37,7 +37,7 @@ pub extern fn go_express(para: &ConverterParameter) -> ConverterReturned {
     let mut ins = Instance::new("any one").unwrap();
     ins.id = para.from.id;
     // 服务于下一个转换器，用于找出 orderState 对应的 `Instance`
-    ins.context.insert("sys.target".to_owned(), para.from.id.to_string());
+    ins.sys_context.insert("target.id".to_owned(), para.from.id.to_string());
     // ... 将包裹信息发送给快递公司，并等待其返回派件单ID,
     // 模拟一个派件单ID，快递公司模拟为：ems
     ins.para = "/ems/".to_owned() + &generate_id(&para.master.clone().unwrap().data).unwrap().to_string();
@@ -49,4 +49,4 @@ pub extern fn go_express(para: &ConverterParameter) -> ConverterReturned {
 
 Nature 使用`Instance.para`保存**"company id + waybill id"**。这样你就可以用 `para`来获取`Instance`了。
 
-再一次我们使用了`sys.target context`，这可能让人有一些奇怪，因为 `waybill`根本不需要它。但是下一个`Converter` **waybill --> orderState:dispatching**  的 `orderState` 的`Instance`ID如何确定呢？因为这是个`auto converter`，`waybill`本身是没有这个信息的，所以这个信息只能放到`sys.target`里。
+再一次我们使用了`target.id system context`，这可能让人有一些奇怪，因为 `waybill`根本不需要它。但是下一个`Converter` **waybill --> orderState:dispatching**  的 `orderState` 的`Instance`ID如何确定呢？因为这是个`auto converter`，`waybill`本身是没有这个信息的，所以这个信息只能放到`target.id`里。

@@ -35,7 +35,7 @@ VALUES('B:third/waybill:1', 'B:sale/orderState:1', '{"target_states":{"add":["di
 pub extern fn go_express(para: &ConverterParameter) -> ConverterReturned {
     // "any one" will be correct by Nature after returned
     let mut ins = Instance::new("any one").unwrap();
-    ins.context.insert("sys.target".to_owned(), para.from.id.to_string());
+    ins.sys_context.insert("target.id".to_owned(), para.from.id.to_string());
     // ... some code to  submit package info to the express company,
     // ... and wait it to return an id.
     // the follow line simulate the express company name and the waybill id returned

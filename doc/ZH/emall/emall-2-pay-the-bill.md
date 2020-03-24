@@ -198,9 +198,9 @@ fn pay(id: u128, num: u32, account: &str, time: i64) -> u128 {
         paid: num,
         pay_time: time,
     };
-    let mut context: HashMap<String, String> = HashMap::new();
-    context.insert("sys.target".to_string(), id.to_string());
-    match send_instance_with_context("finance/payment", &payment, &context) {
+    let mut sys_context: HashMap<String, String> = HashMap::new();
+    sys_context.insert("target.id", id.to_string());
+    match send_instance_with_context("finance/payment", &payment, &sys_context) {
         Ok(id) => id,
         _ => 0
     }
@@ -209,7 +209,7 @@ fn pay(id: u128, num: u32, account: &str, time: i64) -> u128 {
 
 ### Nature 要点
 
-还记得上一小节的问题吗？秘密就在于 **"sys.target"** 上下文上。调用者是知道要为那个订单付款的，而`orderAccount`和`order`共享同一个ID，所以上一小节中的`orderAccount`的ID值就来源于**"sys.target"** 的值。可见相同ID如果应用的恰当，业务逻辑上会有简化。在这个示例中，我们就不需要自己写代码查`orderAccount`数据了，Nature 可以自动为我们查出来。
+还记得上一小节的问题吗？秘密就在于 **"target.id"** 系统上下文上。调用者是知道要为那个订单付款的，而`orderAccount`和`order`共享同一个ID，所以上一小节中的`orderAccount`的ID值就来源于**target.id** 的值。可见相同ID如果应用的恰当，业务逻辑上会有简化。在这个示例中，我们就不需要自己写代码查`orderAccount`数据了，Nature 可以自动为我们查出来。
 
 ## Nature 幕后为你做了什么
 

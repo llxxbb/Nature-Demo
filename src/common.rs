@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::thread::sleep;
 use std::time::Duration;
 
-use reqwest::Client;
+use reqwest::blocking::Client;
 use serde::Serialize;
 
 use nature_common::{Instance, NatureError, ParaForQueryByID, Result};
@@ -24,13 +24,13 @@ pub fn send_instance(ins: &Instance) -> Result<u128> {
 }
 
 pub fn send_business_object<T>(meta_key: &str, bo: &T) -> Result<u128> where T: Serialize {
-    send_business_object_with_context(meta_key, bo, &HashMap::new())
+    send_business_object_with_sys_context(meta_key, bo, &HashMap::new())
 }
 
-pub fn send_business_object_with_context<T>(meta_key: &str, bo: &T, context: &HashMap<String, String>) -> Result<u128> where T: Serialize {
+pub fn send_business_object_with_sys_context<T>(meta_key: &str, bo: &T, sys_context: &HashMap<String, String>) -> Result<u128> where T: Serialize {
     let mut instance = Instance::new(meta_key).unwrap();
     instance.content = serde_json::to_string(bo).unwrap();
-    instance.context = context.clone();
+    instance.sys_context = sys_context.clone();
 
     let response = CLIENT.post(URL_INPUT).json(&instance).send();
     let id_s: String = response.unwrap().text().unwrap();
@@ -45,6 +45,7 @@ pub fn get_instance_by_id(id: u128, meta_full: &str) -> Option<Instance> {
 }
 
 fn get_state_instance_by_id(id: u128, meta_full: &str, sta_ver: i32) -> Option<Instance> {
+    info!("get state instance by id {}", &id);
     let response = CLIENT.post(URL_GET_BY_ID).json(&ParaForQueryByID {
         id,
         meta: meta_full.to_string(),
@@ -55,8 +56,10 @@ fn get_state_instance_by_id(id: u128, meta_full: &str, sta_ver: i32) -> Option<I
     if msg.eq(r#"{"Ok":null}"#) {
         return None;
     }
-    let x: Result<Instance> = serde_json::from_str(&msg).unwrap();
-    Some(x.unwrap())
+    match serde_json::from_str::<Result<Instance>>(&msg).unwrap() {
+        Ok(x) => Some(x),
+        Err(_) => None
+    }
 }
 
 pub fn wait_for_order_state(order_id: u128, state_ver: i32) -> Instance {
@@ -64,7 +67,20 @@ pub fn wait_for_order_state(order_id: u128, state_ver: i32) -> Instance {
         if let Some(ins) = get_state_instance_by_id(order_id, "B:sale/orderState:1", state_ver) {
             return ins;
         } else {
-            sleep(Duration::from_nanos(200000))
+            warn!("not found state instance, will retry");
+            sleep(Duration::from_nanos(3000000))
         }
+    }
+    // panic!("can't find order and state");
+}
+
+#[cfg(test)]
+mod test {
+    use super::wait_for_order_state;
+
+    #[test]
+    fn temp_test() {
+        let rtn = wait_for_order_state(46912184945275581809007620859293488763, 3);
+        dbg!(rtn);
     }
 }
