@@ -49,6 +49,7 @@ fn get_state_instance_by_id(id: u128, meta_full: &str, sta_ver: i32) -> Option<I
     let response = CLIENT.post(URL_GET_BY_ID).json(&ParaForQueryByID {
         id,
         meta: meta_full.to_string(),
+        para: "".to_string(),
         state_version_from: sta_ver,
         limit: 1,
     }).send();

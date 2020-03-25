@@ -11,8 +11,8 @@ pub fn send_order_to_nature() -> u128 {
     let id = send_business_object("/sale/order", &order).unwrap();
 
     // send again
-    let msg = send_business_object("/sale/order", &order).err().unwrap().to_string();
-    assert_eq!(msg.contains("DaoDuplicated"), true);
+    let id2 = send_business_object("/sale/order", &order).unwrap();
+    assert_eq!(id2, id);
 
     // check created instance for order
     let rtn = get_instance_by_id(id, "B:sale/order:1").unwrap();
