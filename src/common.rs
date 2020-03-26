@@ -50,7 +50,7 @@ fn get_state_instance_by_id(id: u128, meta_full: &str, sta_ver: i32) -> Option<I
         id,
         meta: meta_full.to_string(),
         para: "".to_string(),
-        state_version_from: sta_ver,
+        state_version: sta_ver,
         limit: 1,
     }).send();
     let msg = response.unwrap().text().unwrap();
@@ -77,11 +77,11 @@ pub fn wait_for_order_state(order_id: u128, state_ver: i32) -> Instance {
 
 #[cfg(test)]
 mod test {
-    use super::wait_for_order_state;
+    use super::*;
 
     #[test]
     fn temp_test() {
-        let rtn = wait_for_order_state(46912184945275581809007620859293488763, 3);
+        let rtn = get_instance_by_id(46912184945275581809007620859293488763, "B:sale/order:1");
         dbg!(rtn);
     }
 }
