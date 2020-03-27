@@ -6,7 +6,7 @@
 
 ## 定义`meta`
 
-```sqlite
+```mysql
 INSERT INTO meta
 (meta_type, meta_key, description, version, states, fields, config)
 VALUES('B', 'third/waybill', 'waybill', 1, '', '', '{}');
@@ -14,7 +14,7 @@ VALUES('B', 'third/waybill', 'waybill', 1, '', '', '{}');
 
 ## 定义`Converter`
 
-```sqlite
+```mysql
 -- orderState:outbound --> waybill
 INSERT INTO relation
 (from_meta, to_meta, settings)

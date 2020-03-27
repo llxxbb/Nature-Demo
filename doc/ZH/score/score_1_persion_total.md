@@ -2,7 +2,7 @@
 
 ## Define `meta`
 
-```sqlite
+```mysql
 INSERT INTO meta
 (meta_type, meta_key, description, version, states, fields, config)
 VALUES('M', 'statistics/orderTask', 'total sold every hour', 1, '', '', '{"multi_meta":{"keys":["minute","hour"]}, "conflict_avoid": true}');
@@ -27,7 +27,7 @@ B:statistics/orderTask/hour with para: current hour
 
 ## Define converter
 
-```sqlite
+```mysql
 -- orderState:paid --> task
 INSERT INTO relation
 (from_meta, to_meta, settings)
@@ -54,7 +54,7 @@ Another question is how to give multi-dimensions info to the following converter
 
 
 
-```sqlite
+```mysql
 -- orderSign --> orderState:signed
 INSERT INTO relation
 (from_meta, to_meta, settings)

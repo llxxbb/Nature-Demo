@@ -6,7 +6,7 @@ For our benefit, we make fortnight to 1 seconds, so that you can see the result 
 
 ## Define `meta`
 
-```sqlite
+```mysql
 INSERT INTO meta
 (full_key, description, version, states, fields, config)
 VALUES('B:sale/orderSign', 'order finished', 1, '', '', '{}');
@@ -14,7 +14,7 @@ VALUES('B:sale/orderSign', 'order finished', 1, '', '', '{}');
 
 ## Define converter
 
-```sqlite
+```mysql
 -- orderState:dispatching --> orderSign
 INSERT INTO relation
 (from_meta, to_meta, settings)

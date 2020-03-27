@@ -12,7 +12,7 @@
 
 只要将订单下传到库房管理系统，我们就认为订单正在打包了。
 
-```sqlite
+```mysql
 -- orderState:paid --> orderState:package
 INSERT INTO relation
 (from_meta, to_meta, settings)

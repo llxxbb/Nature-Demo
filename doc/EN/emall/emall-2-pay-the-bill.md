@@ -4,7 +4,7 @@ Now the user will pay for the order.  Here we make it a little complex,  we supp
 
  ## Define `meta`
 
-```sqlite
+```mysql
 INSERT INTO meta
 (full_key, description, version, states, fields, config)
 VALUES('/B/finance/payment', 'order payment', 1, '', '', '{}');
@@ -20,7 +20,7 @@ The `orderAccount` is used to mark the order pay state. It's also a state `meta`
 
 ## Define `converter`
 
-```sqlite
+```mysql
 -- order --> orderAccount
 INSERT INTO relation
 (from_meta, to_meta, settings)

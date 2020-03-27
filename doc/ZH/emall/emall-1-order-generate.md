@@ -6,7 +6,7 @@
 
 首先我们需要定义两个 `Meta`，请执行下面的sql脚本
 
-```sqlite
+```mysql
 INSERT INTO meta
 (meta_type, meta_key, description, version, states, fields, config)
 VALUES('B', 'sale/order', 'order', 1, '', '', '{}');
@@ -35,7 +35,7 @@ VALUES('B', 'sale/orderState', 'order state', 1, 'new|paid|package|outbound|disp
 
 当你从外部输入一个`order Instance`到 Nature 后，我们需要设置这个 `order` 的状态为 `new`。要实现这个功能我们需要定义一个 `converter`， 请执行下面的 sql。
 
-```sqlite
+```mysql
 INSERT INTO relation
 (from_meta, to_meta, settings)
 VALUES('B:sale/order:1', 'B:sale/orderState:1', '{"target_states":{"add":["new"]}}');

@@ -10,7 +10,7 @@ Another thing is, a warehouse process `stock-out-application` instead of `order`
 
 ## Define `converter`
 
-```sqlite
+```mysql
 -- orderState:paid --> orderState:package
 INSERT INTO relation
 (from_meta, to_meta, settings)

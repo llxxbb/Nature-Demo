@@ -6,10 +6,10 @@ Nature 是用 rust 语言编写的， 你需要自行编译。或者直接[下�
 
 这里以 windows 环境进行说明。
 
-Nature 缺省使用 sqlite 数据库，如果想使用 mysql 数据库， 请编辑 Nature/cargo.toml文件并将 nature_db的依赖修改成下面的样子，并修改Nature/.env中数据库连接信息。
+Nature 缺省使用 mysql 数据库，如果想使用 sqlite 数据库， 请编辑 Nature/cargo.toml文件并将 nature_db的依赖修改成下面的样子，并修改Nature/.env中数据库连接信息。
 
 ```toml
-nature_db = {path = "../Nature-DB", features = ["mysql"], version = "0.0.2"}
+nature_db = {path = "../Nature-DB", features = ["mysql"], version = "0.2.0"}
 ```
 
 ## 下载代码
@@ -46,7 +46,7 @@ cargo build
 Nature/.env 文件是项目的配置文件，将其拷贝到Nature/target目录下，并修改相应的值，下面为缺省的值。
 
 ```toml
-DATABASE_URL=nature.sqlite
+DATABASE_URL=mysql://root@localhost/nature
 
 NATURE_SERVER_ADDRESS=http://localhost:8080/redo_task
 
@@ -59,8 +59,6 @@ SERVER_PORT=8080
 ```shell
 diesel migration run
 ```
-
-当 nature.sqlite 创建完成后，将其复制到Nature/target目录下
 
 ## 启动
 

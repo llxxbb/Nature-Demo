@@ -6,13 +6,13 @@ We suppose the user have goods selected, and use it to generate an order.
 
 [Here](https://github.com/llxxbb/Nature/blob/master/doc/help/concept-meta.md) you can know more about `meta`.
 
-First we will define two `meta`s. please insert the follow data to nature.sqlite. 
+First we will define two `meta`s. please insert the follow data to table. 
 
 - B:sale/order: includes normal order properties.
 
 - B:sale/orderState: the status for new, paid, outbound, dispatching, signed etcetera.
 
-```sqlite
+```mysql
 INSERT INTO meta
 (full_key, description, version, states, fields, config)
 VALUES('B:sale/order', 'order', 1, '', '', '{}');
@@ -34,7 +34,7 @@ mutex state are separated by "|".
 
 When we input an `Order` from outside, we set a `new` state for this order by converter. Execute the following sql please:
 
-```sqlite
+```mysql
 INSERT INTO relation
 (from_meta, to_meta, settings)
 VALUES('B:sale/order:1', '/B/sale/orderState:1', '{"target_states":{"add":["new"]}}');

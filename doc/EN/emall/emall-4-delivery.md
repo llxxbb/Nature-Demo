@@ -6,7 +6,7 @@ The problem is that we want to query express info by waybill id, and we do not w
 
 ## Define `meta`
 
-```sqlite
+```mysql
 INSERT INTO meta
 (full_key, description, version, states, fields, config)
 VALUES('B:third/waybill', 'waybill', 1, '', '', '{}');
@@ -14,7 +14,7 @@ VALUES('B:third/waybill', 'waybill', 1, '', '', '{}');
 
 ## Define converter
 
-```sqlite
+```mysql
 -- orderState:outbound --> waybill
 INSERT INTO relation
 (from_meta, to_meta, settings)

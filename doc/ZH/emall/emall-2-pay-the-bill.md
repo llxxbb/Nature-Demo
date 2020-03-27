@@ -4,7 +4,7 @@
 
  ## 定义`meta`
 
-```sqlite
+```mysql
 INSERT INTO meta
 (meta_type, meta_key, description, version, states, fields, config)
 VALUES('B', 'finance/payment', 'order payment', 1, '', '', '{}');
@@ -20,7 +20,7 @@ VALUES('B', 'finance/orderAccount', 'order account', 1, 'unpaid|partial|paid', '
 
 ## 定义 `converter`
 
-```sqlite
+```mysql
 -- order --> orderAccount
 INSERT INTO relation
 (from_meta, to_meta, settings)

@@ -32,7 +32,7 @@ This is the first step for manager, Let list what data we wanted.
 
 All this must defined in Nature. otherwise Nature will refuse to accept it. Don't be afraid of the class diagram, you need not to write any code, just fill these goals to Nature DB's table: `meta`.  I had written the sql for you
 
-```sqlite
+```mysql
 
 ```
 
@@ -42,7 +42,7 @@ __Notice:__  I specified status field for the `OrderStatus` goal, it is the only
 
 I drew the picture intent to make you understand easily. in actually the data makes up this picture comes from another table: `one_step_flow`. Let's see:
 
-```sqlite
+```mysql
 INSERT INTO one_step_flow
 (from_meta, from_version, to_meta, to_version, settings)
 VALUES('/B/Sale/Order', 1, '/B/Sale/OrderStatus', 1, '{"executor":[{"protocol":"LocalRust","url":"nature_integrate_test_executor.dll:rtn_one","weight":1}]}'),

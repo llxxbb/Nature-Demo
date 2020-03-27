@@ -8,7 +8,7 @@
 
 ## 定义`meta`
 
-```sqlite
+```mysql
 INSERT INTO meta
 (meta_type, meta_key, description, version, states, fields, config)
 VALUES('B', 'sale/orderSign', 'order finished', 1, '', '', '{}');
@@ -16,7 +16,7 @@ VALUES('B', 'sale/orderSign', 'order finished', 1, '', '', '{}');
 
 ## 定义converter
 
-```sqlite
+```mysql
 -- orderState:dispatching --> orderSign
 INSERT INTO relation
 (from_meta, to_meta, settings)
