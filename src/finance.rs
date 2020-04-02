@@ -6,7 +6,7 @@ use chrono::prelude::*;
 
 use nature_demo_common::Payment;
 
-use crate::{get_instance_by_id, send_business_object_with_sys_context, wait_for_order_state};
+use crate::{get_state_instance_by_id, send_business_object_with_sys_context, wait_for_order_state};
 
 pub fn user_pay(order_id: u128) {
     wait_until_order_account_is_ready(order_id);
@@ -24,7 +24,7 @@ pub fn user_pay(order_id: u128) {
 
 fn wait_until_order_account_is_ready(order_id: u128) {
     loop {
-        if let Some(_) = get_instance_by_id(order_id, "B:finance/orderAccount:1") {
+        if let Some(_) = get_state_instance_by_id(order_id, "B:finance/orderAccount:1", 1) {
             break;
         } else {
             sleep(Duration::from_nanos(200000))

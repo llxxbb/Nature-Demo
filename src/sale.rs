@@ -3,7 +3,7 @@ use std::time::Duration;
 
 use nature_demo_common::{Commodity, Order, SelectedCommodity};
 
-use crate::{get_instance_by_id, send_business_object};
+use crate::{get_instance_by_id, send_business_object, get_state_instance_by_id};
 
 pub fn send_order_to_nature() -> u128 {
     // create an order
@@ -24,7 +24,7 @@ pub fn send_order_to_nature() -> u128 {
 
 fn wait_until_order_state_is_ready(order_id: u128) -> u128 {
     loop {
-        if let Some(ins) = get_instance_by_id(order_id, "B:sale/orderState:1") {
+        if let Some(ins) = get_state_instance_by_id(order_id, "B:sale/orderState:1",1) {
             assert_eq!(ins.id, order_id);
             assert_eq!(ins.states.contains("new"), true);
             let from = ins.from.as_ref().unwrap();

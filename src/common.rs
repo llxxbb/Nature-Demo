@@ -44,7 +44,7 @@ pub fn get_instance_by_id(id: u128, meta_full: &str) -> Option<Instance> {
     get_state_instance_by_id(id, meta_full, 0)
 }
 
-fn get_state_instance_by_id(id: u128, meta_full: &str, sta_ver: i32) -> Option<Instance> {
+pub fn get_state_instance_by_id(id: u128, meta_full: &str, sta_ver: i32) -> Option<Instance> {
     info!("get state instance by id {}", &id);
     let response = CLIENT.post(URL_GET_BY_ID).json(&ParaForQueryByID {
         id,
@@ -80,8 +80,14 @@ mod test {
     use super::*;
 
     #[test]
-    fn temp_test() {
+    fn order_id_test() {
         let rtn = get_instance_by_id(46912184945275581809007620859293488763, "B:sale/order:1");
+        dbg!(rtn);
+    }
+
+    #[test]
+    fn order_state_test() {
+        let rtn = get_state_instance_by_id(46912184945275581809007620859293488763, "B:sale/orderState:1", 1);
         dbg!(rtn);
     }
 }
