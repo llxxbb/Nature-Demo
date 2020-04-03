@@ -1,14 +1,16 @@
-# 统计班内每个人的总分
+# 统计个人所有科目成绩
 
-## Define `meta`
+
+
+## 定义`meta`
 
 ```mysql
-INSERT INTO meta
-(meta_type, meta_key, description, version, states, fields, config)
-VALUES('M', 'statistics/orderTask', 'total sold every hour', 1, '', '', '{"multi_meta":{"keys":["minute","hour"]}, "conflict_avoid": true}');
+, "conflict_avoid": true
 ```
 
 ### how to make statistics
+
+状态版本会有很多冲突，导致性能急剧恶化
 
 If we we increase the counter for every order use `state-instance`, there would be many conflicts for high parallel process, and another question is that we would generated great volume of `state-instace`, so it's a terrible thing. 
 

@@ -137,11 +137,11 @@ fn create_order() -> Order {
 
 ## Nature 幕后为你做了什么
 
-Nature 通过 `Order` 的 `Relation`会好到 `OrderState` ，因为 `Relation` 中的`Converter`没有定义 `Executor`, Nature 会自动进行转换，将 order `Instance` 转换为 orderState  `Instance` 。
+ `Order` 和 `OrderState` 的 `Relation` 是没有 `Executor`的， Nature 会**自动进行转换**，将 order `Instance` 转换为 orderState  `Instance` 。
 
 因为 orderState 的 master 是 order ，所以Nature 将orderState `Instance` 的 ID 设置为 order `Instance` 的ID。
 
-又因为`Converter` 的  target_states 属性指定了“new” 状态。所以 orderState的状态里有一个“new”。
+又因为`Relation` 的  target_states 属性指定了“new” 状态。所以 orderState实例的状态里有一个“new”。
 
 ### Nature 要点
 

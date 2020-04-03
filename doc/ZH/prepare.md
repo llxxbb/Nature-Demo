@@ -1,18 +1,13 @@
 # 项目准备
 
-## 环境说明
+## 获取可执行文件
 
-Nature 是用 rust 语言编写的， 你需要自行编译。或者直接[下载](https://github.com/llxxbb/Nature/releases)一个可执行的版本。
+您可以直接[下载](https://github.com/llxxbb/Nature/releases)一个可执行的版本，暂时只发布win_64版，且不包含Demo相关的组件。
 
-这里以 windows 环境进行说明。
+Nature 缺省使用  mysql 数据库，请自行准备，下面是自行编译的方法，以 windows 环境进行说明：
 
-Nature 缺省使用 mysql 数据库，如果想使用 sqlite 数据库， 请编辑 Nature/cargo.toml文件并将 nature_db的依赖修改成下面的样子，并修改Nature/.env中数据库连接信息。
 
-```toml
-nature_db = {path = "../Nature-DB", features = ["mysql"], version = "0.2.0"}
-```
-
-## 下载代码
+### 下载代码
 
 下载下面项目的代码到同一个目录下
 
@@ -26,7 +21,7 @@ nature_db = {path = "../Nature-DB", features = ["mysql"], version = "0.2.0"}
 - https://github.com/llxxbb/Nature-Demo-Common
 - https://github.com/llxxbb/Nature-Demo-Executor-Restful
 
-## 编译项目
+### 编译项目
 
 然后进入 Nature 子目录并运行下面的命令。 
 
@@ -54,7 +49,7 @@ SERVER_PORT=8080
 ```
 ## 创建数据库
 
-数据库的创建脚本位于Nature-DB/migrations/2019-04-27_init/up.sql。如果你安装了diesel_cli，你可以在终端上运行下面的命令：
+数据库的创建脚本位于Nature-DB/migrations目录下。如果你安装了diesel_cli，你可以在终端上运行下面的命令便可完成数据库的初始化：
 
 ```shell
 diesel migration run
