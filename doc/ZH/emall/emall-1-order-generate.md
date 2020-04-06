@@ -31,7 +31,7 @@ VALUES('B', 'sale/orderState', 'order state', 1, 'new|paid|package|outbound|disp
 
 `master` 说明 `orderState` 依附于 `order`，这是个非常重要的属性，如果应用的好，你只需定义 `converter` 而可无需实现 `converter` 就可以实现`Meta`间示例的转换。
 
-## 定义 `converter`
+## 定义 `Relation`
 
 当你从外部输入一个`order Instance`到 Nature 后，我们需要设置这个 `order` 的状态为 `new`。要实现这个功能我们需要定义一个 `converter`， 请执行下面的 sql。
 

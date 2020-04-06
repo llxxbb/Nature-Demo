@@ -14,7 +14,7 @@ INSERT INTO meta
 VALUES('B', 'sale/orderSign', 'order finished', 1, '', '', '{}');
 ```
 
-## 定义converter
+## 定义`Relation`
 
 ```mysql
 -- orderState:dispatching --> orderSign

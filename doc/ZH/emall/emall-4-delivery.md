@@ -12,7 +12,7 @@ INSERT INTO meta
 VALUES('B', 'third/waybill', 'waybill', 1, '', '', '{}');
 ```
 
-## 定义`Converter`
+## 定义`Relation`
 
 ```mysql
 -- orderState:outbound --> waybill

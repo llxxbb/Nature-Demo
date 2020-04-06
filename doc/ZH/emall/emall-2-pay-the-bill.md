@@ -18,7 +18,7 @@ VALUES('B', 'finance/orderAccount', 'order account', 1, 'unpaid|partial|paid', '
 
 `orderAccount`：用于记录订单地支付状态，它也是个`state-meta`，因为它有状态定义。
 
-## 定义 `converter`
+## 定义 `Relation`
 
 ```mysql
 -- order --> orderAccount

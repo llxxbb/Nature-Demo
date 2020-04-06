@@ -2,17 +2,16 @@
 extern crate lazy_static;
 #[macro_use]
 extern crate log;
+#[cfg(test)]
+#[macro_use]
+extern crate serde_derive;
 
 pub use common::*;
-pub use finance::*;
-pub use sale::*;
-pub use warehouse::*;
 
-mod sale;
 mod common;
-mod finance;
-mod warehouse;
 #[cfg(test)]
-mod demo;
+mod emall;
+#[cfg(test)]
+mod score;
 #[cfg(test)]
 mod other;

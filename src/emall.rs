@@ -1,7 +1,10 @@
-use crate::{outbound, send_order_to_nature, user_pay, wait_for_order_state};
+use crate::wait_for_order_state;
+use crate::emall::finance::user_pay;
+use crate::emall::sale::send_order_to_nature;
+use crate::emall::warehouse::outbound;
 
 #[test]
-fn demo_all_test() {
+fn emall_test() {
     dbg!("generate order");
     let id = send_order_to_nature();
     dbg!("pay for order");
@@ -14,3 +17,7 @@ fn demo_all_test() {
     let _ = wait_for_order_state(id, 6);
 }
 
+
+mod finance;
+mod sale;
+mod warehouse;
