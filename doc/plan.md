@@ -1,5 +1,19 @@
 # plan for demo
 
+## Multi-Meta
+
+有了`成绩单`后我们需要有两个维度的统计：学员和学科。我们可以定义两个关系来解决这个问题，但从性能上来讲不是最优的，一是表格数据的多次传递，二是一次扫描就可以得到两个结果而不需要两次扫描。所以我们这里引入了一个新的`Meta`类型:Multi。
+
+```mysql
+INSERT INTO meta
+(meta_type, meta_key, description, version, states, fields, config)
+VALUES('M', 'score/dimensions', '', 1, '', '', '{"master":"B:score/table:1","multi_meta":["B:score/trainee/subject:1"]}');
+```
+
+### Nature 要点
+
+Multi-Meta 的类型用 **M** 来表示。此种类型的`Meta`还需要设置 “multi_meta”配置项，以声明执行器可以生成的`Meta`。这些`Meta` 必须是定义过的。
+
 ## `MetaType::Null`
 
 This `converter` does not generate any thing to Nature, the reason is `to_meta` is "**/N:1**", it's `MetaType::Null`.  But why this is usable?  in this demo, we want to notify the warehouse,  and Nature can achieve it **reliably**.  
