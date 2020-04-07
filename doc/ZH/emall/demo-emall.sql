@@ -24,12 +24,12 @@ VALUES('B', 'finance/orderAccount', 'order account', 1, 'unpaid|partial|paid', '
 -- order --> orderAccount
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/order:1', 'B:finance/orderAccount:1', '{"executor":[{"protocol":"localRust","url":"nature_demo_executor.dll:order_receivable"}],"target_states":{"add":["unpaid"]}}');
+VALUES('B:sale/order:1', 'B:finance/orderAccount:1', '{"executor":{"protocol":"localRust","url":"nature_demo_executor.dll:order_receivable"},"target_states":{"add":["unpaid"]}}');
 
 -- payment --> orderAccount
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:finance/payment:1', 'B:finance/orderAccount:1', '{"executor":[{"protocol":"localRust","url":"nature_demo_executor.dll:pay_count"}]}');
+VALUES('B:finance/payment:1', 'B:finance/orderAccount:1', '{"executor":{"protocol":"localRust","url":"nature_demo_executor.dll:pay_count"}}');
 
 -- orderAccount --> orderState
 INSERT INTO relation
@@ -40,7 +40,7 @@ VALUES('B:finance/orderAccount:1', 'B:sale/orderState:1', '{"selector":{"state_a
 -- orderState:paid --> orderState:package
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/orderState:1', 'B:sale/orderState:1', '{"selector":{"state_all":["paid"]},"executor":[{"protocol":"http","url":"http://localhost:8082/send_to_warehouse"}],"target_states":{"add":["package"]}}');
+VALUES('B:sale/orderState:1', 'B:sale/orderState:1', '{"selector":{"state_all":["paid"]},"executor":{"protocol":"http","url":"http://localhost:8082/send_to_warehouse"},"target_states":{"add":["package"]}}');
 
 -- delivery  ---------------------------------------------
 INSERT INTO meta
@@ -50,7 +50,7 @@ VALUES('B', 'third/waybill', 'waybill', 1, '', '', '{}');
 -- orderState:outbound --> waybill
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/orderState:1', 'B:third/waybill:1', '{"selector":{"state_all":["outbound"]}, "executor":[{"protocol":"localRust","url":"nature_demo_executor.dll:go_express"}]}');
+VALUES('B:sale/orderState:1', 'B:third/waybill:1', '{"selector":{"state_all":["outbound"]}, "executor":{"protocol":"localRust","url":"nature_demo_executor.dll:go_express"}}');
 
 -- waybill --> orderState:dispatching
 INSERT INTO relation
@@ -65,7 +65,7 @@ VALUES('B', 'sale/orderSign', 'order finished', 1, '', '', '{}');
 -- orderState:dispatching --> orderSign
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/orderState:1', 'B:sale/orderSign:1', '{"delay":1,"selector":{"state_all":["dispatching"]}, "executor":[{"protocol":"localRust","url":"nature_demo_executor.dll:auto_sign"}]}');
+VALUES('B:sale/orderState:1', 'B:sale/orderSign:1', '{"delay":1,"selector":{"state_all":["dispatching"]}, "executor":{"protocol":"localRust","url":"nature_demo_executor.dll:auto_sign"}}');
 
 -- orderSign --> orderState:signed
 INSERT INTO relation
