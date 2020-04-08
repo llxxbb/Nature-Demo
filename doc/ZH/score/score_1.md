@@ -32,7 +32,7 @@ VALUES('B', 'score/trainee/subject', 'person original score', 1, '', '', '{"mast
 ```mysql
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:score/table:1', 'B:score/trainee/subject:1', '{"executor":[{"protocol":"builtIn","url":"dimensionSplit","settings":"{\\"wanted_dimension\\":[[\\"\\",[0,1,2]]]}"}]}');
+VALUES('B:score/table:1', 'B:score/trainee/subject:1', '{"executor":{"protocol":"builtIn","url":"dimensionSplit","settings":"{\\"wanted_dimension\\":[[\\"\\",[0,1,2]]]}"}}');
 ```
 
 ### Nature 要点

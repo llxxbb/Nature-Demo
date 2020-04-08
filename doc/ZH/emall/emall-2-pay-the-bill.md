@@ -24,12 +24,12 @@ VALUES('B', 'finance/orderAccount', 'order account', 1, 'unpaid|partial|paid', '
 -- order --> orderAccount
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/order:1', 'B:finance/orderAccount:1', '{"executor":[{"protocol":"localRust","url":"nature_demo_executor.dll:order_receivable"}],"target_states":{"add":["unpaid"]}}');
+VALUES('B:sale/order:1', 'B:finance/orderAccount:1', '{"executor":{"protocol":"localRust","url":"nature_demo_executor.dll:order_receivable"},"target_states":{"add":["unpaid"]}}');
 
 -- payment --> orderAccount
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:finance/payment:1', 'B:finance/orderAccount:1', '{"executor":[{"protocol":"localRust","url":"nature_demo_executor.dll:pay_count"}]}');
+VALUES('B:finance/payment:1', 'B:finance/orderAccount:1', '{"executor":{"protocol":"localRust","url":"nature_demo_executor.dll:pay_count"}}');
 
 -- orderAccount --> orderState
 INSERT INTO relation

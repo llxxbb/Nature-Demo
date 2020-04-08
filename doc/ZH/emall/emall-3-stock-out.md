@@ -16,7 +16,7 @@
 -- orderState:paid --> orderState:package
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/orderState:1', 'B:sale/orderState:1', '{"selector":{"source_state_include":["paid"]},"executor":[{"protocol":"http","url":"http://localhost:8082/send_to_warehouse"}],"target_states":{"add":["package"]}}');
+VALUES('B:sale/orderState:1', 'B:sale/orderState:1', '{"selector":{"source_state_include":["paid"]},"executor":{"protocol":"http","url":"http://localhost:8082/send_to_warehouse"},"target_states":{"add":["package"]}}');
 ```
 
 ### Nature 要点
