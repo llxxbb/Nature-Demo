@@ -6,7 +6,7 @@ VALUES('B', 'score/table', 'store original score data', 1, '', '', '');
 
 INSERT INTO meta
 (meta_type, meta_key, description, version, states, fields, config)
-VALUES('B', 'score/trainee/subject', 'person original score', 1, '', '', '{"master":"B:score/table:1"}');
+VALUES('B', 'score/trainee/subject', 'person original score', 1, '', '', '');
 
 INSERT INTO relation
 (from_meta, to_meta, settings)
