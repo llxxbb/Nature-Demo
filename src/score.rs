@@ -12,36 +12,36 @@ fn score_test() {
 fn class5_subject1() -> Vec<KV> {
     let mut content: Vec<KV> = vec![];
     content.push(KV::new("class5/name2/subject1", 92));
-    content.push(KV::new("class5/name3/subject1", 92));
-    content.push(KV::new("class5/name4/subject1", 92));
-    content.push(KV::new("class5/name5/subject1", 92));
+    content.push(KV::new("class5/name3/subject1", 87));
+    content.push(KV::new("class5/name4/subject1", 12));
+    content.push(KV::new("class5/name5/subject1", 34));
     content
 }
 
 // name2 missed subject 2
 fn class5_subject2() -> Vec<KV> {
     let mut content: Vec<KV> = vec![];
-    content.push(KV::new("class5/name1/subject2", 92));
-    content.push(KV::new("class5/name3/subject2", 85));
-    content.push(KV::new("class5/name4/subject2", 99));
-    content.push(KV::new("class5/name5/subject2", 67));
+    content.push(KV::new("class5/name1/subject2", 33));
+    content.push(KV::new("class5/name3/subject2", 76));
+    content.push(KV::new("class5/name4/subject2", 38));
+    content.push(KV::new("class5/name5/subject2", 65));
     content
 }
 
 fn class5_subject3() -> Vec<KV> {
     let mut content: Vec<KV> = vec![];
-    content.push(KV::new("class5/name1/subject3", 92));
-    content.push(KV::new("class5/name2/subject3", 85));
-    content.push(KV::new("class5/name3/subject3", 99));
-    content.push(KV::new("class5/name4/subject3", 67));
-    content.push(KV::new("class5/name5/subject3", 67));
+    content.push(KV::new("class5/name1/subject3", 100));
+    content.push(KV::new("class5/name2/subject3", 73));
+    content.push(KV::new("class5/name3/subject3", 55));
+    content.push(KV::new("class5/name4/subject3", 81));
+    content.push(KV::new("class5/name5/subject3", 94));
     content
 }
 
 
 fn name1_subject1() -> Vec<KV> {
     let mut content: Vec<KV> = vec![];
-    content.push(KV::new("class5/name1/subject1", 92));
+    content.push(KV::new("class5/name1/subject1", 62));
     content
 }
 
