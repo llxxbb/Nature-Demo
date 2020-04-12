@@ -59,7 +59,7 @@ I drew the picture intent to make you understand easily. in actually the data ma
 ```mysql
 INSERT INTO one_step_flow
 (from_meta, from_version, to_meta, to_version, settings)
-VALUES('/B/Sale/Order', 1, '/B/Sale/OrderStatus', 1, '{"executor":[{"protocol":"LocalRust","url":"nature_integrate_test_executor.dll:rtn_one","weight":1}]}'),
+VALUES('/B/Sale/Order', 1, '/B/Sale/OrderStatus', 1, '{"executor":[{"protocol":"LocalRust","url":"nature_integrate_test_executor:rtn_one","weight":1}]}'),
 ('/B/multi_downstream/from', 1, '/B/multi_downstream/toA', 1, '{"executor":[{"protocol":"LocalRust","url":"local://multi_downstream","weight":1}]}'),
 ('/B/multi_downstream/from', 1, '/B/multi_downstream/toB', 1, '{"executor":[{"protocol":"LocalRust","url":"local://multi_downstream","weight":1}]}');
 

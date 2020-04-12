@@ -18,7 +18,7 @@ VALUES('B:third/waybill', 'waybill', 1, '', '', '{}');
 -- orderState:outbound --> waybill
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/orderState:1', 'B:third/waybill:1', '{"selector":{"source_state_include":["outbound"]}, "executor":[{"protocol":"localRust","url":"nature_demo_executor.dll:go_express"}]}');
+VALUES('B:sale/orderState:1', 'B:third/waybill:1', '{"selector":{"source_state_include":["outbound"]}, "executor":[{"protocol":"localRust","url":"nature_demo_executor:go_express"}]}');
 
 -- waybill --> orderState:dispatching
 INSERT INTO relation

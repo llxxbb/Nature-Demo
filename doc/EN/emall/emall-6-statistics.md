@@ -33,7 +33,7 @@ B:statistics/orderTask/hour with para: current hour
 -- orderState:paid --> task
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/orderState:1', 'M:statistics/orderTask:1', '{"selector":{"source_state_include":["paid"]},"executor":[{"protocol":"localRust","url":"nature_demo_executor.dll:statistics_task"}]}');
+VALUES('B:sale/orderState:1', 'M:statistics/orderTask:1', '{"selector":{"source_state_include":["paid"]},"executor":[{"protocol":"localRust","url":"nature_demo_executor:statistics_task"}]}');
 ```
 
 
