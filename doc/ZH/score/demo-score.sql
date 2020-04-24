@@ -20,4 +20,4 @@ VALUES('B', 'score/trainee/all-subject', 'all subject\'s score for a person', 1,
 
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:score/trainee/subject:1', 'B:score/trainee/all-subject:1', '{"executor":{"protocol":"builtIn","url":"sum","settings":"{\\"wanted_dimension\\":[[\\"\\",[0,1,2]]]}"}}');
+VALUES('B:score/trainee/subject:1', 'B:score/trainee/all-subject:1', '{"executor":{"protocol":"builtIn","url":"sum","settings":"{\\"wanted_para\\":[0,1]}"}}');

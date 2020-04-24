@@ -24,7 +24,7 @@ VALUES('B', 'finance/orderAccount', 'order account', 1, 'unpaid|partial|paid', '
 -- order --> orderAccount
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/order:1', 'B:finance/orderAccount:1', '{"executor":{"protocol":"localRust","url":"nature_demo_executor:order_receivable"},"target_states":{"add":["unpaid"]}}');
+VALUES('B:sale/order:1', 'B:finance/orderAccount:1', '{"executor":{"protocol":"localRust","url":"nature_demo_executor:order_receivable"},"target":{"states":{"add":["unpaid"]}}}');
 
 -- payment --> orderAccount
 INSERT INTO relation
@@ -34,7 +34,7 @@ VALUES('B:finance/payment:1', 'B:finance/orderAccount:1', '{"executor":{"protoco
 -- orderAccount --> orderState
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:finance/orderAccount:1', 'B:sale/orderState:1', '{"selector":{"source_state_include":["paid"]},"target_states":{"add":["paid"]}}');
+VALUES('B:finance/orderAccount:1', 'B:sale/orderState:1', '{"selector":{"state_all":["paid"]},"target":{"states":{"add":["paid"]}}}');
 ```
 
 我们需要几个Nature 外的`Converter` 来完成我们的任务：

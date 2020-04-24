@@ -38,7 +38,7 @@ VALUES('B', 'sale/orderState', 'order state', 1, 'new|paid|package|outbound|disp
 ```mysql
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/order:1', 'B:sale/orderState:1', '{"target_states":{"add":["new"]}}');
+VALUES('B:sale/order:1', 'B:sale/orderState:1', '{"target":{"states":{"add":["new"]}}}');
 ```
 
 `relation`数据表用于存储 `converter` 的定义，相关说明如下：
@@ -48,7 +48,7 @@ VALUES('B:sale/order:1', 'B:sale/orderState:1', '{"target_states":{"add":["new"]
 | from_meta       | `converter`的输入，格式为 [`MetaType`]:[key]:[version]       |
 | to_meta         | `converter`的输出，格式同 from_meta                          |
 | settings        | 是一个 `JSON` 形式的配置对象，用于说明如何这个关系。         |
-| `target_states` | 当 `converter` 转换完成后，该属性会要求 Nature 在返回的实例上添加或移除状态。 |
+| `target.states` | 当 `converter` 转换完成后，该属性会要求 Nature 在返回的实例上添加或移除状态。 |
 
 ## 定义`Order`和相关的业务对象
 
@@ -141,7 +141,7 @@ fn create_order() -> Order {
 
 因为 orderState 的 master 是 order ，所以Nature 将orderState `Instance` 的 ID 设置为 order `Instance` 的ID。
 
-又因为`Relation` 的  target_states 属性指定了“new” 状态。所以 orderState实例的状态里有一个“new”。
+又因为`Relation` 的  target.states 属性指定了“new” 状态。所以 orderState实例的状态里有一个“new”。
 
 ### Nature 要点
 

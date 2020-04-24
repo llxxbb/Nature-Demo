@@ -23,7 +23,7 @@ VALUES('B:sale/orderState:1', 'B:third/waybill:1', '{"selector":{"source_state_i
 -- waybill --> orderState:dispatching
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:third/waybill:1', 'B:sale/orderState:1', '{"target_states":{"add":["dispatching"]}}');
+VALUES('B:third/waybill:1', 'B:sale/orderState:1', '{"target":{"states":{"add":["dispatching"]}}}');
 ```
 
 ## 实现`executor`

@@ -25,7 +25,7 @@ VALUES('B:sale/orderState:1', 'B:sale/orderSign:1', '{"delay":1,"selector":{"sou
 -- orderSign --> orderState:signed
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/orderSign:1', 'B:sale/orderState:1', '{"target_states":{"add":["signed"]}}');
+VALUES('B:sale/orderSign:1', 'B:sale/orderState:1', '{"target":{"states":{"add":["signed"]}}}');
 ```
 
 ### Nature 要点
