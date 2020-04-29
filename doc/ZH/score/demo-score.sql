@@ -10,7 +10,7 @@ VALUES('B', 'score/trainee/subject', 'person original score', 1, '', '', '');
 
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:score/table:1', 'B:score/trainee/subject:1', '{"executor":{"protocol":"builtIn","url":"dimensionSplit","settings":"{\\"wanted_dimension\\":[[\\"\\",[0,1,2]]]}"}, "filter_after":[{"protocol":"localRust","url":"nature_demo_executor:person_score_filter"}]}');
+VALUES('B:score/table:1', 'B:score/trainee/subject:1', '{"executor":{"protocol":"builtIn","url":"dimensionSplit","settings":"{\\"wanted_dimension\\":[[\\"\\",[0,1,2]]]}"}, "filter_after":[{"protocol":"localRust","url":"nature_demo_executor:person_score_filter"},{"protocol":"http","url":"http://127.0.0.1:8082/add_score"}]}');
 
 -- sum for personal subject ---------------------------------------------
 
