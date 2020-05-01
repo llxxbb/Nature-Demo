@@ -9,7 +9,7 @@
 
 | 章节                                               | 内容摘要                                                     | Nature 要点                                                  |
 | -------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| [生成订单](doc/ZH/emall/emall-1-order-generate.md) | 大致讲解一下Nature的使用方式，介绍Nature的一个重要的能力：有些业务只需要配置一下不需要代码就能自动完成！ | `Meta`, master `meta`, target-state, `Converter` ，提交`Instance`到Nature，自动执行器，使用上游ID |
+| [生成订单](doc/ZH/emall/emall-1-order-generate.md) | 大致讲解一下Nature的使用方式，介绍Nature的一个重要的能力：有些业务只需要配置一下不需要代码就能自动完成！ | `Meta`, master `meta`, target-state, `Converter` ，提交`Instance`到Nature，自动执行器 |
 | [支付订单](doc/ZH/emall/emall-2-pay-the-bill.md)   | 我们只写了很少的业务代码，就实现了复杂的业务逻辑，Nature 会在幕后提供很多保障，如数据一致性，并发冲突等问题。 | 选择上游，系统上下文（target.id）, 并发冲突控制              |
 | [出库](doc/ZH/emall/emall-3-stock-out.md)          | 这里涉及到如何离线处理。                                     | 提交`state-instance` ，回调，与已有系统的对接。              |
 | [配送](doc/ZH/emall/emall-4-delivery.md)           | 这里展示了和外系统协作的方法                                 | 参数化输入                                                   |
@@ -17,16 +17,17 @@
 
 ## 统计DEMO
 
-可以把Nature 看做一个简单的流式计算框架。
+可以把 Nature 看做一个流式计算框架，但你不需要为技术框架和专业技术团队而头痛，这个也许不是性能最好的，但我想是生产力非常高的一个。
 
 下面给出一个成绩统计的例子：
 
-| 章节                                                         | 内容摘要                           | Nature 要点                  |
-| ------------------------------------------------------------ | ---------------------------------- | ---------------------------- |
-| [全员成绩单->个人成绩](doc/ZH/score/score_1_to_persion.md)   | 一个输入可以有多个输出             | 内置`执行器`：dimensionSplit |
-| [求出每个人各科的总分](doc/ZH/score/score_2_person_total_score.md) | 利用状态数据完成个人所有科目的统计 | 参数化输入状态数据           |
-| 求出班级每科的Top                                            | 如何玩转即时统计                   |                              |
-| 求出班级总分的top                                            |                                    |                              |
+| 章节                                                         | 内容摘要                           | Nature 要点                                                |
+| ------------------------------------------------------------ | ---------------------------------- | ---------------------------------------------------------- |
+| [全员成绩单->个人成绩](doc/ZH/score/score_1_to_persion.md)   | 将多个成绩单按人进行拆分           | builtin-executor: dimensionSplit，后置过滤器               |
+| [求出每个人各科的总分](doc/ZH/score/score_2_person_total_score.md) | 利用状态数据完成个人所有科目的统计 | `para`作为选择条件，use_upstream_id，builtin-executor: sum |
+| [生成定时统计任务](doc/ZH/score/score_3_subject_top.md)      | 如何玩转流逝计算                   | cache_saved, builtin-executor: timer                       |
+| [求出班级每科的Top 3](doc/ZH/score/score_3_subject_top.md)   |                                    |                                                            |
+| 求出班级总分的top                                            |                                    |                                                            |
 
 ## 审批流程
 

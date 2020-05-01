@@ -21,3 +21,13 @@ VALUES('B', 'score/trainee/all-subject', 'all subject\'s score for a person', 1,
 INSERT INTO relation
 (from_meta, to_meta, settings)
 VALUES('B:score/trainee/subject:1', 'B:score/trainee/all-subject:1', '{"use_upstream_id":true,"target":{"upstream_para":[0,1]},"executor":{"protocol":"builtIn","url":"sum","settings":"{\\"para_part\\":2}"}}');
+
+-- subject top 3 ---------------------------------------------
+
+INSERT INTO meta
+(meta_type, meta_key, description, version, states, fields, config)
+VALUES('B', 'score/subject/top-timer', 'a timer to trigger top calculate', 1, '', '', '');
+
+INSERT INTO meta
+(meta_type, meta_key, description, version, states, fields, config)
+VALUES('B', 'score/subject/top', 'subject score top', 1, '', '', '{"is_state":true}');

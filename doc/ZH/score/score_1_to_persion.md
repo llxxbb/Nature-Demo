@@ -70,6 +70,10 @@ pub struct Setting {
 
 `dimensionSplit`执行器将提取出的维度放入`Instance.para`属性，将剩余的维度覆盖掉原来的`key`已节省空间。
 
+### Nature 要点
+
+filter_after 可以用于对数据进行清理，如本例中第一个过滤器用于删除除成绩外的其他内容，第二个过滤器则是为所有人的 subject2 成绩加 4分（我们假设这个题目出错了，给所有人加分）。
+
 ## 输入数据并等待结果
 
 具体的输入请参考 score.rs
