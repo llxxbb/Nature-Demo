@@ -20,3 +20,10 @@ INSERT INTO relation
 (from_meta, to_meta, settings)
 VALUES('B:sale/order:1', 'B:sale/time_range/second:1', '{"executor":{"protocol":"builtIn","url":"time_range","settings":"{}"}}');
 
+INSERT INTO relation
+(from_meta, to_meta, settings)
+VALUES('B:sale/time_range/second:1', 'B:sale/time_range/minute:1', '{"executor":{"protocol":"builtIn","url":"time_range","settings":"{\\"on_para\\":true,\\"unit\\":\\"m\\"}"}}');
+
+INSERT INTO relation
+(from_meta, to_meta, settings)
+VALUES('B:sale/time_range/minute:1', 'B:sale/time_range/hour:1', '{"executor":{"protocol":"builtIn","url":"time_range","settings":"{\\"on_para\\":true,\\"unit\\":\\"h\\"}"}}');

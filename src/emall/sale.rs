@@ -42,11 +42,11 @@ fn create_order_object() -> Order {
         price: 1000,
         items: vec![
             SelectedCommodity {
-                item: Commodity { id: 1, name: "phone".to_string() },
+                item: Commodity { id: 1, name: "phone".to_string(), price: 800 },
                 num: 1,
             },
             SelectedCommodity {
-                item: Commodity { id: 2, name: "battery".to_string() },
+                item: Commodity { id: 2, name: "battery".to_string(), price: 100 },
                 num: 2,
             }
         ],
