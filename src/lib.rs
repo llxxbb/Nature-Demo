@@ -14,4 +14,6 @@ mod emall;
 #[cfg(test)]
 mod score;
 #[cfg(test)]
+mod sale_statistics;
+#[cfg(test)]
 mod other;
