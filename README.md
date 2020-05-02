@@ -25,8 +25,8 @@
 | ------------------------------------------------------------ | ---------------------------------- | ---------------------------------------------------------- |
 | [全员成绩单->个人成绩](doc/ZH/score/score_1_to_persion.md)   | 将多个成绩单按人进行拆分           | builtin-executor: dimensionSplit，后置过滤器               |
 | [求出每个人各科的总分](doc/ZH/score/score_2_person_total_score.md) | 利用状态数据完成个人所有科目的统计 | `para`作为选择条件，use_upstream_id，builtin-executor: sum |
-| [生成定时统计任务](doc/ZH/score/score_3_subject_top.md)      | 如何玩转流逝计算                   | cache_saved, builtin-executor: timer                       |
-| [求出班级每科的Top 3](doc/ZH/score/score_3_subject_top.md)   |                                    |                                                            |
+| [生成定时统计任务](doc/ZH/score/score_3_make_time_range.md)      | 如何玩转流逝计算                   | cache_saved, builtin-executor: timer                       |
+| [求出班级每科的Top 3](doc/ZH/score/score_3_make_time_range.md)   |                                    |                                                            |
 | 求出班级总分的top                                            |                                    |                                                            |
 
 ## 审批流程
