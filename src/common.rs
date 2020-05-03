@@ -5,7 +5,7 @@ use std::time::Duration;
 use reqwest::blocking::Client;
 use serde::Serialize;
 
-use nature_common::{Instance, NatureError, ParaForQueryByID, Result};
+use nature_common::{Instance, NatureError, QueryByID, Result};
 
 lazy_static! {
     pub static ref CLIENT : Client = Client::new();
@@ -46,13 +46,8 @@ pub fn get_instance_by_id(id: u128, meta_full: &str) -> Option<Instance> {
 
 pub fn get_state_instance_by_id(id: u128, meta_full: &str, sta_ver: i32) -> Option<Instance> {
     info!("get state instance by id {}", &id);
-    let response = CLIENT.post(URL_GET_BY_ID).json(&ParaForQueryByID {
-        id,
-        meta: meta_full.to_string(),
-        para: "".to_string(),
-        state_version: sta_ver,
-        limit: 1,
-    }).send();
+    let para = QueryByID::new(id, meta_full, "", sta_ver);
+    let response = CLIENT.post(URL_GET_BY_ID).json(&para).send();
     let msg = response.unwrap().text().unwrap();
     if msg.eq(r#"{"Ok":null}"#) {
         return None;
