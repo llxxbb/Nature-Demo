@@ -52,4 +52,4 @@ VALUES('M', 'sale/order/to_item', '', 1, '', '', '{"multi_meta":["B:sale/item/vo
 
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/time_range/minute:1', 'M:sale/order/to_item:1', '{"executor":{"protocol":"localRust","url":"nature_demo_executor:order_to_item"}}');
+VALUES('B:sale/time_range/second:1', 'M:sale/order/to_item:1', '{"delay_on_para":[2,1],"executor":{"protocol":"http","url":"http://localhost:8082/order_to_item"}}');
