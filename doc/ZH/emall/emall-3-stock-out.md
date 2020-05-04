@@ -52,7 +52,7 @@ fn send_to_warehouse_thread(para: ConverterParameter) {
         task_id: para.task_id,
         result: ConverterReturned::Instances(vec![para.from]),
     };
-    let rtn = CLIENT.post(&*NATURE_CALLBACK_ADDRESS).json(&rtn).send();
+    let rtn = CLIENT.post(&*CALLBACK_ADDRESS).json(&rtn).send();
     let text: String = rtn.unwrap().text().unwrap();
     if text.contains("Err") {
         error!("{}", text);
