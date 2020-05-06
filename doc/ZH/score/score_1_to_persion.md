@@ -35,14 +35,32 @@ INSERT INTO relation
 VALUES('B:score/table:1', 'B:score/trainee/subject:1', '{"executor":{"protocol":"builtIn","url":"dimensionSplit","settings":"{\\"wanted_dimension\\":[[\\"\\",[0,1,2]]]}"}, "filter_after":[{"protocol":"localRust","url":"nature_demo_executor:person_score_filter"},{"protocol":"http","url":"http://127.0.0.1:8082/add_score"}]}');
 ```
 
-### Nature 要点
+` nature_demo_executor:person_score_filter` 和 `http://127.0.0.1:8082/add_score`的作用后面讲。
 
-这里我们看到了一个 BuiltIn 执行器， Builtin 一般是比较通用的。如对数据进行分类拆分：
+## 运行 DEMO
 
-- `dimensionSplit`的数据要求：首先数据必须是一个数组，其次，数组中的每一项都是一个 `Input` 数据对象,如下，key 用于存储所有的维度信息，value 用于存放要统计的数据。
+### 数据输入
+
+数据的部分数据示例如下,这个表说明了哪个班的哪个人的哪个科目的成绩：
 
 ```rust
-struct Input<'a> {
+let mut content: Vec<KV> = vec![];
+content.push(KV::new("class5/name2/subject1", 92));
+content.push(KV::new("class5/name3/subject1", 87));
+content.push(KV::new("class5/name4/subject1", 12));
+content.push(KV::new("class5/name5/subject1", 34));
+```
+
+我们需要对输入的输入进行拆分，使每个人的每个科目有独立的记录。这个工作可以借助于`builtin-executor: dimensionSplit`来完成。
+
+### Nature 要点 dimensionSplit
+
+`builtIn-executor` : 一般是比较通用的。如对数据进行分类拆分等，用于减轻使用者的工作量。
+
+- `dimensionSplit`的数据要求：首先数据必须是一个数组，其次，数组中的每一项都会被加工成一个 `Output` 数据对象,如下，key 用于存储所有的维度信息，value 用于存放要统计的数据。
+
+```rust
+struct Output<'a> {
     /// include all dimension, separator is defined in Setting
     key: String,
     /// each split dimension will copy this value.

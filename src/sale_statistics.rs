@@ -10,9 +10,9 @@ fn sale_statistics_test() {
     // create an order
     let order = order_1();
     let _id = send_business_object("/sale/order", &order).unwrap();
-    let order = order_2();
     // simulate sum more then once.
     sleep(Duration::from_secs(2));
+    let order = order_2();
     let _id = send_business_object("/sale/order", &order).unwrap();
     let order = order_3();
     let _id = send_business_object("/sale/order", &order).unwrap();
