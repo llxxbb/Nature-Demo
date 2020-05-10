@@ -1,7 +1,7 @@
 -- generate order ---------------------------------------------
 INSERT INTO meta
 (meta_type, meta_key, description, version, states, fields, config)
-VALUES('B', 'sale/order', 'order', 1, '', '', '{}');
+VALUES('B', 'sale/order', 'order', 1, '', '', '');
 
 INSERT INTO meta
 (meta_type, meta_key, description, version, states, fields, config)
@@ -15,7 +15,7 @@ VALUES('B:sale/order:1', 'B:sale/orderState:1', '{"target":{"states":{"add":["ne
 -- pay for the bill  ---------------------------------------------
 INSERT INTO meta
 (meta_type, meta_key, description, version, states, fields, config)
-VALUES('B', 'finance/payment', 'order payment', 1, '', '', '{}');
+VALUES('B', 'finance/payment', 'order payment', 1, '', '', '');
 
 INSERT INTO meta
 (meta_type, meta_key, description, version, states, fields, config)
@@ -45,7 +45,7 @@ VALUES('B:sale/orderState:1', 'B:sale/orderState:1', '{"selector":{"state_all":[
 -- delivery  ---------------------------------------------
 INSERT INTO meta
 (meta_type, meta_key, description, version, states, fields, config)
-VALUES('B', 'third/waybill', 'waybill', 1, '', '', '{}');
+VALUES('B', 'third/waybill', 'waybill', 1, '', '', '');
 
 -- orderState:outbound --> waybill
 INSERT INTO relation
@@ -60,7 +60,7 @@ VALUES('B:third/waybill:1', 'B:sale/orderState:1', '{"target":{"states":{"add":[
 -- signed  ---------------------------------------------
 INSERT INTO meta
 (meta_type, meta_key, description, version, states, fields, config)
-VALUES('B', 'sale/orderSign', 'order finished', 1, '', '', '{}');
+VALUES('B', 'sale/orderSign', 'order finished', 1, '', '', '');
 
 -- orderState:dispatching --> orderSign
 INSERT INTO relation
