@@ -97,7 +97,7 @@ VALUES('B:score/table:1', 'B:score/trainee/subject:1', '{"executor":{"protocol":
 "filter_after":[{"protocol":"http","url":"http://127.0.0.1:8082/add_score"},{"protocol":"localRust","url":"nature_demo_executor:name_to_id"}]
 ```
 
-`后置过滤器`的作用是在`执行器`执行完后Nature 保存数据前，对数据进行一些修正。这是定义了两个`后置过滤器`，一个是基于http 方式调用，用于给所有参加学科2考试的人补分；一个是基于静态链接库调用，用于将 `班级\姓名`替换成学号。 
+`后置过滤器`的作用是在`执行器`执行完后Nature 保存数据前，对数据进行一些修正。这里定义了两个`后置过滤器`，一个是基于http 方式调用，用于给所有参加学科2考试的人补分；一个是基于静态链接库调用，用于将 `班级\姓名`替换成学号。 这两个过滤器的实现请自行查看源代码，这里就不贴出来了。
 
 ### Nature 要点
 
@@ -106,59 +106,9 @@ VALUES('B:score/table:1', 'B:score/trainee/subject:1', '{"executor":{"protocol":
 - 性能：上面的 4 条数据是一次性被`后置过滤器`处理的，如果我们改用`Relation`的 `执行器` 来完成，对应的则需要定义两个`执行器`，而每个`执行器`只能一条一条地处理数据，这样我们就需要8次 IO 才能完成这个工作。性能不可同日而语。
 - `过滤器`一般是技术处理语义，而`Relation`主导的是业务语义，我还是不希望你的老板去理解这么一个技术性的“业务概念”。这条说明也同样适用于`前置过滤器`
 
+## 运行Demo
 
-
-## 运行 DEMO
-
-### 数据输入
-
-数据的部分数据示例如下,这个表说明了哪个班的哪个人的哪个科目的成绩：
-
-```rust
-
-```
-
-我们需要对输入的输入进行拆分，使每个人的每个科目有独立的记录。这个工作可以借助于`builtin-executor: dimensionSplit`来完成。
-
-### Nature 要点 dimensionSplit
-
-`builtIn-executor` : 一般是比较通用的。如对数据进行分类拆分等，用于减轻使用者的工作量。
-
-- `dimensionSplit`的数据要求：首先数据必须是一个数组，其次，数组中的每一项都会被加工成一个 `Output` 数据对象,如下，key 用于存储所有的维度信息，value 用于存放要统计的数据。
-
-```rust
-struct Output<'a> {
-    /// include all dimension, separator is defined in Setting
-    key: String,
-    /// each split dimension will copy this value.
-    #[serde(borrow)]
-    value: &'a RawValue,
-}  
-```
-
-- `dimensionSplit`配置信息：用于说明该执行器如何工作，需要配置在`Relartion`中。
-
-```rust
-pub struct Setting {
-    /// - dimension_separator: default is "/"
-    #[serde(skip_serializing_if = "is_default")]
-    #[serde(default = "default_separator")]
-    pub dimension_separator: String,
-    /// - wanted_dimension: array of array to store dimension index. for example: [["meta-a",[1,2]],["meta-b",[1,3]]].
-    pub wanted_dimension: Vec<(String, Vec<u8>)>,
-}
-```
-
-`dimension_separator`：用于说明维度间的分隔符，缺省使用“/”。
-
-`wanted_dimension`：用于说明如何提取维度及如何存储。这是一个数组，每个数组的项都是一个提取的请求，每个请求由两部分组成：第一个是要输出的`Meta`信息，只对`Multi-Meta`有效且必须定义过；第二个是要提取的维度索引，是一个有顺序的数组。
-
-`dimensionSplit`执行器将提取出的维度放入`Instance.para`属性，将剩余的维度覆盖掉原来的`key`已节省空间。
-
-### Nature 要点
-
-filter_after 可以用于对数据进行清理，如本例中第一个过滤器用于删除除成绩外的其他内容，第二个过滤器则是为所有人的 subject2 成绩加 4分（我们假设这个题目出错了，给所有人加分）。
-
-## 输入数据并等待结果
-
-具体的输入请参考 score.rs
+- 启动 nature.exe,  
+- 启动  nature_demo_executor_restful.exe
+- 运行 nature-demo::score::score_test 
+- 查看`instance`数据表中的数据以验证结果，其结果示例已在上面给出了。

@@ -1,15 +1,35 @@
-# 生成订单
+# 接收订单
 
-我们假设用户已经选择了商品，并以此生成订单。
+我们假设已经有了一个商城系统，用户在在这个系统里可以选购商品并提交订单。现在我们想借助 Nature 来接管订单的后续处理过程。
 
-## 定义 `Meta`
+**Q**:是否可以将选购商品等这些商城的职能用 Nature 来实现？
 
-首先我们需要定义两个 `Meta`，请执行下面的sql脚本
+**A**:Nature 目前倾向于后端处理，没有前端交互能力，但可以为前端提供数据，即使是提供数据，现在功能上还不完备，如缓存等。
+
+## 接收外系统提交的订单
+
+第一步我们要为订单创建一个`Meta`，以区别于其他事物，其 sql 形式如下：
 
 ```mysql
 INSERT INTO meta
 (meta_type, meta_key, description, version, states, fields, config)
 VALUES('B', 'sale/order', 'order', 1, '', '', '{}');
+```
+
+我们逐一解释一下：
+
+- meta_type='B': 为`Meta`指定类型，B指的是`MetaType::Business`，代表这是一个业务对象，其他类型可参考[meta.md](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/meta.md)
+- meta_key='sale/order' : 为`Meta`的名字，用于区别其他`Meta`。
+- description=‘order’：向别人介绍一下这个`Meta`是干什么的，意义是什么等。
+- version=1: 每当业务发生变更时，可以通过变更版本号来跟踪业务变化，当遇到这种情况时请不要 `update` 当前的 `Meta` 而是要插入一条新的数据。这种做法是一种兼容方式的变化，因为老的版本并没有消失。
+- states=‘’ ：用于描述业务的状态，如订单
+
+
+
+首先我们需要定义两个 `Meta`，请执行下面的sql脚本
+
+```mysql
+
 
 INSERT INTO meta
 (meta_type, meta_key, description, version, states, fields, config)
