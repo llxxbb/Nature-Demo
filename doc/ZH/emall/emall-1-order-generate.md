@@ -8,7 +8,7 @@
 
 ## 外系统提交订单
 
-我们需要将订单数据用 json 提交到 Nature 的这个地址下：`http://localhost:8080/input`
+我们需要将订单数据用 json 提交到 Nature 的这个地址下：`http://localhost:8080/input`，如果成功该接口则会返回一个ID。
 
 Nature 的 json 格式如下：
 
@@ -47,11 +47,9 @@ VALUES('B', 'sale/order', 'order', 1, '', '', '');
 
 打开 instance 数据表，我们会发现多了一条下面的数据：
 
-| ins_key                                           | content                                                      | states | state_version | from_key |
-| ------------------------------------------------- | ------------------------------------------------------------ | ------ | ------------- | -------- |
-| B:sale/orderState:1\|3827f37003127855b32ea022daa04cd\| | {"user_id":123,"price":1000,"items":[{"item":{"id":1,"name":"phone","price":800},"num":1},{"item":{"id":2,"name":"battery","price":100},"num":2}],"address":"a.b.c"} |        |               |          |
-B:sale/orderState:1\|3827f37003127855b32ea022daa04cd\|
-
+| ins_key                                           | content                                                      |
+| ------------------------------------------------- | ------------------------------------------------------------ |
+| B:sale/order:1\|3827f37003127855b32ea022daa04cd\| | {"user_id":123,"price":1000,"items":[{"item":{"id":1,"name":"phone","price":800},"num":1},{"item":{"id":2,"name":"battery","price":100},"num":2}],"address":"a.b.c"} |
 - ins_key：用于唯一标记此条数据。器构成为 “meta_string|id|para”。此例中我们没有输入id,Nature会用输入数据的 hash 值来作为此条数据的 ID 这样做的目的是为了追求**幂等**。此例中我们也没有输入 para 所以此条数据尾巴上只有一个“|”
 - content 是我们模拟的订单数据，这个数据是 emall_test() 给出的，大家可以自行去看源码。
 
@@ -60,9 +58,6 @@ B:sale/orderState:1\|3827f37003127855b32ea022daa04cd\|
 先结束 nature.exe 的运行，我们继续我们的示例。
 
 这个示例的要点就是要跟踪订单的处理状态。状态数据是不建议直接放到`B:sale/order:1`上的，因为Nature 对数据的每次状态变更都会创建一条新的完整的数据，如果放到`B:sale/order:1`上会造成大量的数据冗余！性能自然也好不到哪里去。
-
-- **Nature 要点**：对于状态数据，传统处理方式一般是采用update的方式将新状态覆盖到旧状态上，而要跟踪这些变化需要额外的措施来保障，复杂度较高。而Nature 已经将这种机制内建，会大幅度简化状态数据的处理。**Nature 绝不修改、删除数据**，状态的每次变化都会形成新的数据，并用递增的版本号进行标记，这样所有的数据都可以被**追溯**。
-- **Nature 要点**：将订单数据和状态数据分开存储，相较于传统方式的合并存储，看似复杂化了设计，但对Nature的使用者来讲几乎无感知的，而且分开后，不同数据的使用目的会更加明确，有利于流程梳理；同时这种方式对 Nature 来讲还优化了存储和数据传输效率，所以Nature 是非常提倡分开这种做法的。
 
 为此我们需要为订单状态单独创建一个`Meta`:
 
@@ -77,9 +72,8 @@ VALUES('B', 'sale/orderState', 'order state', 1, 'new|paid|package|outbound|disp
   - orderState  会使用 order的ID作为自己的ID
   - orderState 作为上游驱动下游数据时，Nature 会顺便将 order 数据传递给下游，这样下游就不需要单独再查询一次订单数据了。
 
-- **Nature 要点** ： 在Nature里多个不同元数据实例共享相同的 ID 是一种推荐的做法，这个ID 可以被视为一个**事务ID**。既用一个ID就可以把相关的所有数据提取出来。这要比传统数据表依赖于外键转换才能提取数据有效率的多。
 
-## 生成订单状态数据
+## 定义`订单`和`订单状态`之间的关系
 
 要想生成订单状态数据，我们需要建立起订单和订单状态之间的`关系`。请执行下面的sql：
 
@@ -89,12 +83,11 @@ INSERT INTO relation
 VALUES('B:sale/order:1', 'B:sale/orderState:1', '{"target":{"states":{"add":["new"]}}}');
 ```
 
-| 字段或属性      | 说明                                                         |
-| --------------- | ------------------------------------------------------------ |
-| from_meta       | `关系`的起点，为 meta_string                                 |
-| to_meta         | `关系`的终点，为 meta_string                                 |
-| settings        | 是一个 `JSON` 形式的配置对象，用于对这个`关系`进行一些附加控制，如`执行器`，`过滤器`以及对上下游实例的一些要求等。请参考[使用 Relation](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/relation.md) |
-| `target.states` | 当 `converter` 转换完成后，该属性会要求 Nature 在返回的实例上添加或移除状态。 |
+| 字段或属性 | 说明                                                         |
+| ---------- | ------------------------------------------------------------ |
+| from_meta  | `关系`的起点，为 meta_string                                 |
+| to_meta    | `关系`的终点，为 meta_string                                 |
+| settings   | 是一个 `JSON` 形式的配置对象，用于对这个`关系`进行一些附加控制，如`执行器`，`过滤器`以及对上下游实例的一些要求等。请参考[使用 Relation](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/relation.md) |
 
 - **Nature 要点**：在Nature `关系`是有方向的，这个方向说明了数据的流转方向，上面的`关系`定义说明了数据只能从 B:sale/order:1 流向 B:sale/orderState:1。
 - target.states.add=["new"]：是说在新生成的数据实例（B:sale/orderState:1）上附加上”new“ 状态。这个语法是数组，也就是说我们可以同时附加多个状态。**注意：这个附加是在上一个版本的状态基础上进行附加的**。对于本例来讲上一版本还不存在，则认为上一状态为“”。
@@ -108,103 +101,20 @@ VALUES('B:sale/order:1', 'B:sale/orderState:1', '{"target":{"states":{"add":["ne
 
 打开 instance 数据表，我们会发现有类似于下面的数据：
 
-| ins_key                                           | content                                                      |
-| ------------------------------------------------- | ------------------------------------------------------------ |
-| B:sale/order:1\|3827f37003127855b32ea022daa04cd\| | {"user_id":123,"price":1000,"items":[{"item":{"id":1,"name":"phone","price":800},"num":1},{"item":{"id":2,"name":"battery","price":100},"num":2}],"address":"a.b.c"} |
+| ins_key                                                | states  | state_version | from_key        |
+| ------------------------------------------------------ | ------- | ------------- | --------------- |
+| B:sale/orderState:1\|3827f37003127855b32ea022daa04cd\| | ["new"] | 1             | B:sale/order:1\|3827f37003127855b32ea022daa04cd\| |
 
+我们只 `meta` 和 `relation`数据表里加了两条配置数据，神奇的是`instance`数据表里自动生成一条“sale/order”数据。
 
+- **Nature 要点**：当`关系`中的下游`Instance.content`没有意义时，我们就不需要一个明确的`执行器`来完成`关系`要求的数据转换任务，在此种情况下Nature 会为`关系`自动生成一个类型为`auto`的`执行器`，正式这个`执行器`帮助我们生成了上面这条数据。有关使用`执行器`的例子，下面会讲到。
 
-## 定义`Order`和相关的业务对象
+如果仔细看，你会发现上面这条数据的`ins_key` 和 `from_key` 中的 ID 是相同的，这是“B:sale/orderState:1”对应的`Meta.master`设置在起作用。
 
+* **Nature 要点** ： 在Nature里多个不同元数据实例共享相同的 ID 是一种推荐的做法，这个ID 可以被视为一个**事务ID**。既**用一个ID就可以把相关的所有数据提取出来**。这要比传统数据表依赖于外键转换才能提取数据有效率的多，而且还减少了关系数据的维护。更重要的是这种处理方式**减少了保障数据一致性的技术复杂度**。
 
+同时我们发现`target.states.add=["new"]`也发挥了作用：这条数据的`states`被设置成`["new"]`了。
 
-
-
-### Nature 要点
-
-**我们不需要为`Order`定义ID属性**, `Order` 实例在运行时会依附于一个 `Instance`，而Nature会自动为`Instance`创建一个ID。 
-
-在这里我们没有定义 `OrderState`对象, 这是因为除了 `Meta`中定义的状态列表外我们不在需要什么其他属性。
-
-## 提交 `Instance` 到 Nature
-
-在 Nature-Demo 项目中，我们构建了一个 `Order` 的实例，它包含了一部电话和两块电池。
-
-```rust
-fn create_order() -> Order {
-    Order {
-        user_id: 123,
-        price: 1000,
-        items: vec![
-            SelectedCommodity {
-                item: Commodity { id: 1, name: "phone".to_string() },
-                num: 1,
-            },
-            SelectedCommodity {
-                item: Commodity { id: 2, name: "battery".to_string() },
-                num: 2,
-            }
-        ],
-        address: "a.b.c".to_string(),
-    }
-}
-```
-
-并且把这个实例的JSON形式绑定到 `Instance。content` 上，这个`Instance`的 `MetaType` 为 "/B/order:1"。
-
-```rust
-        // 创建一个订单对象
-        let order = create_order();
-        // ---- 闯将一个 instance, 其 meta 为: "B:order:1"
-        let mut instance = Instance::new("/sale/order").unwrap();
-        instance.content = serde_json::to_string(&order).unwrap();
-```
-
-然后我们把这个`Instance` 提交给 Nature
-
-```rust
-        let response = CLIENT.post(URL_INPUT).json(&instance).send();
-        let id_s: String = response.unwrap().text().unwrap();
-        let id: Result<u128, NatureError> = serde_json::from_str(&id_s).unwrap();
-        let id = id.unwrap();
-```
-
-`URL_INPUT` 参数的形式是： "http://{server}:{port}/input"。Nature 将保存这个 `Instance`，如果成功Nature 将返回这个`Instance`的ID，否则返回错误信息。
-
-#### Nature 要点
-
-用于创建 `instance` 的 `meta` 必须已经在meta 数据表中定义过。
-
-如果你没有为 `Instance` 指定一个ID，Nature 会为你生成一个 128 位的 hash 值作为它的ID
-
-同一个`Instance`你可以提交多次，它们会返回相同的ID，Nature 是幂等的。
-
-## Nature 幕后为你做了什么
-
- `Order` 和 `OrderState` 的 `Relation` 是没有 `Executor`的， Nature 会**自动进行转换**，将 order `Instance` 转换为 orderState  `Instance` 。
-
-因为 orderState 的 master 是 order ，所以Nature 将orderState `Instance` 的 ID 设置为 order `Instance` 的ID。
-
-又因为`Relation` 的  target.states 属性指定了“new” 状态。所以 orderState实例的状态里有一个“new”。
-
-### Nature 要点
-
-在这个示例中 order 和 orderState 的 `Instance` **具有相同的 ID**， 这样做的好处就是，我可以用一个ID就可以将所有相关联的业务数据一次性提取出来。而传统数据库的设计方式往往是需要外键转换的，这会影响性能。
-
-这是**非常关键的一个特性**，源数据可以被认为是一个事务，而源数据的ID可用于跟踪这个事务的一切处理结果，而不需要通过中间的关系来查找，这一方面提升的查询的性能。另一方面会大量减少关系数据的维护。更重要的是该特性还可以有效的应对数据不一致问题，从未减少不必要的技术复杂度。
-
-以后的示例中会大量应用这一特性。
-
-## 与传统开发方式的区别
-
-传统方式下设计对代码的约束是比较弱的，但通过上面的例子你可以看到，虽然我们的代码里面有 order 的定义，但是我们无法对`Meta`中的 order 进行重新定义，甚至orderState的值我们都不能自由设置。这说明Nature 的`设计时`会对`运行时`进行强制约束。
-
-这种约束就像接口对实现的约束效果是一样的。只不过接口只能由代码来体现，而Nature的约束则可以有业务方来直接表达。这就减少的很多中间环节，时间和人员成本也就跟着降下来了。另一方面，因为减少的中间环节，信息就不会失真，目标表达更准确，代码也就少走了很多弯路，
-
-不知道你有没有发现，所有的 `Instance` 都是由Nature 进行存储的，也就是说业务系统可以完全不用考虑数据库的事情，我不知道这会为业务系统减少多少负担。
-
-Demo中有反复提交的演示，以说明Nature 是幂等的。不仅如此Nature 还会为你默默的处理好像重试、最终一致性等问题，大幅度减少传统业务系统的技术复杂度，使开发人员更专注于业务的实现。
-
-Nature 对业务系统简化的不仅仅是技术复杂性，对业务逻辑的简化也是比较显著。本示例中业务系统只是提交一个 order 的`Instance`到 Nature， Nature 就自动生成了orderState 并维护了它的状态。状态处理在业务系统中是非常难以维护的业务逻辑，尤其是业务一致性保障及状态跟踪。而Nature 几乎不用写代码就可以实现复杂的状态处理。
-
-业务系统越简单就越不容易出错，也就越健壮、稳定。
+- **Nature 要点**：对于状态数据，传统处理方式一般是采用update的方式将新状态覆盖到旧状态上，而要跟踪这些变化需要额外的措施来保障，复杂度较高。而Nature 已经将这种机制内建，会大幅度简化状态数据的处理。**Nature 绝不修改、删除数据**，状态的每次变化都会形成新的数据，并用递增的版本号进行标记，这样所有的数据都可以被**追溯**。
+- **Nature 要点**：将订单数据和状态数据分开存储，相较于传统方式的合并存储，看似复杂化了设计，但对Nature的使用者来讲几乎无感知的，甚至更简单，拿本示例来讲程序员无需对关心状态数据的设计、存储及操作相关内容；而且分开后，不同数据的使用目的会更加明确，有利于流程梳理；同时这种方式对 Nature 来讲还优化了存储和数据传输效率，所以Nature 是非常提倡将基本信息和状态分开这种做法的。
+- **Nature 要点**：在本示例的源码中，我们多次提交了相同的订单数据，Nature 会返回相同的ID，也就是说 **Nature 是幂等的**。

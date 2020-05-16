@@ -40,7 +40,7 @@ fn pay(id: u128, num: u32, account: &str, time: i64) -> u128 {
         pay_time: time,
     };
     let mut sys_context: HashMap<String, String> = HashMap::new();
-    sys_context.insert("target.id".to_string(), id.to_string());
+    sys_context.insert("target.id".to_string(), format!("{:x}", id));
     match send_business_object_with_sys_context("finance/payment", &payment, &sys_context) {
         Ok(id) => id,
         _ => 0
