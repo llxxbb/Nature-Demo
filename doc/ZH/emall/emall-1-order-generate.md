@@ -112,6 +112,7 @@ VALUES('B:sale/order:1', 'B:sale/orderState:1', '{"target":{"states":{"add":["ne
 如果仔细看，你会发现上面这条数据的`ins_key` 和 `from_key` 中的 ID 是相同的，这是“B:sale/orderState:1”对应的`Meta.master`设置在起作用。
 
 * **Nature 要点** ： 在Nature里多个不同元数据实例共享相同的 ID 是一种推荐的做法，这个ID 可以被视为一个**事务ID**。既**用一个ID就可以把相关的所有数据提取出来**。这要比传统数据表依赖于外键转换才能提取数据有效率的多，而且还减少了关系数据的维护。更重要的是这种处理方式**减少了保障数据一致性的技术复杂度**。
+* **Nature 要点**：`from_key` 是 Nature 自动添加的，可用于追溯数据，这会为排查问题提供极大的方便。
 
 同时我们发现`target.states.add=["new"]`也发挥了作用：这条数据的`states`被设置成`["new"]`了。
 
