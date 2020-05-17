@@ -1,5 +1,42 @@
 # 对订单进行支付
 
+ ## 为订单建立账户
+
+为了能够使一个订单能够支持多次支付，我们需要为每一笔订单建立一个独立的账户，来记录应收和实收情况。其`Meta`定义如下：
+
+```mysql
+INSERT INTO meta
+(meta_type, meta_key, description, version, states, fields, config)
+VALUES('B', 'finance/orderAccount', 'order account', 1, 'unpaid|partial|paid', '', '{"master":"B:sale/order:1"}');
+```
+
+我们可以看到这也是一个状态数据，里面有一组互斥的状态定义。另外它的 `master`也指到了 `order`上。有关这两个点已经在[上一节](emall-1-order-generate.md)中解释过了，这里不再说明。
+
+## 将应收写入订单账
+
+订单信息里含有应收信息，所以我们需要建立订单和订单账之间的关系。
+
+```mysql
+-- order --> orderAccount
+INSERT INTO relation
+(from_meta, to_meta, settings)
+VALUES('B:sale/order:1', 'B:finance/orderAccount:1', '{"executor":{"protocol":"localRust","url":"nature_demo_executor:order_receivable"},"target":{"states":{"add":["unpaid"]}}}');
+```
+
+这里 Nature 不能再为我们自动创建`orderAccount`实例了，因为 Nature 是不知道如何写它的 `content`。这就需要我们借助外部来实现了，为此我们引入了新的 配置项：`executor`。`executor`的实现方式有多种，这里使用的是`localRust`方式，实际上就是c静态库。`url`则说明了是哪个静态库的哪个方法。方法的入参、出参请参考 [reladtion.md](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/relation.md)，方法的具体实现请自行查看示例代码。
+
+这个方法的主要作用就是从订单（入参）中提取应收数据，并将应收写入到出参实例的 `content`中。
+
+## 运行 demo
+
+请将本例对应的 nature_demo_executor.dll 放入到包含 nature.exe的目录中，运行：
+
+- 启动 nature.exe
+
+- 运行 nature-demo::emall::emall_test()
+
+  
+
 现在到了支付环节了，我们虚构了一些复杂情景，我们假设用户的每张银行卡里的钱都不足以全额支付这笔订单，但是三张卡加起来是可以的。
 
 ## 记录每笔支付数据
@@ -12,37 +49,28 @@ INSERT INTO meta
 VALUES('B', 'finance/payment', 'order payment', 1, '', '', '');
 ```
 
-其输入的数据体现在 instance 数据表如下所示：
+定义了 `Meta` 后我们就可以向 Nature 输入数据了，其输入数据后在 instance 数据表里的样子如下：
 
-| ins_key                                           | content | states | state_version | from_key |
-| ------------------------------------------------- | ------- | ------ | ------------- | -------- |
-| B:sale/order:1\|3827f37003127855b32ea022daa04cd\| |         |        |               |          |
+| ins_key                                                 | content                                                      | sys_context                                     |
+| ------------------------------------------------------- | ------------------------------------------------------------ | ----------------------------------------------- |
+| B:finance/payment:1\|85fcf20d28c053ac2d3103d1759cf123\| | {"order":4665262802592301254545277299928466637,"from_account":"b","paid":200,"pay_time":1589670980281} | {"target.id":"3827f37003127855b32ea022daa04cd"} |
+| B:finance/payment:1\|df0d1867b9564ab3963dd8546aefec38\| | {"order":4665262802592301254545277299928466637,"from_account":"c","paid":700,"pay_time":1589670980286} | {"target.id":"3827f37003127855b32ea022daa04cd"} |
+| B:finance/payment:1\|e18330eb534abe924a3d03760df3e90c\| | {"order":4665262802592301254545277299928466637,"from_account":"a","paid":100,"pay_time":1589670980275} | {"target.id":"3827f37003127855b32ea022daa04cd"} |
 
- ## 为订单建立账户
-
-为了能够使一个订单能够支持多次支付，我们需要为每一笔订单建立一个独立的账户。其`Meta`定义如下：
-
-```mysql
-INSERT INTO meta
-(meta_type, meta_key, description, version, states, fields, config)
-VALUES('B', 'finance/orderAccount', 'order account', 1, 'unpaid|partial|paid', '', '{"master":"B:sale/order:1"}');
-```
-
-我们可以看到这也是一个状态数据，里面有一组互斥的状态定义。另外它的 `master`也指到了 `order`上。有关这两个点已经在[上一节](emall-1-order-generate.md)中解释过了，这里不再说明。
+除了已经接触到的 `ins_key` 和 `content`外，这里有出现了一个 `sys_context` 字段，这是 Nature 的有一个新的用法，我们先暂时放一放，下面会具体解释。
 
 ## 将支付数据关联到订单账上
 
+接下来我们就需要将这些支付数据记录到订单账上，也就是让支付和订单账建立关系。
 
+这里有一个问题需要解决：我们为那个订单付款？
 
-
+之所以不指定 `Meta` 就是想以非编程的方式来控制流程。
 
 ## 定义 `Relation`
 
 ```mysql
--- order --> orderAccount
-INSERT INTO relation
-(from_meta, to_meta, settings)
-VALUES('B:sale/order:1', 'B:finance/orderAccount:1', '{"executor":{"protocol":"localRust","url":"nature_demo_executor:order_receivable"},"target":{"states":{"add":["unpaid"]}}}');
+
 
 -- payment --> orderAccount
 INSERT INTO relation
