@@ -1,16 +1,38 @@
 # 出库
 
-当订单支付完成后，我们就需要履行合同了。第一步就是出库。我们假设库房管理系统已经存在且比较老旧，运行缓慢，不能直接和Nature进行通信。为了使它能够和Nature能够进行通讯，库房的开发工程师封装了一个中间层并将它部署到库房里。因为库房是一个独立的系统，所以我们就不需要库房相关的`Meta`定义了。
+现在我们该履行合同了。第一步就是出库，我们假设库房管理系统已经存在，为此我们需要实现一个执行器来与库房系统通讯。但因为库房的拣货、打包涉及到人工和（或）机械设备的处理，时间很长，导致执行器执行超时，无法与Nature 协作，既同步的方式无法满足 Nature 的通讯要求。
 
-我们在这里假设库房管理系统与Nature的通讯往往要超时，所以我们在本示例里采用一种新的机制来面对这个问题：回调。
+**一些限制说明**：
 
-## 一些限制说明
+在真实的情况中，一个订单可能包含不同的商品，而这些商品也可能分布在不同的库房中。本示例为了简单起见，假定所有的商品都在同一个库房里。
 
-在真实的情况中，一个订单可能包含不同的商品，而这些商品也可能分布在不同的库房中。一般情况下每个库房的商品都需要单独跟踪。本示例为了简单起见，假定所有的商品都在同一个库房里。
+这里有两种解决方法，第一种方式是建立如下`关系`, 用执行器将 Nature 的订单加工成`出库单`并导入到库房系统。
 
-## 定义`Relation`
+```mysql
+-- orderState:paid --> stockOutApplication
+INSERT INTO relation
+(from_meta, to_meta, settings)
+VALUES('B:sale/orderState:1', 'N:warehouse/outApplication:1', '{"selector":{"state_all":["paid"]},"executor":{"protocol":"localRust","url":"nature_demo_executor:stock_out_application"}}');
+```
 
-只要将订单下传到库房管理系统，我们就认为订单正在打包了。
+- **Nature 要点**：请注意这里的`N:warehouse/outApplication:1`，我们之前并没有定义过，这是一个不存在的`Meta`。 为了简化配置工作，对于没有存储意义的`Meta`不需要定义就可以使用，`出库单`是存储到库房系统里的，没有必要再在 Nature 里存储一份。我们用`N:`来标记这样的`Meta`，N 代表 `MetaType::Null`。`warehouse/outApplication`只是助记符，`N:warehouse/outApplication:1` 完全可以写成`N::1`，后面的版本号无论是多少都会被置为1，因为“空”有很多版本也没有意义。请参考 [meta.md](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/meta.md)。
+
+`出库单`进入库房系统后，人员及设备就可以开工了，当打包完成后就需要调用 Nature 的 input 接口来改变订单的状态，以驱动订单后面的流程。但这种方式，少了一些规范性和约束性，因为库房系统必须填写下面的信息如下：
+
+- 目标`Meta`为：`B:sale/orderState:1`
+- 将`instance`的状态置为 package 
+- 设置状态的版本号
+
+会有下面的问题：
+
+- 这些信息必须通过编程的方式提交，这样程序员就必须要了解订单状态相关的知识，扩大了信息沟通和维护成本。
+- 程序员可能会指定不规范的状态版本号，还有就是必须编程应对状态版本冲突的问题。
+
+其实这两个问题都可以避免，这就是我们的第二中方法，也是本示例所采用的方法：利用 Nature 的**回调机制**。
+
+## 订单状态：支付->打包完成
+
+当我们支付完成后，订单状态就会停在`paid`上，直到库房系统给出一个新的状态，所以我们可以定义一个订单状态到订单状态的`关系`。
 
 ```mysql
 -- orderState:paid --> orderState:package
@@ -19,75 +41,33 @@ INSERT INTO relation
 VALUES('B:sale/orderState:1', 'B:sale/orderState:1', '{"selector":{"state_all":["paid"]},"executor":{"protocol":"http","url":"http://localhost:8082/send_to_warehouse"},"target":{"states":{"add":["package"]}}}');
 ```
 
-### Nature 要点
+- **Nature 要点**：我们这里看到了一种新的执行器：`http`，借助它 Nature 可以在全球范围内编织一个庞大的系统。
 
-`Protocol::http`: Nature 可以通过Http协议与外部的`executor`进行通讯。
+- **Nature 要点**：nature_demo_executor_restful 项目已经提供了对上面url的支持，实现逻辑大家可自行下载源码进行查看。
 
-## 处理流程示意图
-
-```mermaid
-graph LR
-	order:paid-->send[出库申请]
-	send-->wh[出库处理]
-	wh-->order:outbound	
-```
-
-## 实现`executor`
-
-下面这个`executor`的实现主要是将订单信息下传到库房：
+send_to_warehouse 的实现方式是这样的，将入参直接传递给一个新的线程（实际生产中，你可以采用更好的处理方式）来处理，自己什么也不做并直接返回 下面的结果给 Nature：
 
 ```rust
-fn send_to_warehouse(para: Json<ConverterParameter>) -> HttpResponse {
-    thread::spawn(move || send_to_warehouse_thread(para.0));
-    // 让Nature等待60s,如果60s内没有响应，Nature将会重试。
-    HttpResponse::Ok().json(ConverterReturned::Delay(60))
-}
-
-fn send_to_warehouse_thread(para: ConverterParameter) {
-    // TODO 将订单下传给库房管理系统。
-    // 等待 50ms， 以模拟上面的下传操作时间。
-    thread::sleep(Duration::new(0, 50000));
-    // 返回库房的处理结果
-    let rtn = DelayedInstances {
-        task_id: para.task_id,
-        result: ConverterReturned::Instances(vec![para.from]),
-    };
-    let rtn = CLIENT.post(&*CALLBACK_ADDRESS).json(&rtn).send();
-    let text: String = rtn.unwrap().text().unwrap();
-    if text.contains("Err") {
-        error!("{}", text);
-    } else {
-        debug!("warehouse business processed!")
-    }
-}
+ConverterReturned::Delay(60)
 ```
 
-上面的代码并没有写出业务逻辑来，真正的业务逻辑需要在新起的线程里异步处理。这里只是给出了如何和Nature进行异步通信的方法。
+这个的意思是说，我要晚会给你（Nature）结果，多晚呢？60秒内。
 
-### Nature 要点
+- **Nature 要点**：Nature 在 `Delay` 指定的时间内不会进行重试。如果不指定 `Delay` Nature 在没有得到响应的情况下，会在接下来的第2、4、8、16、32、64...秒（依据启动参数来确定）进行重试，直到有反馈为止。
+- **Nature 要点**：这里的延迟时间是个技术问题，不是业务问题，所以就不放到`关系`里面进行配置了，如果放到那里反而不灵活了。
 
-`callback`：`executor`可以异步执行一个需要长时间运行的任务，在这种情况下，`executor`需要立即返回`ConverterReturned::Delay(seconds)` 给Nature，此返回值的意思是，挂起当前的处理并等待通知，如在等待指定的时间内还没有反馈，则进行重试,
+因为这是个Demo，我们只在50ms便返回了结果。当返回结果时我们不能调用 Nature 的 input 接口了，否则 Nature 挂起的任务会在将来的某个时刻重试。这里应当调用 Nature 的 `callback` 接口，它接受 `DelayedInstances`类型的示例。请注意别忘了把执行器得到的 task_id 给带上，具体请看示例代码。
 
-当`executor`处理完后需要将正式的结果通过`DelayedInstances` 来告知Nature 而不是`ConverterReturned`。并且`DelayedInstances.task_id` 的值一定是`para.task_id`的值，Nature 可以通过这个 task_id 来唤起挂起的任务。
+## 订单状态：出库
 
-## 将出库信息反馈给Nature
+打包对库房来说只是个中间状态，只是为了让顾客及时了解到货物的状态。我们还需要把货物放到出库区，让配送人员将货物拉走。这个`出库`状态也可以走 Nature 回调的路子，实现状态的配置化，但为了演示如何向 Nature 提交状态数据，这里放弃了这种做法，而是直接将状态数据提交到 Nature 的 input 接口，具体请看示例代码。
 
-接收了出库申请后，库房管理人员或机器人要依据订单地内容进行拣货和打包和出库。此时中间层应该通知Nature 改变订单地状态，以驱动后面的流程。示例代码如下：
+- **Nature 要点**：一定要设置`instance.id `为要订单的ID，否则Nature 会分配一个新的ID，这将导致订单在系统中无法出库。
+- **Nature 要点**：`state_version` 必须要在原有的基础上加一，否则会引起冲突，无法处理。
 
-```rust
-	let mut instance = Instance::new("/sale/orderState").unwrap();
-    instance.id = one_order.id;
-    instance.state_version = one_order.state_version + 1;
-    instance.states.insert("outbound".to_string());
-    let rtn = send_instance(&instance);
-```
+## 多个库房
 
-### Nature 要点
+这里并不是刻意想着构建一个庞大的电商系统，只是因为借助多库房来演示 Nature 的一种新技术：上下文选择。如想立马了解可以点击链接：[附录-多个库房](doc/ZH/emall/emall-appendix-multi-warehouse.md)
 
-一定要设置`instance.id `为要出库的订单ID，否则Nature 会分配一个新的ID，这将导致订单在系统中无法出库。
 
-`state_version` 必须要在原有的基础上加一，否则会引起冲突，无法处理.
 
-## 与传统开发方式的区别
-
-Nature 能够强有力的对逻辑实现进行肢解，大幅度降低彼此之间的耦合，这样就为基于分布式的异构系统间的业务往来提供了良好的协作平台，即便是老旧的系统仍然可以发挥应有的价值。

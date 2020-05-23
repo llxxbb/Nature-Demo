@@ -37,6 +37,12 @@ INSERT INTO relation
 VALUES('B:finance/orderAccount:1', 'B:sale/orderState:1', '{"selector":{"state_all":["paid"]},"target":{"states":{"add":["paid"]}}}');
 
 -- stock out  ---------------------------------------------
+
+-- orderState:paid --> stockOutApplication
+INSERT INTO relation
+(from_meta, to_meta, settings)
+VALUES('B:sale/orderState:1', 'N:warehouse/outApplication:1', '{"selector":{"state_all":["paid"]},"executor":{"protocol":"localRust","url":"nature_demo_executor:stock_out_application"}}');
+
 -- orderState:paid --> orderState:package
 INSERT INTO relation
 (from_meta, to_meta, settings)
