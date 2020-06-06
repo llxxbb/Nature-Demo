@@ -1,3 +1,9 @@
+TRUNCATE TABLE `meta`;
+TRUNCATE TABLE `relation`;
+TRUNCATE TABLE `instances`;
+TRUNCATE TABLE `task`;
+TRUNCATE TABLE `task_error`;
+
 -- all class's all subjects score to personal subject score ---------------------------------------------
 
 INSERT INTO meta

@@ -1,3 +1,9 @@
+TRUNCATE TABLE `meta`;
+TRUNCATE TABLE `relation`;
+TRUNCATE TABLE `instances`;
+TRUNCATE TABLE `task`;
+TRUNCATE TABLE `task_error`;
+
 -- generate time range based on `order` ---------------------------------------------
 
 INSERT INTO meta

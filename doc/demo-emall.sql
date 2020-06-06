@@ -1,3 +1,9 @@
+TRUNCATE TABLE `meta`;
+TRUNCATE TABLE `relation`;
+TRUNCATE TABLE `instances`;
+TRUNCATE TABLE `task`;
+TRUNCATE TABLE `task_error`;
+
 -- generate order ---------------------------------------------
 INSERT INTO meta
 (meta_type, meta_key, description, version, states, fields, config)
