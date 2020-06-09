@@ -61,11 +61,11 @@ ConverterReturned::Delay(60)
 
 让我们来看下效果，运行：
 
-nature.exe
+- nature.exe
 
-nature_demo_executor_restful.exe
+- nature_demo_executor_restful.exe
 
-nature-demo::emall::emall_test()
+- nature-demo::emall::emall_test()
 
 结束后我们会发现有下面的数据产生：
 
@@ -98,7 +98,7 @@ nature-demo::emall::emall_test()
 
 ## 多个库房
 
-这里并不是刻意想着构建一个庞大的电商系统（当然 Nature 有这个能力），只是因为借助多库房来演示 Nature 的一种新技术：上下文选择。如想立马了解可以点击链接：[附录-多个库房](doc/ZH/emall/emall-appendix-multi-warehouse.md)
+这里并不是刻意想着构建一个庞大的电商系统（当然 Nature 有这个能力），只是因为借助多库房来演示 Nature 的一种新技术：上下文选择。如想立马了解可以点击链接：[附录-多个库房](emall-appendix-multi-warehouse.md)
 
 
 
