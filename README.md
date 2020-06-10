@@ -14,7 +14,7 @@
 | [支付订单](doc/ZH/emall/emall-3-pay-the-bill.md)             | 我们只写了很少的业务代码，就实现了支持多次支付的复杂场景，Nature 会在幕后提供很多保障，如**数据一致性**，**并发及冲突**等问题。 | 系统上下文，并发冲突，状态数据处理。用状态选择控制流程，数据追溯 |
 | [出库](doc/ZH/emall/emall-4-stock-out.md)                    | 如何与涉及到人工和（或）机械设备的**慢系统**或**遗留资产**打交道。 | 回调，http执行器，外部提交状态数据。                         |
 | [配送](doc/ZH/emall/emall-5-delivery.md)                     | 这里展示了如何**记录第三方数据**的方法，便于利用这些数据与第三方系统结算。 | 参数化输入                                                   |
-| [签收](doc/ZH/emall/emall-6-signed.md)                       | 这里描述了Nature 对时间敏感性任务的处理                      | 延迟转换                                                     |
+| [签收](doc/ZH/emall/emall-6-signed.md)                       | 利用 Nature 的 retry 可以完成需要特定时间运行的任务          | 延迟处理                                                     |
 | [附录-多个库房](doc/ZH/emall/emall-appendix-multi-warehouse.md) |                                                              | 上下文选择控制流程                                           |
 
 ## 学习成绩统计
