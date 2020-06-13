@@ -12,7 +12,13 @@ INSERT INTO meta
 VALUES('B', 'finance/payment', 'order payment', 1, '', '', '');
 ```
 
-定义了 `Meta` 后我们就可以运行 Demo 来向 Nature 输入数据了。
+定义了 `Meta` 后我们就可以向 Nature 输入数据了。输入数据的代码请参考：nature-demo::emall::finance::pay。需要说明的是我们这里用到了`Instance.sys_context`属性，如下：
+
+```rust
+sys_context.insert("target.id".to_string(), format!("{:x}", id));
+```
+
+我们在里面放置了一个 `target.id`，其值为**16进制**的订单ID。其作用我们稍后讲。先让我们来看一下demo的运行效果。
 
 - 启动 nature.exe
 - 运行 nature-demo::emall::emall_test()
@@ -25,9 +31,9 @@ VALUES('B', 'finance/payment', 'order payment', 1, '', '', '');
 | B:finance/payment:1\|df0d1867b9564ab3963dd8546aefec38\| | {"order":4665262802592301254545277299928466637,"from_account":"c","paid":700,"pay_time":1589670980286} | {"target.id":"3827f37003127855b32ea022daa04cd"} |
 | B:finance/payment:1\|e18330eb534abe924a3d03760df3e90c\| | {"order":4665262802592301254545277299928466637,"from_account":"a","paid":100,"pay_time":1589670980275} | {"target.id":"3827f37003127855b32ea022daa04cd"} |
 
-除了已经接触到的 `ins_key` 和 `content`外，这里有出现了一个 `sys_context` 字段，这是 Nature 的有一个新的用法，我们先暂时放一放，下面会具体解释。
+除了已经接触到的 `ins_key` 和 `content`外，这里有出现了一个 `sys_context` 字段，里面放置了上面我们提到的 `target.id`数据。
 
-在demo 示例代码中，我们故意将第二笔支付重新输入了一遍，以验证我们是否可以少交点钱。
+在demo 示例代码中，我们故意将第二笔支付重新输入了一遍，以验证我们是否可以少交点钱，结果很好，并没有发生糟糕的事情。
 
 ## 将支付数据关联到订单账上
 
@@ -40,9 +46,9 @@ INSERT INTO relation
 VALUES('B:finance/payment:1', 'B:finance/orderAccount:1', '{"executor":{"protocol":"localRust","url":"nature_demo_executor:pay_count"}}');
 ```
 
-如果关系中的下游是状态数据，Nature 便会将状态数据(`orderAccount` )的上一版本查出来一并给执行器（`pay_count`），但`orderAccount` 实例的ID是多少呢？
+关系做好了，但我们如何将这三笔不同的账记到同一个订单账上呢？有人会说支付单记录的订单号不就是订单账的号吗，没错，但 Nature 是不理解 `Instance.content`中的内容的。但 Nature 却可以理解 `Instance.sys_context` 中的内容，所以这就是为什么在里面放置 `target.id` 属性的原因了。有了 `target.id` Nature 就可以找到要操作的订单账了。
 
-- **Nature 要点**：当 Nature 需要上一版本的状态数据时，会从`sys_context`  中 获取 `target.id`值来作为实例的 ID， 否则这件事就需要程序员在`执行器`上自行查询了。
+- **Nature 要点**：订单账是状态数据，Nature 对状态数据有特殊的处理。在将支付单数据提交`执行器`（`pay_count`）处理前，Nature 便会将`orderAccount` 的上一版本查出来一并给执行器（`pay_count`），而这个查询所需要的ID就来源于上面的 `target.id`。
 
 有关`pay_count`是如何工作的请自行查看示例代码。现在我们可以验证一下效果了。
 

@@ -20,14 +20,13 @@ VALUES('B', 'third/waybill', 'waybill', 1, '', '', '');
 -- orderState:outbound --> waybill
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/orderState:1', 'B:third/waybill:1', '{"selector":{"state_all":["outbound"]}, "executor":{"protocol":"localRust","url":"nature_demo_executor:go_express"}}');
+VALUES('B:sale/orderState:1', 'B:third/waybill:1', '{"id_bridge":true, "selector":{"state_all":["outbound"]}, "executor":{"protocol":"localRust","url":"nature_demo_executor:go_express"}}');
 ```
 
-有关选择器的使用在[支付订单](emall-3-pay-the-bill.md)中已经介绍过，请参考 [meta.md](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/meta.md)。
+我们看到了一个新的属性：`id_bridge`，其作用在稍后讲，这里先忽略一下。有关选择器的使用在[支付订单](emall-3-pay-the-bill.md)中已经介绍过，请参考 [meta.md](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/meta.md)。
 
-`执行器`的具体实现方式请参考对应的源代码，这里有两点需要说明一下：
+`执行器`的具体实现方式请参考对应的源代码，这里有一点需要说明一下：
 
-- **系统上下文**：我们需要设置 `target.id` 为派件单对应的订单ID，以简化订单下一环节`派件单 -> 订单状态:配送`的处理，我们在[支付订单](emall-3-pay-the-bill.md)中也应用了这一技巧。
 - **设置`Instance.para`属性**：用于记录派件单相关信息，其形式为：“/[快递公司ID]/[派件单ID]”。**参数之间请务必用“/”进行分隔**（你可以通过改变 Nature 的启动参数来将它变成其它字符）。
 
 让我们看一下运行结果，运行：
@@ -40,11 +39,11 @@ VALUES('B:sale/orderState:1', 'B:third/waybill:1', '{"selector":{"state_all":["o
 
 结束后我们会发现有下面的数据产生：
 
-| ins_key                                                    | system_context                                  | from_key                                                  |
-| ---------------------------------------------------------- | ----------------------------------------------- | --------------------------------------------------------- |
-| B:third/waybill:1\|0\|/ems/3827f37003127855b32ea022daa04cd | {"target.id":"3827f37003127855b32ea022daa04cd"} | B:sale/orderState:1\|3827f37003127855b32ea022daa04cd\|\|4 |
+| ins_key                                                    | from_key                                                  | sys_context                                     |
+| ---------------------------------------------------------- | --------------------------------------------------------- | ----------------------------------------------- |
+| B:third/waybill:1\|0\|/ems/3827f37003127855b32ea022daa04cd | B:sale/orderState:1\|3827f37003127855b32ea022daa04cd\|\|4 | {"target.id":"3827f37003127855b32ea022daa04cd"} |
 
-- **Nature 要点**：你会发现`派件单`的ID为0，Nature并没有为这个`instance` **Hash**出一个值来。这样做的原因是因为我们指定了 `para`，这会让 Nature 认为这是一条外部数据。如果 Nature 对这个ID进行了填充，当检索/ems/开头的派件单数据时将会是一件非常低效的事。当然 Nature 并不阻止你自行填充这个 ID 值。
+- **Nature 要点**：你会发现`派件单`的ID为0，Nature并没有为这个`instance` **Hash**出一个值来。这样做的原因是因为我们指定了 `para`，这会让 Nature 认为这是一条外部数据。如果 Nature 对这个ID进行了填充，当检索/ems/开头的派件单数据时将会是一件非常麻烦和低效的事。当然 Nature 并不阻止你自行填充这个 ID 值。
 - **Nature 要点**：Nature 提供的检索能力是有限度的，毕竟 Nature 的主要目的不是用来检索数据而是用来处理数据的。
 
 ## 将订单的状态置为“配送中”
@@ -72,4 +71,9 @@ VALUES('B:third/waybill:1', 'B:sale/orderState:1', '{"target":{"states":{"add":[
 | ins_key                                                    | states          | state_version | from_key                                                  |
 | ---------------------------------------------------------- | --------------- | ------------- | --------------------------------------------------------- |
 | B:sale/orderState:1\|3827f37003127855b32ea022daa04cd\| | ["dispatching"] | 5             | B:third/waybill:1\|0\|/ems/3827f37003127855b32ea022daa04cd\|0 |
+
+这里有个问题，派件单是如何知道要更新哪一个订单的状态的？细心的读者可能已经注意到`派件单`数据的`sys_context`里的`target.id`存放的就是订单的ID，那么派件单里的这个ID又是从哪里来的呢？如果你去看 go_express 的源代码，你会发现我们并没有设置`Instance.sys_context`属性。不卖关子，写这个属性的是 Nature 自已，还想着我们上面提到的 `id_bridge` 吗：
+
+- **Nature 要点**：派件单的两端都是订单状态，而派件单的ID不使用订单的ID，这就中断了ID的传递，而`id_bridge` 在派件单上方架起了一座桥梁，使得ID可以被传递，而**传递的意义在于你可以避免写代码或少些代码**，如本小节中我们就不需要写代码。
+- **Nature 要点**：`id_bridge` 可以跨越多个节点进行搭桥，但要求中间的所有节点都需要指定 `id_bridge`  或在`Instance.sys_context`中指定 `target.id`。
 
