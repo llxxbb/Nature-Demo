@@ -77,7 +77,7 @@ VALUES('B', 'sale/orderSign', 'order finished', 1, '', '', '');
 -- orderState:dispatching --> orderSign
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/orderState:1', 'B:sale/orderSign:1', '{"delay":1,"selector":{"state_all":["dispatching"]}, "executor":{"protocol":"localRust","url":"nature_demo_executor:auto_sign"}}');
+VALUES('B:sale/orderState:1', 'B:sale/orderSign:1', '{"delay":1, "id_bridge":true, "selector":{"state_all":["dispatching"]}, "executor":{"protocol":"localRust","url":"nature_demo_executor:auto_sign"}}');
 
 -- orderSign --> orderState:signed
 INSERT INTO relation
