@@ -23,7 +23,7 @@ VALUES('B', 'score/trainee/all-subject', 'all subject\'s score for a person', 1,
 ```mysql
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:score/trainee/subject:1', 'B:score/trainee/all-subject:1', '{"target":{"upstream_para":[0]},"executor":{"protocol":"builtIn","url":"sum","settings":"{\\"para_part\\":1}"}}');
+VALUES('B:score/trainee/subject:1', 'B:score/trainee/all-subject:1', '{"target":{"copy_para":[0]},"executor":{"protocol":"builtIn","url":"sum","settings":"{\\"para_part\\":1}"}}');
 ```
 
 ### 设置计算结果叠加的目标实例
@@ -31,10 +31,10 @@ VALUES('B:score/trainee/subject:1', 'B:score/trainee/all-subject:1', '{"target":
 这里出现了一个新的用法：
 
 ```json
-"target":{"upstream_para":[0]}
+"target":{"copy_para":[0]}
 ```
 
-这个是告诉 Nature 我们的计算结果要往哪个`Instance`上叠加，`target`指的是 `B:score/trainee/all-subject:1`，`upstream_para` 指的是`B:score/trainee/subject:1`的 para 的哪个部分， 还记得吗，这个para的形式是 “学号/学科”。整个的意思是要在 `B:score/trainee/all-subject:1|0|学号` 上进行叠加计算。
+这个是告诉 Nature 我们的计算结果要往哪个`Instance`上叠加，`target`指的是 `B:score/trainee/all-subject:1`，`copy_para` 指的是`B:score/trainee/subject:1`的 para 的哪个部分， 还记得吗，这个para的形式是 “学号/学科”。整个的意思是要在 `B:score/trainee/all-subject:1|0|学号` 上进行叠加计算。
 
 ### 内置执行器：sum
 
