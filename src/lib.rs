@@ -17,3 +17,5 @@ mod score;
 mod sale_statistics;
 #[cfg(test)]
 mod other;
+#[cfg(test)]
+mod multi_warehouse;
