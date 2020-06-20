@@ -46,8 +46,10 @@ VALUES('B:sale/order:1', 'B:finance/orderAccount:1', '{"executor":{"protocol":"l
 
 请将本例对应的 nature_demo_executor.dll 放入到包含 nature.exe的目录中，运行：
 
-- 启动 nature.exe
-- 运行 nature-demo::emall::emall_test()
+```shell
+nature.exe
+cargo.exe test --color=always --package nature-demo --lib emall::emall_test
+```
 
 运行完成后我们就可以在 instance 数据表里看到下面新生成的订单账数据：
 

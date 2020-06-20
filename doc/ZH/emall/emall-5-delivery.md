@@ -31,11 +31,11 @@ VALUES('B:sale/orderState:1', 'B:third/waybill:1', '{"id_bridge":true, "selector
 
 让我们看一下运行结果，运行：
 
-- nature.exe
-
-- nature_demo_executor_restful.exe
-
-- nature-demo::emall::emall_test()
+```shell
+nature.exe
+nature_demo_executor_restful.exe
+cargo.exe test --color=always --package nature-demo --lib emall::emall_test
+```
 
 结束后我们会发现有下面的数据产生：
 
@@ -60,11 +60,11 @@ VALUES('B:third/waybill:1', 'B:sale/orderState:1', '{"target":{"states":{"add":[
 
 很高兴，再一次不需要写代码就可以完成任务。让我们看一下运行结果，运行：
 
-- nature.exe
-
-- nature_demo_executor_restful.exe
-
-- nature-demo::emall::emall_test()
+```shell
+nature.exe
+nature_demo_executor_restful.exe
+cargo.exe test --color=always --package nature-demo --lib emall::emall_test
+```
 
 结束后我们会发现有下面的数据产生：
 

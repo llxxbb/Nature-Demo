@@ -37,9 +37,13 @@ VALUES('B:sale/orderSign:1', 'B:sale/orderState:1', '{"target":{"states":{"add":
 
 到最后时刻了，请运行下面的内容：
 
-- nature.exe
-- nature_demo_executor_restful.exe
-- nature-demo::emall::emall_test()
+```shell
+nature.exe
+nature_demo_executor_restful.exe
+retry.exe
+cargo.exe test --color=always --package nature-demo --lib emall::emall_test
+```
+
 - retry.exe：因为执行器不能立刻执行，Nature 会放弃对它的处理，为了唤起这些被挂起的任务，你需要启动 `Nature-Retry`
 
  让我们看下运行结果：

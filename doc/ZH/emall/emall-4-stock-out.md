@@ -61,11 +61,11 @@ ConverterReturned::Delay(60)
 
 让我们来看下效果，运行：
 
-- nature.exe
-
-- nature_demo_executor_restful.exe
-
-- nature-demo::emall::emall_test()
+```shell
+nature.exe
+nature_demo_executor_restful.exe
+cargo.exe test --color=always --package nature-demo --lib emall::emall_test
+```
 
 结束后我们会发现有下面的数据产生：
 
@@ -82,11 +82,11 @@ ConverterReturned::Delay(60)
 
 让我们来看下效果，运行：
 
+```shell
 nature.exe
-
 nature_demo_executor_restful.exe
-
-nature-demo::emall::emall_test()
+cargo.exe test --color=always --package nature-demo --lib emall::emall_test
+```
 
 结束后我们会发现有下面的数据产生：
 

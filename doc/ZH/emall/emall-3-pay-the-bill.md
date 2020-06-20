@@ -18,10 +18,12 @@ VALUES('B', 'finance/payment', 'order payment', 1, '', '', '');
 sys_context.insert("target.id".to_string(), format!("{:x}", id));
 ```
 
-我们在里面放置了一个 `target.id`，其值为**16进制**的订单ID。其作用我们稍后讲。先让我们来看一下demo的运行效果。
+我们在里面放置了一个 `target.id`，其值为**16进制**的订单ID。其作用我们稍后讲。先让我们来看一下demo的运行效果。运行：
 
-- 启动 nature.exe
-- 运行 nature-demo::emall::emall_test()
+```shell
+nature.exe
+cargo.exe test --color=always --package nature-demo --lib emall::emall_test
+```
 
 之后我们便可以在 instance 数据表里的看到下面的数据：
 
@@ -50,10 +52,12 @@ VALUES('B:finance/payment:1', 'B:finance/orderAccount:1', '{"executor":{"protoco
 
 - **Nature 要点**：订单账是状态数据，Nature 对状态数据有特殊的处理。在将支付单数据提交`执行器`（`pay_count`）处理前，Nature 便会将`orderAccount` 的上一版本查出来一并给执行器（`pay_count`），而这个查询所需要的ID就来源于上面的 `target.id`。
 
-有关`pay_count`是如何工作的请自行查看示例代码。现在我们可以验证一下效果了。
+有关`pay_count`是如何工作的请自行查看示例代码。现在我们可以验证一下效果了。运行：
 
-- 启动 nature.exe
-- 运行 nature-demo::emall::emall_test()
+```shell
+nature.exe
+cargo.exe test --color=always --package nature-demo --lib emall::emall_test
+```
 
 之后我们便会发现 instance 数据表产生了下面的数据。
 

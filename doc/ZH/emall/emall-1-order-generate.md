@@ -43,10 +43,12 @@ VALUES('B', 'sale/order', 'order', 1, '', '', '');
 
 ## 查看输入的数据
 
-让我们先看看 Nature 所插入数据的样子。
+让我们先看看 Nature 所插入数据的样子。运行：
 
-- 启动 nature.exe
-- 运行 nature-demo::emall::emall_test()
+```shell
+nature.exe
+cargo.exe test --color=always --package nature-demo --lib emall::emall_test
+```
 
 打开 instance 数据表，我们会发现有下面的数据：
 
@@ -103,10 +105,12 @@ VALUES('B:sale/order:1', 'B:sale/orderState:1', '{"target":{"states":{"add":["ne
 
 ## 运行 Demo 并查看生成的订单状态数据
 
-让我们见证一个**魔法时刻**
+让我们见证一个**魔法时刻**，运行：
 
-- 启动 nature.exe
-- 运行 nature-demo::emall::emall_test()
+```shell
+nature.exe
+cargo.exe test --color=always --package nature-demo --lib emall::emall_test
+```
 
 打开 instance 数据表，我们会发现有一条下面的数据：
 
