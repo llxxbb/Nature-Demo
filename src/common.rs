@@ -104,6 +104,7 @@ pub fn get_by_key(id: u128, meta: &str, para: &str, sta_version: i32) -> Result<
         time_lt: None,
         limit: 11,
     };
+    dbg!(&para);
     get_by_meta(&para)
 }
 
@@ -111,7 +112,9 @@ pub fn get_by_key(id: u128, meta: &str, para: &str, sta_version: i32) -> Result<
 pub fn loop_get_by_key(id: u128, meta: &str, para: &str, sta_version: i32) -> Vec<Instance> {
     loop {
         if let Ok(ins) = get_by_key(id, meta, para, sta_version) {
-            return ins;
+            if ins.len() > 0 {
+                return ins;
+            }
         } else {
             warn!("not found state instance, will retry");
             sleep(Duration::from_nanos(3000000))
