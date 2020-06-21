@@ -28,8 +28,6 @@ VALUES('B:score/trainee/subject:1', 'B:score/trainee/all-subject:1', '{"target":
 
 ### 设置计算结果叠加的目标实例
 
-这里出现了一个新的用法：
-
 ```json
 "target":{"copy_para":[0]}
 ```

@@ -1,4 +1,4 @@
-# 多个库房
+# 附录：多个库房
 
 现在模拟一个情景，我们已经有了一个自己的库房，因为业务扩展的需要现在需要增加一个库房。出于成本考虑，这个库房的业务由第三方来承接。但这里有个问题要解决：如何标记订单该由哪个库房生产呢？
 
@@ -67,5 +67,3 @@ VALUES('B:order:1', 'B:warehouse/third:1', '{"selector":{"context_all":["third"]
 | B:warehouse/self:1\|70a8d67d64bd2b86253d7c4452056685\|  |         |                                 | B:order:1\|74c5d1d825d15cac88330edb45268624\|\|0 |
 | B:warehouse/third:1\|8aa0337559cd5091d83ce40d3442a76d\| |         |                                 | B:order:1\|74c5d1d825d15cac88330edb45268624\|\|0 |
 | B:warehouse/third:1\|d264929013427f9b9739abb87e9d7ff2\| |         |                                 | B:order:1\|a75366d1b120cb8b633d05fd2eff3426\|\|0 |
-
-- 

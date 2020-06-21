@@ -19,3 +19,5 @@ mod sale_statistics;
 mod other;
 #[cfg(test)]
 mod multi_warehouse;
+#[cfg(test)]
+mod multi_delivery;

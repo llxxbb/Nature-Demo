@@ -5,7 +5,7 @@ use std::time::Duration;
 use reqwest::blocking::Client;
 use serde::Serialize;
 
-use nature_common::{Instance, NatureError, KeyCondition, Result};
+use nature_common::{Instance, KeyCondition, NatureError, Result};
 
 lazy_static! {
     pub static ref CLIENT : Client = Client::new();
@@ -13,6 +13,7 @@ lazy_static! {
 
 pub static URL_INPUT: &str = "http://localhost:8080/input";
 pub static URL_GET_BY_ID: &str = "http://localhost:8080/get_by_id";
+pub static URL_GET_BY_META: &str = "http://localhost:8080/get_by_meta";
 
 pub fn send_instance(ins: &Instance) -> Result<u128> {
     let response = CLIENT.post(URL_INPUT).json(ins).send();
@@ -21,6 +22,14 @@ pub fn send_instance(ins: &Instance) -> Result<u128> {
         return Err(NatureError::VerifyError(id_s));
     }
     serde_json::from_str(&id_s)?
+}
+
+pub fn get_by_meta(cond: &KeyCondition) -> Result<Vec<Instance>> {
+    // let rtn = CLIENT.post(&*GET_BY_META).json(cond).send().await?.json::<ConverterReturned>().await?;
+    let res = CLIENT.post(URL_GET_BY_META).json(cond).send();
+    let rtn = res.unwrap().json::<Result<Vec<Instance>>>().unwrap();
+    // let _ = dbg!(&rtn);
+    rtn
 }
 
 pub fn send_business_object<T>(meta_key: &str, bo: &T) -> Result<u128> where T: Serialize {
@@ -69,6 +78,47 @@ pub fn wait_for_order_state(order_id: u128, state_ver: i32) -> Instance {
     }
     // panic!("can't find order and state");
 }
+
+pub fn send_with_context<T>(meta_key: &str, bo: &T, context: &HashMap<String, String>) -> Result<u128> where T: Serialize {
+    let mut instance = Instance::new(meta_key).unwrap();
+    instance.content = serde_json::to_string(bo).unwrap();
+    instance.context = context.clone();
+
+    let response = CLIENT.post(URL_INPUT).json(&instance).send();
+    let id_s: String = response.unwrap().text().unwrap();
+    if id_s.contains("Err") {
+        return Err(NatureError::VerifyError(id_s));
+    }
+    serde_json::from_str(&id_s)?
+}
+
+
+pub fn get_by_key(id: u128, meta: &str, para: &str, sta_version: i32) -> Result<Vec<Instance>> {
+    let para = KeyCondition {
+        id: format!("{:x}", id),
+        meta: meta.to_string(),
+        key_gt: "".to_string(),
+        para: para.to_string(),
+        state_version: sta_version,
+        time_ge: None,
+        time_lt: None,
+        limit: 11,
+    };
+    get_by_meta(&para)
+}
+
+
+pub fn loop_get_by_key(id: u128, meta: &str, para: &str, sta_version: i32) -> Vec<Instance> {
+    loop {
+        if let Ok(ins) = get_by_key(id, meta, para, sta_version) {
+            return ins;
+        } else {
+            warn!("not found state instance, will retry");
+            sleep(Duration::from_nanos(3000000))
+        }
+    }
+}
+
 
 #[cfg(test)]
 mod test {

@@ -15,8 +15,8 @@
 | [出库](doc/ZH/emall/emall-4-stock-out.md)                    | 如何与涉及到人工和（或）机械设备的**慢系统**或**遗留资产**打交道。 | 回调，http执行器，外部提交状态数据。MetaType::Null           |
 | [配送](doc/ZH/emall/emall-5-delivery.md)                     | 这里展示了如何**记录第三方数据**的方法，便于利用这些数据与第三方系统结算。另外Nature 提供了一种机制，用于主干流程被其它一业务中断后再连接起来的情景。 | 参数化输入, id_bridge                                        |
 | [签收](doc/ZH/emall/emall-6-signed.md)                       | 利用 Nature 的 retry 可以完成需要特定时间运行的任务          | 延迟处理                                                     |
-| [附录-多个库房](doc/ZH/emall/emall-appendix-multi-warehouse.md) | 利用上下文将订单分配到不同的库房生产。                       | 自定义上下文，上下文选择控制流程                             |
-| 多级配送中转                                                 | 业务上的循环流程控制                                         |                                                              |
+| [附录-多个库房](doc/ZH/emall/emall-appendix-multi-warehouse.md) | 利用**上下文**将订单分配到不同的库房生产。                   | 自定义上下文，上下文选择控制流程                             |
+| [附录：多级配送中转](doc/ZH/emall/emall-appendix-multi-transfer-station.md) | 非编程方式处理业务上的**循环**结构。                         | 选择器的组合使用。use_upstream_id， copy_para                |
 
 ## 学习成绩统计
 
