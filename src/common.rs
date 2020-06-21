@@ -24,12 +24,17 @@ pub fn send_instance(ins: &Instance) -> Result<u128> {
     serde_json::from_str(&id_s)?
 }
 
-pub fn get_by_meta(cond: &KeyCondition) -> Result<Vec<Instance>> {
+pub fn get_by_id(cond: &KeyCondition) -> Option<Instance> {
     // let rtn = CLIENT.post(&*GET_BY_META).json(cond).send().await?.json::<ConverterReturned>().await?;
-    let res = CLIENT.post(URL_GET_BY_META).json(cond).send();
-    let rtn = res.unwrap().json::<Result<Vec<Instance>>>().unwrap();
-    // let _ = dbg!(&rtn);
-    rtn
+    let response = CLIENT.post(URL_GET_BY_ID).json(cond).send();
+    let msg = response.unwrap().text().unwrap();
+    if msg.eq(r#"{"Ok":null}"#) {
+        return None;
+    }
+    match serde_json::from_str::<Result<Instance>>(&msg).unwrap() {
+        Ok(x) => Some(x),
+        Err(_) => None
+    }
 }
 
 pub fn send_business_object<T>(meta_key: &str, bo: &T) -> Result<u128> where T: Serialize {
@@ -93,7 +98,7 @@ pub fn send_with_context<T>(meta_key: &str, bo: &T, context: &HashMap<String, St
 }
 
 
-pub fn get_by_key(id: u128, meta: &str, para: &str, sta_version: i32) -> Result<Vec<Instance>> {
+pub fn get_by_key(id: u128, meta: &str, para: &str, sta_version: i32) -> Option<Instance> {
     let para = KeyCondition {
         id: format!("{:x}", id),
         meta: meta.to_string(),
@@ -104,17 +109,14 @@ pub fn get_by_key(id: u128, meta: &str, para: &str, sta_version: i32) -> Result<
         time_lt: None,
         limit: 11,
     };
-    dbg!(&para);
-    get_by_meta(&para)
+    get_by_id(&para)
 }
 
 
-pub fn loop_get_by_key(id: u128, meta: &str, para: &str, sta_version: i32) -> Vec<Instance> {
+pub fn loop_get_by_key(id: u128, meta: &str, para: &str, sta_version: i32) -> Instance {
     loop {
-        if let Ok(ins) = get_by_key(id, meta, para, sta_version) {
-            if ins.len() > 0 {
-                return ins;
-            }
+        if let Some(ins) = get_by_key(id, meta, para, sta_version) {
+            return ins;
         } else {
             warn!("not found state instance, will retry");
             sleep(Duration::from_nanos(3000000))
