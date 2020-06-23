@@ -47,8 +47,8 @@ VALUES('B:order:1', 'B:warehouse/third:1', '{"selector":{"context_all":["third"]
 让我们看下运行效果，启动：
 
 ```shell
-- nature.exe
-- cargo.exe test --color=always --package nature-demo --lib multi_warehouse::multi_warehouse
+nature.exe
+cargo.exe test --color=always --package nature-demo --lib multi_warehouse::multi_warehouse
 ```
 
 在 `multi_warehouse` 里一共提交了 A、B、C、D 四个订单，A的上下文是 self， B的上下文是 third， C的上下文 是 self 和 third.  D没有上下文。

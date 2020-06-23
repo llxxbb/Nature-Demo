@@ -58,7 +58,14 @@ VALUES('B:deliveryState:1', 'B:delivery:1', '{"selector":{"state_all":["finished
     };
 ```
 
-"C/D" 或 "_" 两个分支用于验证 配置设置的正确性以及 Nature 执行的正确性。让我们看下是否有 `Instance.para` 为 "error" 或 "err2" 的实例产生。运行后的数据如下：
+"C/D" 或 "_" 两个分支用于验证 配置设置的正确性以及 Nature 执行的正确性。让我们看下是否有 `Instance.para` 为 "error" 或 "err2" 的实例产生。运行下面的代码：
+
+```shell
+nature.exe
+cargo.exe test --color=always --package nature-demo --lib multi_delivery::test
+```
+
+运行后的数据如下：
 
 | ins_key | context | states | state_version | from_key |
 | ------- | ------- | ------ | ------------- | -------- |
