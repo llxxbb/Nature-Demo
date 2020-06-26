@@ -1,8 +1,6 @@
 # 求出每个人的总成绩
 
-现在我们来求每个人的所有科目的总成绩。首先定义`Meta`
-
-## 定义个人总成绩`Meta`
+现在我们来求每个人所有科目的`总成绩`。首先定义`Meta`
 
 ```mysql
 INSERT INTO meta
@@ -10,31 +8,29 @@ INSERT INTO meta
 VALUES('B', 'score/trainee/all-subject', 'all subject\'s score for a person', 1, '', '', '{"is_state":true}');
 ```
 
-### Nature 要点
+- **Nature 要点**：请注意 `config` 字段的值为空，因为在这里我们不需要任何状态，所以Nature 会将之视为非状态数据既常规数据来处理。然而个人成绩是一条一条汇总过来的，所以总成绩是在不断变化的，这就需要 `all-subject`是一个状态数据。为了达到这个目的，我们需要强制`all-subject`成为状态数据，这也是Nature 引入 `is_state` 属性的原因，此属性可以将任何非状态数据转换成状态数据。
 
-对于`score/trainee/all-subject`来讲它应该是一个状态数据，个人成绩是一条一条汇总过来的，因为 Nature 的数据不可变更性，我们只能用状态数据来进行成绩叠加操作。
-
-`score/trainee/all-subject`虽然是状态数据，但我们又不需要对每个状态进行描述，因此`states`字段的值为空。然而 Nature 认为`states`字段为空的`Meta`是非状态的，这时候就需要我们用`is_state`来强制它作为状态数据。
-
-## 计算个人总成绩
-
-有了`个人中成绩`的定义后，我们就可以进行计算了，先建立`个人学科成绩`于`个人总成绩`的的`Relation`
+有了`个人总成绩`的定义后，我们就可以进行计算了，建立下面的`Relation`
 
 ```mysql
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:score/trainee/subject:1', 'B:score/trainee/all-subject:1', '{"target":{"copy_para":[0]},"executor":{"protocol":"builtIn","url":"sum","settings":"{\\"para_part\\":1}"}}');
+VALUES('B:score/trainee/subject:1', 'B:score/trainee/all-subject:1', '{"target":{"copy_para":[0]},"executor":{"protocol":"builtIn","url":"sum","settings":"{\\"key_from_para\\":[1]}"}}');
 ```
 
-### 设置计算结果叠加的目标实例
+里面有几个点需要说明一下：
 
 ```json
 "target":{"copy_para":[0]}
 ```
 
-这个是告诉 Nature 我们的计算结果要往哪个`Instance`上叠加，`target`指的是 `B:score/trainee/all-subject:1`，`copy_para` 指的是`B:score/trainee/subject:1`的 para 的哪个部分， 还记得吗，这个para的形式是 “学号/学科”。整个的意思是要在 `B:score/trainee/all-subject:1|0|学号` 上进行叠加计算。
+`target`指的是 `B:score/trainee/all-subject:1`，`copy_para` 指的是`B:score/trainee/subject:1`的 para 的哪个部分， 还记得吗，这个para的形式是 “学号/学科”。整个的意思是总成绩需要记录到 `B:score/trainee/all-subject:1|0|学号` 对应的`Instance`上。
 
-### 内置执行器：sum
+```json
+"executor":{"protocol":"builtIn","url":"sum","settings":"{\\"key_from_para\\":[1]}"}
+```
+
+- **Nature 要点**：sum 内置执行器的作用是将上游 context 的值和下游的上一个版本的 content 中的 total 值进行相加并形成新版本的 total 值
 
 很高兴的是，我们在`Relation`中又看到了一个`builtin-executor`：`sum`也就是说我们只需要配置一下而无需编码就可以完成这个工作了。在使用 sum 之前我们需要先设置一下
 

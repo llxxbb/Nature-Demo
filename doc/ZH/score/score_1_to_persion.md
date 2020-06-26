@@ -65,7 +65,7 @@ VALUES('B:score/table:1', 'B:score/trainee/subject:1', '{"executor":{"protocol":
 ```
 
 - **Nature 要点**：`builtIn`是说我们不需要开发这个功能，直接拿来用就好了。Nature 内置了一些执行器，在后续的示例里我们将充分展示。与`自动执行器`不同，`内置执行器`需要在 `url` 属性里设置我们需要用到的功能，而`自动执行器`则不需要。
-- **Nature 要点**：`scatter` 内置执行器的作用是，将`成绩单`中数据表格拆分成一条条独立的`个人学科成绩`。并将 表格数据的第一列放到`个人学科成绩`数据的`Instance.para` 里，而成绩数据则放到`Instance.content`中。
+- **Nature 要点**：`scatter` 内置执行器的作用是，将`成绩单`中数据表格拆分成一条条独立的`个人学科成绩`。并将 表格数据的第一列放到`个人学科成绩`数据的`Instance.para` 里，而成绩数据则放到`Instance.content`中。请参考[内置执行器](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/build-in.md)
 
 如果忽略`filter_after`的作用（不久我们会讲到），经过`scatter`处理后，`Instance`数据表中应该会看到下面的数据，
 
