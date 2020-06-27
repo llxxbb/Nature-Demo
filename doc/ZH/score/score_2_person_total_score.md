@@ -24,33 +24,24 @@ VALUES('B:score/trainee/subject:1', 'B:score/trainee/all-subject:1', '{"target":
 "target":{"copy_para":[0]}
 ```
 
-`target`指的是 `B:score/trainee/all-subject:1`，`copy_para` 指的是`B:score/trainee/subject:1`的 para 的哪个部分， 还记得吗，这个para的形式是 “学号/学科”。整个的意思是总成绩需要记录到 `B:score/trainee/all-subject:1|0|学号` 对应的`Instance`上。
+`target`指的是 `B:score/trainee/all-subject:1`，`copy_para` 指的是`B:score/trainee/subject:1`的 para 的哪个部分， 还记得吗，在上一节中这个para的形式是 “学号/学科”。整个的意思是说总成绩需要记录到 `B:score/trainee/all-subject:1|0|学号` 对应的`Instance`上。有关`copy-para`的说明具体请参考：[使用 Relation](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/relation.md)
 
 ```json
 "executor":{"protocol":"builtIn","url":"sum","settings":"{\\"key_from_para\\":[1]}"}
 ```
 
-- **Nature 要点**：sum 内置执行器的作用是将上游 context 的值和下游的上一个版本的 content 中的 total 值进行相加并形成新版本的 total 值
+- **Nature 要点**：sum 内置执行器的作用是将上游 content 的值和下游的上一个版本的 content 中的 total 值进行相加并形成新版本的 total 值，具体请参考[内置执行器](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/build-in.md)
 
-很高兴的是，我们在`Relation`中又看到了一个`builtin-executor`：`sum`也就是说我们只需要配置一下而无需编码就可以完成这个工作了。在使用 sum 之前我们需要先设置一下
+本节示例不需要任何代码，只需要配置一下就可以得到结果，运行下面的内容：
 
-```json
-"settings":"{\\"para_part\\":1}"
+```shell
+nature.exe
+retry.exe
+nature_demo_executor_restful.exe
+cargo.exe test --color=always --package nature-demo --lib score::score_test
 ```
 
-`para_part`的作用有两个：
-
-- 说明用上游数据`Instance.para`的哪个部分来标记要求和的数据。对于此例来讲`上游.para`便是“学号/学科”,  1 对应的就是“学科”的位置（para的起始位置为0）。
-- 未被标记的 para 自动会形成当前输出的 para。 对于此 Demo 来讲“学号”讲作为 `B:score/trainee/all-subject:1`的 para 进行输出。
-
-## 运行 Demo
-
-- 启动 nature.exe
-- 启动  nature_demo_executor_restful.exe
-- 运行 nature-demo::score::score_test 
-- 查看`instance`数据表中的数据以验证结果。
-
-我们会看到类似于下面的数据输出：
+我们会在 instance 数据表中看到类似于下面的数据：
 
 | ins_key | state_version | content |
 | ------- | ------------- | ------- |
@@ -58,7 +49,9 @@ VALUES('B:score/trainee/subject:1', 'B:score/trainee/all-subject:1', '{"target":
 |B:score/trainee/all-subject:1\|0\|001|2| {"detail":{"subject2":37,"subject3":100},"total":137} |
 |B:score/trainee/all-subject:1\|0\|001|3| {"detail":{"subject2":37,"subject3":100,"subject1":62},"total":199} |
 
+我们可以清晰的看到 B:score/trainee/all-subject:1\|0\|001 这条数据共有3个版本。每个版本的content 都是增量的。
+
 ## 这不是最好的
 
-**本示例仅限于有限计算结果的叠加**。其实这是一种低效的统计方法，我们看到每次叠加都会形成一个版本，这对于高并发的电商销量统计而言显然是一种灾难。这就需要用一种新的统计方法。请参考[销量统计demo](../sale/sale_1_make_time_range.md)
+**本示例仅限于有限计算结果的叠加**。其实这是一种低效的统计方法，因为每次叠加都会形成一个版本，这会消耗大量的IO资源，这对于高并发的电商销量统计而言显然是一种灾难。因此我们需要一种新的统计方法。请参考[销量统计demo](../sale/sale_1_make_time_range.md)
 
