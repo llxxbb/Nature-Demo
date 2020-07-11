@@ -1,7 +1,5 @@
 use std::collections::HashMap;
 
-use serde::Serialize;
-
 use crate::send_with_context;
 
 #[test]
