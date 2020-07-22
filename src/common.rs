@@ -13,7 +13,7 @@ lazy_static! {
 
 pub static URL_INPUT: &str = "http://localhost:8080/input";
 pub static URL_GET_BY_ID: &str = "http://localhost:8080/get_by_id";
-pub static URL_GET_BY_META: &str = "http://localhost:8080/get_by_key_gt";
+pub static URL_GET_BY_META: &str = "http://localhost:8080/get_by_key_range";
 
 pub fn send_instance(ins: &Instance) -> Result<u128> {
     let response = CLIENT.post(URL_INPUT).json(ins).send();
