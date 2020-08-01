@@ -33,7 +33,8 @@ VALUES('M', 'sale/order/second', '', 1, '', '', '{"multi_meta":["B:sale/item/cou
 
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/item/tag_second:1', 'M:sale/order/second:1', '{"filter_before":[{"protocol":"builtIn","url":"instance-loader","settings":"{\\"key_gt\\":\\"B:sale/order:1|\\",\\"key_lt\\":\\"B:sale/order:2|\\",\\"time_part\\":[0,1]}"}],"delay_on_para":[2,1],"executor":{"protocol":"http","url":"http://localhost:8082/order_to_item"}}');
+VALUES('B:sale/item/tag_second:1', 'M:sale/order/second:1', '{"filter_before":[{"protocol":"builtIn","url":"instance-loader","settings":"{\\"key_gt\\":\\"B:sale/order:1|\\",\\"key_lt\\":\\"B:sale/order:2|\\",\\"time_part\\":[0,1],\\"filters\\":[{\\"protocol\\":\\"localRust\\",\\"url\\":\\"nature_demo_executor:order2item\\"}]}"}],"delay_on_para":[2,1],"executor":{"protocol":"localRust","url":"nature_demo_executor:item_statistics"}}');
+-- \\"filters\\":[{\\"protocol\\":\\"localRust\\",\\"url\\":\\"nature_demo_executor:order2item\\"}]
 
 -- minute data
 INSERT INTO meta
