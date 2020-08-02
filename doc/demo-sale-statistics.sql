@@ -19,11 +19,11 @@ VALUES('B', 'sale/item/count', 'item count', 1, '', '', '');
 
 INSERT INTO meta
 (meta_type, meta_key, description, version, states, fields, config)
-VALUES('M', 'sale/order/loop', '', 1, '', '', '{"multi_meta":["B:sale/item/count:1","B:sale/item/money:1"]}');
+VALUES('M', 'sale/order/to_item', '', 1, '', '', '{"multi_meta":["B:sale/item/count:1","B:sale/item/money:1"]}');
 
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/order:1', 'M:sale/order/loop:1', '{"executor":{"protocol":"localRust","url":"nature_demo_executor:order_to_item"}}');
+VALUES('B:sale/order:1', 'M:sale/order/to_item:1', '{"executor":{"protocol":"localRust","url":"nature_demo_executor:order_to_item"}}');
 
 ----------------------------------------------------------------------
 
