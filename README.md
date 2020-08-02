@@ -35,7 +35,7 @@ Nature 不但可以搞定复杂的业务流程，也可以搞定流式计算。�
 
 | 章节                                                         | 内容摘要                                                     | Nature 要点                               |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------------------------------------- |
-| [订单->区间统计任务](doc/ZH/sale/sale_1_make_time_range.md)  | 基于数据生成时间规划我们的统计间隔。用于下一步单品的销量统计。 | cache_saved, builtin-executor: time_range |
+| [订单->区间统计任务](doc/ZH/sale/sale_1.md)  | 基于数据生成时间规划我们的统计间隔。用于下一步单品的销量统计。 | cache_saved, builtin-executor: time_range |
 | [单品销量统计和销售额统计](doc/ZH/sale/sale_2_counter_summer.md) | 为了提升性能，可以一次生成多个目标。                         | MetaType::Multi                           |
 | 销量top                                                      |                                                              | builtin-executor: top                     |
 
