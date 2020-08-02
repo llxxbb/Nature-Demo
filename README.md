@@ -39,7 +39,7 @@ Nature 不但可以搞定复杂的业务流程，也可以搞定流式计算。�
 | [定义统计时间区间](doc/ZH/sale/sale_2.md)                    | 使用区间统计技术可以避免基于状态数据的统计，出于演示的目的，这里以秒我单位进行演示。 | cache_saved, builtin-executor: time_range |
 | [单品销量统计和销售额统计](doc/ZH/sale/sale_2_counter_summer.md) |                                                              |                                           |
 | 销量top                                                      |                                                              | builtin-executor: top                     |
-|                                                              |                                                              |                                           |
+| 分钟统计数据                                                 | 与秒数据的一致性，递进统计                                   |                                           |
 
 
 
