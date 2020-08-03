@@ -43,19 +43,26 @@ INSERT INTO relation
 (from_meta, to_meta, settings)
 VALUES('B:sale/item/count:1', 'B:sale/item/count/tag_second:1', '{"executor":{"protocol":"builtIn","url":"time_range"}}');
 
--- item statistics index ---------------------------------------------
+-- item statistics ---------------------------------------------
+
+INSERT INTO meta
+(meta_type, meta_key, description, version, states, fields, config)
+VALUES('B', 'sale/item/money/second', 'time range for second' , 1, '', '', '{"cache_saved":true}');
+
+INSERT INTO meta
+(meta_type, meta_key, description, version, states, fields, config)
+VALUES('B', 'sale/item/count/second', 'time range for second' , 1, '', '', '{"cache_saved":true}');
+
+INSERT INTO relation
+(from_meta, to_meta, settings)
+VALUES('B:sale/item/money/tag_second:1', 'B:sale/item/money/second:1', '{"delay_on_para":[2,1],"executor":{"protocol":"builtIn","url":"time_range"}}');
+
+
+-- item statistics ---------------------------------------------
+
+
 
 -- "filter_before":[{"protocol":"builtIn","url":"instance-loader","settings":"{\\"key_gt\\":\\"B:sale/order:1|\\",\\"key_lt\\":\\"B:sale/order:2|\\",\\"time_part\\":[0,1],\\"filters\\":[{\\"protocol\\":\\"localRust\\",\\"url\\":\\"nature_demo_executor:order2item\\"}]}"}]
--- "delay_on_para":[2,1],
-
--- second data
-INSERT INTO meta
-(meta_type, meta_key, description, version, states, fields, config)
-VALUES('B', 'sale/item/counter/s', 'how many item sold in second' , 1, '', '', '');
-
-INSERT INTO meta
-(meta_type, meta_key, description, version, states, fields, config)
-VALUES('B', 'sale/item/money/s', 'how much money received in a second for one item' , 1, '', '', '');
 
 
 -- minute data
