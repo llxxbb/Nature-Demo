@@ -24,7 +24,7 @@ VALUES('B', 'deliveryState', '', 1, 'new|finished', '', '{"master":"B:delivery:1
 -- delivery --> deliveryState
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:delivery:1', 'B:deliveryState:1', '{"target":{"states":{"add":["new"]}, "copy_para":[0,1]}}');
+VALUES('B:delivery:1', 'B:deliveryState:1', '{"target":{"states":{"add":["new"]}, "append_para":[0,1]}}');
 
 -- deliveryState --> delivery
 INSERT INTO relation
@@ -40,7 +40,7 @@ VALUES('B:deliveryState:1', 'B:delivery:1', '{"selector":{"state_all":["finished
 
 `delivery --> deliveryState` ：用于自动生成状态为 new 的配送状态数据（无需编码），具体介绍请参考[之前示例](emall-1-order-generate.md)
 
-- **Nature 要点**："copy_para":[0,1] 是说我们要从上游复制 para 到下游，具体请看[relation.md](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/relation.md)。在本示例里我们将配送的起始地与目的地一起放到了 `Instance.para` 中。形式如 “A/B”。
+- **Nature 要点**："append_para":[0,1] 是说我们要从上游复制 para 到下游，具体请看[relation.md](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/relation.md)。在本示例里我们将配送的起始地与目的地一起放到了 `Instance.para` 中。形式如 “A/B”。
 
 `deliveryState --> delivery`：用于当前配送结束后，生成后续的配送任务。
 

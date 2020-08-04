@@ -15,16 +15,16 @@ VALUES('B', 'score/trainee/all-subject', 'all subject\'s score for a person', 1,
 ```mysql
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:score/trainee/subject:1', 'B:score/trainee/all-subject:1', '{"target":{"copy_para":[0]},"executor":{"protocol":"builtIn","url":"sum","settings":"{\\"key_from_para\\":[1]}"}}');
+VALUES('B:score/trainee/subject:1', 'B:score/trainee/all-subject:1', '{"target":{"append_para":[0]},"executor":{"protocol":"builtIn","url":"sum","settings":"{\\"key_from_para\\":[1]}"}}');
 ```
 
 里面有几个点需要说明一下：
 
 ```json
-"target":{"copy_para":[0]}
+"target":{"append_para":[0]}
 ```
 
-`target`指的是 `B:score/trainee/all-subject:1`，`copy_para` 指的是`B:score/trainee/subject:1`的 para 的哪个部分， 还记得吗，在上一节中这个para的形式是 “学号/学科”。整个的意思是说总成绩需要记录到 `B:score/trainee/all-subject:1|0|学号` 对应的`Instance`上。有关`copy-para`的说明具体请参考：[使用 Relation](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/relation.md)
+`target`指的是 `B:score/trainee/all-subject:1`，`append_para` 指的是`B:score/trainee/subject:1`的 para 的哪个部分， 还记得吗，在上一节中这个para的形式是 “学号/学科”。整个的意思是说总成绩需要记录到 `B:score/trainee/all-subject:1|0|学号` 对应的`Instance`上。有关`copy-para`的说明具体请参考：[使用 Relation](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/relation.md)
 
 ```json
 "executor":{"protocol":"builtIn","url":"sum","settings":"{\\"key_from_para\\":[1]}"}

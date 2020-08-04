@@ -14,7 +14,7 @@ VALUES('B', 'deliveryState', '', 1, 'new|finished', '', '{"master":"B:delivery:1
 -- delivery --> deliveryState
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:delivery:1', 'B:deliveryState:1', '{"target":{"states":{"add":["new"]}, "copy_para":[0,1]}}');
+VALUES('B:delivery:1', 'B:deliveryState:1', '{"target":{"states":{"add":["new"]}, "append_para":[0,1]}}');
 
 -- deliveryState --> delivery
 INSERT INTO relation

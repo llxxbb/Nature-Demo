@@ -26,4 +26,4 @@ VALUES('B', 'score/trainee/all-subject', 'all subject\'s score for a person', 1,
 
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:score/trainee/subject:1', 'B:score/trainee/all-subject:1', '{"target":{"copy_para":[0]},"executor":{"protocol":"builtIn","url":"merge","settings":"{\\"key\\":{\\"Para\\":[1]},\\"when_same\\":\\"Old\\",\\"sum_all\\":true}"}}');
+VALUES('B:score/trainee/subject:1', 'B:score/trainee/all-subject:1', '{"target":{"append_para":[0]},"executor":{"protocol":"builtIn","url":"merge","settings":"{\\"key\\":{\\"Para\\":[1]},\\"when_same\\":\\"Old\\",\\"sum_all\\":true}"}}');
