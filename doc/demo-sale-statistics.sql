@@ -37,11 +37,12 @@ VALUES('B', 'sale/item/count/tag_second', 'time range for second' , 1, '', '', '
 
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/item/money:1', 'B:sale/item/money/tag_second:1', '{"executor":{"protocol":"builtIn","url":"time_range"}}');
+VALUES('B:sale/item/money:1', 'B:sale/item/money/tag_second:1', '{"target":{"append_para":[0]},"executor":{"protocol":"builtIn","url":"time_range"}}');
 
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/item/count:1', 'B:sale/item/count/tag_second:1', '{"executor":{"protocol":"builtIn","url":"time_range"}}');
+VALUES('B:sale/item/count:1', 'B:sale/item/count/tag_second:1', '{"target":{"append_para":[0]},"executor":{"protocol":"builtIn","url":"time_range"}}');
+
 
 -- item statistics ---------------------------------------------
 
