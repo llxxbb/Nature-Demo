@@ -43,7 +43,6 @@ INSERT INTO relation
 (from_meta, to_meta, settings)
 VALUES('B:sale/item/count:1', 'B:sale/item/count/tag_second:1', '{"target":{"append_para":[0]},"executor":{"protocol":"builtIn","url":"time_range"}}');
 
-
 -- item statistics ---------------------------------------------
 
 INSERT INTO meta
@@ -61,10 +60,7 @@ VALUES('B:sale/item/money/tag_second:1', 'B:sale/item/money/second:1', '{"delay_
 
 -- item statistics ---------------------------------------------
 
-
-
 -- "filter_before":[{"protocol":"builtIn","url":"instance-loader","settings":"{\\"key_gt\\":\\"B:sale/order:1|\\",\\"key_lt\\":\\"B:sale/order:2|\\",\\"time_part\\":[0,1],\\"filters\\":[{\\"protocol\\":\\"localRust\\",\\"url\\":\\"nature_demo_executor:order2item\\"}]}"}]
-
 
 -- minute data
 INSERT INTO meta
