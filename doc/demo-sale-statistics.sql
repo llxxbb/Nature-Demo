@@ -63,7 +63,6 @@ VALUES('B:sale/item/money/tag_second:1', 'B:sale/item/money/second:1', '{"filter
 
 -- top statistics ---------------------------------------------
 
--- minute data
 INSERT INTO meta
 (meta_type, meta_key, description, version, states, fields, config)
 VALUES('B', 'sale/item/count/secondTop', 'top of count' , 1, '', '', '');
