@@ -61,10 +61,7 @@ INSERT INTO relation
 (from_meta, to_meta, settings)
 VALUES('B:sale/item/money/tag_second:1', 'B:sale/item/money/second:1', '{"filter_before":[{"protocol":"builtIn","url":"instance-loader","settings":"{\\"key_gt\\":\\"B:sale/item/money:1|0|(item)/\\",\\"key_lt\\":\\"B:sale/item/money:1|0|(item)0\\",\\"time_part\\":[0,1]}"}],"delay_on_para":[2,1],"executor":{"protocol":"builtIn","url":"merge"}}');
 
-
 -- item statistics ---------------------------------------------
-
--- "filter_before":[{"protocol":"builtIn","url":"instance-loader","settings":"{\\"key_gt\\":\\"B:sale/item/count:1|0|(item)/\\",\\"key_lt\\":\\"B:sale/item/count:1|0|(item)0\\",\\"time_part\\":[0,1],\\"filters\\":[{\\"protocol\\":\\"localRust\\",\\"url\\":\\"nature_demo_executor:make_tuple\\"}]}"}]
 
 -- minute data
 INSERT INTO meta
