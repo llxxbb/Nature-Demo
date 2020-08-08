@@ -15,7 +15,7 @@ VALUES('B', 'score/trainee/all-subject', 'all subject\'s score for a person', 1,
 ```mysql
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:score/trainee/subject:1', 'B:score/trainee/all-subject:1', '{"target":{"append_para":[0]},"executor":{"protocol":"builtIn","url":"sum","settings":"{\\"key_from_para\\":[1]}"}}');
+VALUES('B:score/trainee/subject:1', 'B:score/trainee/all-subject:1', '{"target":{"append_para":[0]},"executor":{"protocol":"builtIn","url":"merge","settings":"{\\"key\\":{\\"Para\\":[1]},\\"when_same\\":\\"Old\\",\\"sum_all\\":true}"}}');
 ```
 
 里面有几个点需要说明一下：
@@ -27,10 +27,10 @@ VALUES('B:score/trainee/subject:1', 'B:score/trainee/all-subject:1', '{"target":
 `target`指的是 `B:score/trainee/all-subject:1`，`append_para` 指的是`B:score/trainee/subject:1`的 para 的哪个部分， 还记得吗，在上一节中这个para的形式是 “学号/学科”。整个的意思是说总成绩需要记录到 `B:score/trainee/all-subject:1|0|学号` 对应的`Instance`上。有关`copy-para`的说明具体请参考：[使用 Relation](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/relation.md)
 
 ```json
-"executor":{"protocol":"builtIn","url":"sum","settings":"{\\"key_from_para\\":[1]}"}
+"executor":{"protocol":"builtIn","url":"merge","settings":"{\\"key\\":{\\"Para\\":[1]},\\"when_same\\":\\"Old\\",\\"sum_all\\":true}"}
 ```
 
-- **Nature 要点**：sum 内置执行器的作用是将上游 content 的值和下游的上一个版本的 content 中的 total 值进行相加并形成新版本的 total 值，具体请参考[内置执行器](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/build-in.md)
+- **Nature 要点**：merge 内置执行器的作用是将上游 content 的值和下游的上一个版本的 content 中的 total 值进行相加并形成新版本的 total 值，具体请参考[内置执行器](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/build-in.md)
 
 本节示例不需要任何代码，只需要配置一下就可以得到结果，运行下面的内容：
 
