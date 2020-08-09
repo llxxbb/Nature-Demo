@@ -65,12 +65,8 @@ VALUES('B:sale/item/money/tag_second:1', 'B:sale/item/money/second:1', '{"filter
 
 INSERT INTO meta
 (meta_type, meta_key, description, version, states, fields, config)
-VALUES('B', 'sale/item/count/secondTop', 'top of count' , 1, '', '', '');
-
-INSERT INTO meta
-(meta_type, meta_key, description, version, states, fields, config)
-VALUES('B', 'sale/item/money/secondTop', 'top of money' , 1, '', '', '');
+VALUES('B', 'sale/item/money/secondTop', 'top of money' , 1, '', '', '{"cache_saved":true}');
 
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/item/count/second:1', 'B:sale/item/count/secondTop:1', '{"executor":{"protocol":"builtIn","url":"time_range","settings":"{\\"on_para\\":true,\\"unit\\":\\"m\\",\\"value\\":5}"}}');
+VALUES('B:sale/item/money/second:1', 'B:sale/item/money/secondTop:1', '{"delay_on_para":[2,1],"executor":{"protocol":"builtIn","url":"merge"}}');
