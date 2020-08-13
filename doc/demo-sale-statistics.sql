@@ -68,8 +68,8 @@ INSERT INTO relation
 VALUES('B:sale/item/money/secondTopTask:1', 'L:sale/item/money/secondTopLooper:1', '{
 "filter_before":[
     {"protocol":"builtIn","url":"task-checker","settings":"{\\"key_gt\\":\\"B:sale/item/money/second:1|0\\",\\"key_lt\\":\\"B:sale/item/money/second:1|1\\",\\"time_part\\":[0,1]}"},
-    {"protocol":"builtIn","url":"task-checker","settings":"{\\"key_gt\\":\\"B:sale/item/money/tag_second:1|0\\",\\"key_lt\\":\\"B:sale/item/money/tag_second:1|1\\",\\"time_part\\":[0,1]}"},
-    {"protocol":"builtIn","url":"instance-loader","settings":"{\\"key_gt\\":\\"B:sale/item/money/tag_second:1|0\\",\\"key_lt\\":\\"B:sale/item/money/tag_second:1|1\\",\\"time_part\\":[0,1]}"}
+    {"protocol":"builtIn","url":"task-checker","settings":"{\\"key_gt\\":\\"B:sale/item/money/tag_second:1|0\\",\\"key_lt\\":\\"B:sale/item/money/tag_second:1|1\\"}"},
+    {"protocol":"builtIn","url":"instance-loader","settings":"{\\"key_gt\\":\\"B:sale/item/money/tag_second:1|0\\",\\"key_lt\\":\\"B:sale/item/money/tag_second:1|1\\"}"}
 ],"delay_on_para":[2,1],"executor":{"protocol":"builtIn","url":"merge"}}');
 
 --
