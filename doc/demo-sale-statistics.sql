@@ -49,27 +49,28 @@ VALUES('B:sale/item/money/tag_second:1', 'B:sale/item/money/second:1', '{"filter
 
 INSERT INTO meta
 (meta_type, meta_key, description, version, states, fields, config)
-VALUES('B', 'sale/item/money/secondTopTask', 'top of money task' , 1, '', '', '{"cache_saved":true}');
+VALUES('B', 'sale/money/second_tag', 'top of money task' , 1, '', '', '{"cache_saved":true}');
 
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/item/money/second:1', 'B:sale/item/money/secondTopTask:1', '{"target":{"append_para":[0,1]}}');
+VALUES('B:sale/item/money/second:1', 'B:sale/money/second_tag:1', '{"target":{"append_para":[0,1],"context_name":"(time)"}}');
 
 INSERT INTO meta
 (meta_type, meta_key, description, version, states, fields, config)
-VALUES('B', 'sale/item/money/secondTop', 'top of money' , 1, '', '', '');
+VALUES('B', 'sale/money/secondTop', 'top of money' , 1, '', '', '');
 
 INSERT INTO meta
 (meta_type, meta_key, description, version, states, fields, config)
-VALUES('L', 'sale/item/money/secondTopLooper', 'top looper' , 1, '', '', '{"multi_meta":["B:sale/item/money/secondTop:1"], "output_last":true}');
+VALUES('L', 'sale/money/secondTopLooper', 'top looper' , 1, '', '', '{"multi_meta":["B:sale/money/secondTop:1"], "output_last":true}');
 
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/item/money/secondTopTask:1', 'L:sale/item/money/secondTopLooper:1', '{
+VALUES('B:sale/money/second_tag:1', 'L:sale/money/secondTopLooper:1', '{
 "filter_before":[
-    {"protocol":"builtIn","url":"task-checker","settings":"{\\"key_gt\\":\\"B:sale/item/money/second:1|0\\",\\"key_lt\\":\\"B:sale/item/money/second:1|1\\",\\"time_part\\":[0,1]}"},
-    {"protocol":"builtIn","url":"task-checker","settings":"{\\"key_gt\\":\\"B:sale/item/money/tag_second:1|0\\",\\"key_lt\\":\\"B:sale/item/money/tag_second:1|1\\"}"},
-    {"protocol":"builtIn","url":"instance-loader","settings":"{\\"key_gt\\":\\"B:sale/item/money/tag_second:1|0\\",\\"key_lt\\":\\"B:sale/item/money/tag_second:1|1\\"}"}
+    {"protocol":"builtIn","url":"task-checker","settings":"{\\"key_gt\\":\\"B:sale/item/money:1|0\\",\\"key_lt\\":\\"B:sale/item/money:1|1\\",\\"time_part\\":[0,1]}"},
+    {"protocol":"builtIn","url":"task-checker","settings":"{\\"key_gt\\":\\"B:sale/item/money/tag_second:1|0|(time)/\\",\\"key_lt\\":\\"B:sale/item/money/tag_second:1|0|(time)0\\"}"},
+    {"protocol":"builtIn","url":"task-checker","settings":"{\\"key_gt\\":\\"B:sale/item/money/second:1|0|(time)/\\",\\"key_lt\\":\\"B:sale/item/money/second:1|0|(time)0\\",\\"time_part\\":[0,1]}"},
+    {"protocol":"builtIn","url":"instance-loader","settings":"{\\"key_gt\\":\\"B:sale/item/money/second:1|0|(time)/\\",\\"key_lt\\":\\"B:sale/item/money/second:1|0|(time)0\\"}"}
 ],"delay_on_para":[2,1],"executor":{"protocol":"builtIn","url":"merge"}}');
 
 --
