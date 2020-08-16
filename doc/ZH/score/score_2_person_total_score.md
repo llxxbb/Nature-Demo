@@ -30,7 +30,7 @@ VALUES('B:score/trainee/subject:1', 'B:score/trainee/all-subject:1', '{"target":
 "executor":{"protocol":"builtIn","url":"merge","settings":"{\\"key\\":{\\"Para\\":[1]},\\"when_same\\":\\"Old\\",\\"sum_all\\":true}"}
 ```
 
-- **Nature 要点**：merge 内置执行器的作用是将上游 content 的值和下游的上一个版本的 content 中的 total 值进行相加并形成新版本的 total 值，具体请参考[内置执行器](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/build-in.md)
+- **Nature 要点**：merge 内置执行器的作用是将上游 content 的值和下游的上一个版本的 content 中的 total 值进行相加并形成新版本的 total 值，具体请参考[内置执行器](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/built-in.md)
 
 本节示例不需要任何代码，只需要配置一下就可以得到结果，运行下面的内容：
 

@@ -1,30 +1,40 @@
-# 销量统计和销售额统计
+# 销售额统计
 
-在上一节中我们生成了以时间为单位的区间统计任务，考虑到一个区间内的数据量有可能非常的大，比如以月为单位，此时我们将需要一些技巧了。对于这些技巧的支持不是 Nature 本身具有的，而是因为其普遍性，Nature 就之提炼到 builtin 中，以方便大家的使用。我们来看一下：
+在上一节中我们生成了以时间为单位的区间统计任务，考虑到一个区间内的数据量有可能非常的大，比如以月为单位，此时我们将需要一些技巧了。对于这些技巧的支持不是 Nature 本身具有的，因为其普遍性，Nature 将之集成到 builtin 中，以方便大家的使用。
+
+其解决方法其实很简单，就是各自统计各自的。我们来看一下：
 
 ```mysql
 INSERT INTO meta
 (meta_type, meta_key, description, version, states, fields, config)
 VALUES('B', 'sale/item/money/second', 'second summary of money' , 1, '', '', '');
 
-INSERT INTO meta
-(meta_type, meta_key, description, version, states, fields, config)
-VALUES('B', 'sale/item/count/second', 'second summary of count' , 1, '', '', '');
-
-INSERT INTO relation
-(from_meta, to_meta, settings)
-VALUES('B:sale/item/count/tag_second:1', 'B:sale/item/count/second:1', '{"filter_before":[{"protocol":"builtIn","url":"instance-loader","settings":"{\\"key_gt\\":\\"B:sale/item/count:1|0|(item)/\\",\\"key_lt\\":\\"B:sale/item/count:1|0|(item)0\\",\\"time_part\\":[0,1]}"}],"delay_on_para":[2,1],"executor":{"protocol":"builtIn","url":"merge"}}');
-
 INSERT INTO relation
 (from_meta, to_meta, settings)
 VALUES('B:sale/item/money/tag_second:1', 'B:sale/item/money/second:1', '{"filter_before":[{"protocol":"builtIn","url":"instance-loader","settings":"{\\"key_gt\\":\\"B:sale/item/money:1|0|(item)/\\",\\"key_lt\\":\\"B:sale/item/money:1|0|(item)0\\",\\"time_part\\":[0,1]}"}],"delay_on_para":[2,1],"executor":{"protocol":"builtIn","url":"merge"}}');
 ```
 
-我们一开始先定义了单品的两个统计指标一个是销量一个是销售额。两个都是以秒为统计单位。然后定义了两个`关系`，分别统计两个指标。这两个关系的 settings 有点复杂，我们只需说明其中的一个就好，因为两个几乎一样。
+我们一开始先定义了一个以秒为单位的单品销售额统计项。然后定义了一个`关系，这个关系的 settings 有点复杂，我们将之进行分解并一一说明。主要有两部分，主体部分为 内置转换器：merge，如下：
 
-- **Nature 要点**："delay_on_para":[2,1] 是说该转换执行器需要延迟2秒后运行。是在哪个基础上延迟呢？是在上游 para [1] 的时间基础上延迟。为什么要延迟？因为如果我们在 tag_second 创建之后立马执行，则可能统计不到当前秒内后进入的数据，所以要等待当前要统计的时间完全结束后才能统计。
-- **Nature 要点**：[merge](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/built-in.md) 我们有一次见到了这个 builtin. 只不过相较于之前，这里使用了更为高效的方式来同时对一批数据进行求和。至于这批数据是怎么来的，请看下面的要点。
-- **Nature 要点**：[instance-loader](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/built-in.md)  加载用于统计的批量 Instance 数据。注意 (item)/ 和(item)0 用于限定哪个商品。其中（item）在运行时很会被替换掉，因为[上一节](sale_2.md)在sys_context 中指定了 para.dynamic.
+```json
+{"filter_before":[],"delay_on_para":[2,1],"executor":{"protocol":"builtIn","url":"merge"}}
+```
+
+merge 主要统计秒内单品销售额。需要注意：
+
+- **Nature 要点**：tag_second 只是个时间区间是没有数据的，在这里他的作用就是用于驱动统计任务的执行。而真正的数据加载时通过 filter_before 中定义的 `instance-loader` 来完成的。
+- **Nature 要点**：时间区间数据创建完成后不能立即立即统计的，因为此时该区间有可能还没有结束，所以需要延时执行，这就是 `delay_on_para` 所发挥的作用。它的用意是要在 Instance.para 的某个部分上取一个时间（由`delay_on_para` 的第二个参数决定），并在此基础上延迟指定的时间（由`delay_on_para` 的第一个参数决定，既延时2s）。具体请参考[relation.md](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/relation.md)
+- **Nature 要点**：我们之前应用过 merge 一次，相较于学习成绩统计，这里使用了更高效的方法来对一批数据进行求和。merge支持多种统计模式，可以让你不用写代码就可以完成统计工作，详情请参考：[内置执行器](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/built-in.md)
+
+```json
+{"protocol":"builtIn","url":"instance-loader","settings":"{\\"key_gt\\":\\"B:sale/item/money:1|0|(item)/\\",\\"key_lt\\":\\"B:sale/item/money:1|0|(item)0\\",\\"time_part\\":[0,1]}"}
+```
+
+ `instance-loader` 是[内置执行器](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/build-in.md)中的前置过滤器。用于自动加载所需要的 Instance 数据。这里有一个要点，我们在运行时才能知道我们需要加载那些数据，如本例中的商品ID。这就需要用到参数替换功能了，如下：
+
+- **Nature 要点**： (item)/ 和(item)0 中的“(item)”是要替换的参数，用于限定加载哪个商品的待统计数据。其中（item）在运行时很会被 sys_context 中指定了 para.dynamic.(item) 的值替换掉。
+
+instance-loader 的其它属性用于限定 ins_key 的范围和时间范围，可参考[内置执行器](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/built-in.md)。
 
 虽然 settings 比较复杂，但我们不用写一行代码就可以完成数据团队才可以完成的事。让我们运行程序
 
