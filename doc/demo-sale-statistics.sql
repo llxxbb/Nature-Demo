@@ -61,9 +61,8 @@ VALUES('B', 'sale/money/secondTop', 'top of money' , 1, '', '', '');
 
 INSERT INTO meta
 (meta_type, meta_key, description, version, states, fields, config)
-VALUES('L', 'sale/money/secondTopLooper', 'top looper' , 1, '', '', '{"multi_meta":["B:sale/money/secondTop:1"], "output_last":true}');
+VALUES('L', 'sale/money/secondTopLooper', 'top looper' , 1, '', '', '{"multi_meta":["B:sale/money/secondTop:1"], "only_one":true}');
 
--- used only for summary
 INSERT INTO relation
 (from_meta, to_meta, settings)
 VALUES('B:sale/money/second_tag:1', 'L:sale/money/secondTopLooper:1', '{

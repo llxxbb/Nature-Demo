@@ -24,10 +24,10 @@ Nature 不但可以搞定复杂的业务流程，也可以搞定流式计算。�
 
 下面给出一个成绩统计的例子：
 
-| 章节                                                         | 内容摘要                                                     | Nature 要点                                          |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ---------------------------------------------------- |
-| [全员成绩单->个人成绩](doc/ZH/score/score_1_to_persion.md)   | 使用 Nature 的内置执行器 scatter 来实现成绩单的拆分          | builtin-executor: scatter，后置过滤器                |
-| [求出每个人所有科目的总分](doc/ZH/score/score_2_person_total_score.md) | “没有状态”的状态数据，利用状态数据和内置执行器 sum 来完成个人总成绩的统计 | is_state， `para`作为选择条件，builtin-executor: sum |
+| 章节                                                         | 内容摘要                                                     | Nature 要点                          |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------ |
+| [全员成绩单->个人成绩](doc/ZH/score/score_1_to_persion.md)   | 使用 Nature 的内置执行器 scatter 来实现成绩单的拆分          | scatter，后置过滤器                  |
+| [求出每个人所有科目的总分](doc/ZH/score/score_2_person_total_score.md) | “没有状态”的状态数据，利用状态数据和内置执行器 sum 来完成个人总成绩的统计 | is_state， `para`作为选择条件，merge |
 
 ## 销售统计
 
@@ -38,8 +38,4 @@ Nature 不但可以搞定复杂的业务流程，也可以搞定流式计算。�
 | [订单拆分](doc/ZH/sale/sale_1.md)         | 我们将统计每个商品的销量和销售额，并通过应用 MetaType::Multi 来提升性能 | MetaType::Multi                                      |
 | [定义统计时间区间](doc/ZH/sale/sale_2.md) | 使用区间统计技术可以避免基于状态数据的统计，出于演示的目的，这里以秒我单位进行演示。这里涉及到几个 Nature 的高级用法。 | cache_saved, time_range， append_para，para.dynamic  |
 | [单品销售额统计](doc/ZH/sale/sale_3.md)   | 对秒区间内的单品进行销售额自动统计。                         | filter_before, instance-loader, delay_on_para, merge |
-| 销量top                                   |                                                              | builtin-executor: top                                |
-| 分钟统计数据                              | 与秒数据的一致性，递进统计                                   |                                                      |
-
-
-
+| [销售额top](doc/ZH/sale/sale_4.md)        | 这里涉及到应用上的几个重要技巧。                             | 任务归一化，MetaType::Loop,task-checker              |
