@@ -48,10 +48,39 @@ VALUES('B:sale/money/second_tag:1', 'L:sale/money/secondTopLooper:1', '{
 
 元数据 `secondTop` 用于存放我们最终的统计结果
 
-- **Nature 要点**：`secondTopLooper` 是一种新型的元数据：`MetaType::Loop`。Loop 类型的引入主要是为了应对一次分批统计问题，百万以上的数据是不能一次加载处理的。Loop 只是个过渡型元数据，其目标元数据需要用 `multi_meta`属性给出。
-- 为了配合 Loop 使用，Nature 提供了 instance-loader 内置执行器。
+`secondTopLooper` 是一种新型的元数据：`MetaType::Loop`。
+
+- **Nature 要点**：Loop 类型的引入主要是为了应对一次分批统计问题，百万以上的数据是不能一次加载处理的。Loop 只是个过渡型元数据，其目标元数据需要用 `multi_meta`属性给出。请参考：[meta.md](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/meta.md).为了配合 Loop 使用，Nature 提供了 instance-loader [内置执行器](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/built-in.md)，下面会讲到。
+
+现在我们来看下这个复杂的 `relation` 的配置部分，我们将它分解开来看：我们先看一下主体：
+
+```json
+{
+	"filter_before":[...],
+    "delay_on_para":[2,1],
+    "executor":{"protocol":"builtIn","url":"merge","settings":"{\\"key\\":\\"Content\\",\\"sum_all\\":true,\\"top\\":{\\"MaxTop\\":1}}"}}
+```
+
+没错，我们又一次使用了 `merge` ，这至少证明它的通用性还是不错的。
+
+- **Nature 要点**：为了能够演示出效果，这里只求 top 1， 可依据实际情况进行修改。**注意**：如果上游数据量非常大，请不要使用 `top.None` 模式，该模式会记录所以商品的销售额，因为下游数据是一条数据，其**容量有限**。 有关merge 请参考：[内置执行器](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/built-in.md)
+
+关系里的上游数据只是一个时间标记，用于延时驱动（delay_on_para，前面讲过）本次的统计任务。所以我们还需要借助于 `filter_before` 来加载真正的待统计数据。然而这次的 `filter_before` 内容有点多。
+
+```json
+{"protocol":"builtIn","url":"task-checker","settings":".1."},
+{"protocol":"builtIn","url":"task-checker","settings":".2."},
+{"protocol":"builtIn","url":"task-checker","settings":".3."},
+{"protocol":"builtIn","url":"instance-loader","settings":"..."}
+```
+
+- **Nature 要点**：task-checker 可以用于检测特定时间内的特定任务的状态，它检查的是 task 数据表。
+
+我们完全可以基于 `sale/item/money`（单笔订单每个商品的销售额）来做 top N 统计，但考虑到我们已经对单品的秒区间做了汇总统计（`sale/item/money/second`），如果在这个基础上我们将节省很多算力。但这里有个问题，`sale/item/money/second` 处理是异步的，也就是说，我们要统计 top 时`sale/item/money/second` 数据很有可能没有准备好。
 
 
+
+可以考虑去掉第一个，
 
 
 
@@ -66,3 +95,11 @@ VALUES('B:sale/money/second_tag:1', 'L:sale/money/secondTopLooper:1', '{
 我们相对完整的演示了一些统计的关键应用情景，在此期间您可以看到除了数据格式转换需要用到代码外，其它问题我们全都是用内置执行器来解决的。而且在整个示例里我们只用了一次外部代码转换，其余的转换也是通过内置执行器来完成的。我不否认这些内置执行器是为构建演示而创建的，但如果您仔细评阅这些内置执行器的说明，您会发现它们是通用的，一个很好的例子就是 merge 内置执行器被用在了三个不同的地方。
 
 我想说的是这些内置执行器加上这种处理模式可以真正的节省了您的代码，而不是仅能于我设定的固定场景。也就是说 Nature 要解决的是真正的通用性问题，这会为大数据处理的标准化、简单化和规范化提供了基础保障并降低大数据的技术门槛。
+
+
+
+[meta.md](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/meta.md)
+
+[relation.md](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/relation.md)
+
+详情请参考：[内置执行器](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/built-in.md)
