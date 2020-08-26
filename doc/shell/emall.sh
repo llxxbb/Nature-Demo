@@ -13,7 +13,7 @@ instance='{
         "name":"phone",
         "price":800
       },
-      num:1
+      "num":1
     },
     {
       "item":{
@@ -21,7 +21,7 @@ instance='{
         "name":"battery",
         "price":100
       },
-      num:1
+      "num":1
     }
   ],
   "address":"a.b.c"
@@ -36,7 +36,7 @@ JSON_STRING=$( jq -n \
                   --arg content "$instance" \
                   '{"data":{"meta": $meta, "content": $content}}' )
 
-echo  $JSON_STRING
+echo  "$JSON_STRING"
 
 url="http://localhost:8080/input"
 
