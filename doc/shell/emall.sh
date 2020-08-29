@@ -2,7 +2,7 @@
 
 # This shell to simulate the business system client to communicate with Nature.
 
-## generate order-----------------------------------
+# generate order-----------------------------------
 instance='{
   "user_id":123,
   "price":1000,
@@ -27,19 +27,21 @@ instance='{
   "address":"a.b.c"
 }'
 
-myMeta="B:/sale/order:1"
+path=$(dirname "$0")
 
-## submit order to Nature
+# submit order to Nature
+rtn1=$("$path"/common/input.sh "B:/sale/order:1" "$instance")
 
-JSON_STRING=$( jq -n \
-                  --arg meta "$myMeta" \
-                  --arg content "$instance" \
-                  '{"data":{"meta": $meta, "content": $content}}' )
+# cam be reentrant----------------------------------------
+rtn2=$("$path"/common/input.sh "B:/sale/order:1" "$instance")
 
-echo  "$JSON_STRING"
+if [ "$rtn1" != "$rtn2" ]; then
+  echo "should be equal"
+  exit 1
+fi
 
-url="http://localhost:8080/input"
+# wait state instance generated----------------------------
 
-curl -H "Content-type: application/json" -X POST \
-     -d"$JSON_STRING" $url
+"$path"/common/get_by_id_wait.sh "$rtn1", "B:/sale/orderState:1", 1
+
 

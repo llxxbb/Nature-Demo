@@ -1,11 +1,12 @@
 use std::thread::sleep;
 use std::time::Duration;
 
+use nature_common::ID;
 use nature_demo_common::{Commodity, Order, SelectedCommodity};
 
-use crate::{get_instance_by_id, get_state_instance_by_id, send_business_object};
+use crate::{get_state_instance_by_id, send_business_object};
 
-pub fn send_order_to_nature() -> u128 {
+pub fn send_order_to_nature() -> ID {
     // create an order
     let order = create_order_object();
     let id = send_business_object("/sale/order", &order).unwrap();
@@ -14,21 +15,11 @@ pub fn send_order_to_nature() -> u128 {
     let id2 = send_business_object("/sale/order", &order).unwrap();
     assert_eq!(id2, id);
 
-    // check created instance for order
-    loop {
-        let rtn = get_instance_by_id(id, "B:sale/order:1");
-        if rtn.is_some() {
-            assert_eq!(rtn.unwrap().id, id);
-            break;
-        }
-        sleep(Duration::from_nanos(200000))
-    }
-
     // check created instance for order state
     wait_until_order_state_is_ready(id)
 }
 
-fn wait_until_order_state_is_ready(order_id: u128) -> u128 {
+fn wait_until_order_state_is_ready(order_id: ID) -> ID {
     loop {
         if let Some(ins) = get_state_instance_by_id(order_id, "B:sale/orderState:1", 1) {
             assert_eq!(ins.id, order_id);
