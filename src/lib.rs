@@ -2,13 +2,12 @@
 extern crate lazy_static;
 #[macro_use]
 extern crate log;
-#[cfg(test)]
 #[macro_use]
 extern crate serde_derive;
 
 pub use common::*;
 
-mod common;
+mod entry;
 #[cfg(test)]
 mod emall;
 #[cfg(test)]
@@ -21,3 +20,4 @@ mod other;
 mod multi_warehouse;
 #[cfg(test)]
 mod multi_delivery;
+mod common;

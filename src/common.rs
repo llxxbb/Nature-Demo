@@ -5,7 +5,7 @@ use std::time::Duration;
 use reqwest::blocking::Client;
 use serde::Serialize;
 
-use nature_common::{ID, Instance, KeyCondition, NatureError, Result};
+use nature::common::{ID, Instance, KeyCondition, NatureError, Result};
 
 lazy_static! {
     pub static ref CLIENT : Client = Client::new();
