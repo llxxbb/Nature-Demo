@@ -6,6 +6,9 @@ extern crate log;
 extern crate serde_derive;
 
 pub use common::*;
+pub use executor::*;
+
+mod executor;
 
 mod entry;
 #[cfg(test)]

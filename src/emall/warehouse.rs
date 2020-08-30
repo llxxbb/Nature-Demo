@@ -1,4 +1,4 @@
-use nature_common::{ID, Instance};
+use nature::common::{ID, Instance};
 
 use crate::{send_instance, wait_for_order_state};
 

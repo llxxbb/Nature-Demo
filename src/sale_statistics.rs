@@ -1,7 +1,7 @@
 use std::thread::sleep;
 use std::time::Duration;
 
-use nature_demo_common::{Commodity, Order, SelectedCommodity};
+use crate::entry::{Commodity, Order, SelectedCommodity};
 
 use crate::send_business_object;
 

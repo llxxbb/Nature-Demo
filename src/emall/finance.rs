@@ -4,10 +4,10 @@ use std::time::Duration;
 
 use chrono::prelude::*;
 
-use nature_demo_common::Payment;
+use nature::common::ID;
 
 use crate::{get_state_instance_by_id, send_business_object_with_sys_context, wait_for_order_state};
-use nature_common::ID;
+use crate::entry::Payment;
 
 pub fn user_pay(order_id: ID) {
     wait_until_order_account_is_ready(order_id);

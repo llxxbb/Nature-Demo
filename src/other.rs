@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-use nature_common::NatureError;
+use nature::common::NatureError;
 
 #[test]
 fn u128_test() {
