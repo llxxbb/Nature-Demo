@@ -29,7 +29,7 @@ VALUES('B:delivery:1', 'B:deliveryState:1', '{"target":{"states":{"add":["new"]}
 -- deliveryState --> delivery
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:deliveryState:1', 'B:delivery:1', '{"selector":{"state_all":["finished"], "context_all":["mid"]}, "use_upstream_id":true, "executor":{"protocol":"localRust","url":"nature_demo_executor:multi_delivery"}}');
+VALUES('B:deliveryState:1', 'B:delivery:1', '{"selector":{"state_all":["finished"], "context_all":["mid"]}, "use_upstream_id":true, "executor":{"protocol":"localRust","url":"nature_demo:multi_delivery"}}');
 ```
 
 上述脚本来源于 nature-demo::doc::demo-multi-delivery.sql
@@ -47,7 +47,7 @@ VALUES('B:deliveryState:1', 'B:delivery:1', '{"selector":{"state_all":["finished
 - **Nature 要点**：如果指定了多个`选择器`则选择器之间是`与`的关系，既必须同时满足才能触发`执行器`。`deliveryState --> delivery` 用到了`state_all`和`context_all`两个选择器，两个都满足后才能执行`multi_delivery`。
 - **Nature 要点**：`delivery --> deliveryState` 和 `deliveryState --> delivery` 构成了一个业务上的**循环**，而我们避免了 loop, for 和 while 等这些编程元素。
 
-来看下我们的编码工作，配送单的输入请参考：nature-demo::multi_delivery.rs, 执行器的代码请参考：nature_demo_executor::multi_delivery。在输入端我们只需要提交一个配置单，但需要提交三个状态数据以说明配送的状态，前两个需要指定 `Instance.context` 为 “mid”, 最后一个需要制定 `Instance.context` 为非“mid”（在这里我们用了“end”）。在执行器的代码中，有下面的代码，用于生成下次配送任务的起止地点：
+来看下我们的编码工作，配送单的输入请参考：nature-demo::multi_delivery.rs, 执行器的代码请参考：nature_demo::multi_delivery。在输入端我们只需要提交一个配置单，但需要提交三个状态数据以说明配送的状态，前两个需要指定 `Instance.context` 为 “mid”, 最后一个需要制定 `Instance.context` 为非“mid”（在这里我们用了“end”）。在执行器的代码中，有下面的代码，用于生成下次配送任务的起止地点：
 
 ```rust
     ins.para = match para {

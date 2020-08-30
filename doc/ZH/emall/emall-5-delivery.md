@@ -20,7 +20,7 @@ VALUES('B', 'third/waybill', 'waybill', 1, '', '', '');
 -- orderState:outbound --> waybill
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/orderState:1', 'B:third/waybill:1', '{"id_bridge":true, "selector":{"state_all":["outbound"]}, "executor":{"protocol":"localRust","url":"nature_demo_executor:go_express"}}');
+VALUES('B:sale/orderState:1', 'B:third/waybill:1', '{"id_bridge":true, "selector":{"state_all":["outbound"]}, "executor":{"protocol":"localRust","url":"nature_demo:go_express"}}');
 ```
 
 我们看到了一个新的属性：`id_bridge`，其作用在稍后讲，这里先忽略一下。有关选择器的使用在[支付订单](emall-3-pay-the-bill.md)中已经介绍过，请参考 [meta.md](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/meta.md)。

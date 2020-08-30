@@ -45,7 +45,7 @@ cargo.exe test --color=always --package nature-demo --lib emall::emall_test
 -- payment --> orderAccount
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:finance/payment:1', 'B:finance/orderAccount:1', '{"executor":{"protocol":"localRust","url":"nature_demo_executor:pay_count"}}');
+VALUES('B:finance/payment:1', 'B:finance/orderAccount:1', '{"executor":{"protocol":"localRust","url":"nature_demo:pay_count"}}');
 ```
 
 关系做好了，但我们如何将这三笔不同的账记到同一个订单账上呢？有人会说支付单记录的订单号不就是订单账的号吗，没错，但 Nature 是不理解 `Instance.content`中的内容的。但 Nature 却可以理解 `Instance.sys_context` 中的内容，所以这就是为什么在里面放置 `target.id` 属性的原因了。有了 `target.id` Nature 就可以找到要操作的订单账了。

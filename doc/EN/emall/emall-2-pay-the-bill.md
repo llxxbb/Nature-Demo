@@ -24,12 +24,12 @@ The `orderAccount` is used to mark the order pay state. It's also a state `meta`
 -- order --> orderAccount
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/sale/order:1', '/B/finance/orderAccount:1', '{"executor":[{"protocol":"localRust","url":"nature_demo_executor:order_receivable"}],"target_states":{"add":["unpaid"]}}');
+VALUES('/B/sale/order:1', '/B/finance/orderAccount:1', '{"executor":[{"protocol":"localRust","url":"nature_demo:order_receivable"}],"target_states":{"add":["unpaid"]}}');
 
 -- payment --> orderAccount
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('/B/finance/payment:1', '/B/finance/orderAccount:1', '{"executor":[{"protocol":"localRust","url":"nature_demo_executor:pay_count"}]}');
+VALUES('/B/finance/payment:1', '/B/finance/orderAccount:1', '{"executor":[{"protocol":"localRust","url":"nature_demo:pay_count"}]}');
 
 -- orderAccount --> orderState
 INSERT INTO relation

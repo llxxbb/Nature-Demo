@@ -55,7 +55,7 @@ VALUES('B', 'score/trainee/subject', 'person original score', 1, '', '', '{"mast
 ```mysql
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:score/table:1', 'B:score/trainee/subject:1', '{"executor":{"protocol":"builtIn","url":"scatter"}, "filter_after":[{"protocol":"http","url":"http://127.0.0.1:8082/add_score"},{"protocol":"localRust","url":"nature_demo_executor:name_to_id"}]}');
+VALUES('B:score/table:1', 'B:score/trainee/subject:1', '{"executor":{"protocol":"builtIn","url":"scatter"}, "filter_after":[{"protocol":"http","url":"http://127.0.0.1:8082/add_score"},{"protocol":"localRust","url":"nature_demo:name_to_id"}]}');
 ```
 
 我们先看 executor 的定义 ：
@@ -100,7 +100,7 @@ cargo.exe test --color=always --package nature-demo --lib score::score_test
 `scatter`后的数据怎么会变成这种形式了呢？这就是 `filter_after` 的作用了。我们来详细讲解一下 `filter_after` 的作用，先看一下本示例我们给出的配置：
 
 ```json
-"filter_after":[{"protocol":"http","url":"http://127.0.0.1:8082/add_score"},{"protocol":"localRust","url":"nature_demo_executor:name_to_id"}]
+"filter_after":[{"protocol":"http","url":"http://127.0.0.1:8082/add_score"},{"protocol":"localRust","url":"nature_demo:name_to_id"}]
 ```
 
 - **Nature 要点**：`filter_after` 的作用是在`执行器`执行完后且在 Nature 保存数据前，对数据进行一些修正，特别适合于技术处理，如格式修正等。

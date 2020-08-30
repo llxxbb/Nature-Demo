@@ -19,4 +19,4 @@ VALUES('B:delivery:1', 'B:deliveryState:1', '{"target":{"states":{"add":["new"]}
 -- deliveryState --> delivery
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:deliveryState:1', 'B:delivery:1', '{"selector":{"state_all":["finished"], "context_all":["mid"]}, "use_upstream_id":true, "executor":{"protocol":"localRust","url":"nature_demo_executor:multi_delivery"}}');
+VALUES('B:deliveryState:1', 'B:delivery:1', '{"selector":{"state_all":["finished"], "context_all":["mid"]}, "use_upstream_id":true, "executor":{"protocol":"localRust","url":"nature_demo:multi_delivery"}}');

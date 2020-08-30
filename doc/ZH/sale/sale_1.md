@@ -21,7 +21,7 @@ VALUES('M', 'sale/order/to_item', '', 1, '', '', '{"multi_meta":["B:sale/item/co
 
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/order:1', 'M:sale/order/to_item:1', '{"executor":{"protocol":"localRust","url":"nature_demo_executor:order_to_item"}}');
+VALUES('B:sale/order:1', 'M:sale/order/to_item:1', '{"executor":{"protocol":"localRust","url":"nature_demo:order_to_item"}}');
 ```
 
 `sale/order`: 用作 `relation` 输入源.

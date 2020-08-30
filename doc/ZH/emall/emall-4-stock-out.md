@@ -12,7 +12,7 @@
 -- orderState:paid --> stockOutApplication
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/orderState:1', 'N:warehouse/outApplication:1', '{"selector":{"state_all":["paid"]},"executor":{"protocol":"localRust","url":"nature_demo_executor:stock_out_application"}}');
+VALUES('B:sale/orderState:1', 'N:warehouse/outApplication:1', '{"selector":{"state_all":["paid"]},"executor":{"protocol":"localRust","url":"nature_demo:stock_out_application"}}');
 ```
 
 - **Nature 要点**：请注意这里的`N:warehouse/outApplication:1`，我们之前并没有定义过，这是一个不存在的`Meta`。 为了简化配置工作，对于没有存储意义的`Meta`不需要定义就可以使用，`出库单`是存储到库房系统里的，没有必要再在 Nature 里存储一份。我们用`N:`来标记这样的`Meta`，N 代表 `MetaType::Null`。`warehouse/outApplication`只是助记符，`N:warehouse/outApplication:1` 完全可以写成`N::1`，后面的版本号无论是多少都会被置为1，因为“空”有很多版本也没有意义。请参考 [meta.md](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/meta.md)。
