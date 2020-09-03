@@ -32,3 +32,7 @@ tokio = { version = "0.2", features = ["full"] }
 [lib]
 name="nature_demo"
 crate-type = ["cdylib"]
+
+[[bin]]
+name="nature_demo_restful"
+path="src/bin/restful_executor.rs"

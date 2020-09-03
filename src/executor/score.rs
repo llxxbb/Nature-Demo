@@ -4,7 +4,7 @@ use nature::common::{Instance, NatureError, Result, SEPARATOR_INS_PARA};
 
 #[no_mangle]
 #[allow(unused_attributes)]
-#[allow(improper_ctypes)]
+#[allow(improper_ctypes_definitions)]
 pub extern fn name_to_id(para: &Vec<Instance>) -> Result<Vec<Instance>> {
     let mut map = HashMap::new();
     map.insert("class5/name1", "001");

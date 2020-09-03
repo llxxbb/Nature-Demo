@@ -3,7 +3,7 @@ use crate::entry::Order;
 
 #[no_mangle]
 #[allow(unused_attributes)]
-#[allow(improper_ctypes)]
+#[allow(improper_ctypes_definitions)]
 pub extern fn order_to_item(para: &ConverterParameter) -> ConverterReturned {
     dbg!(&para.from.content);
     let order: Order = match serde_json::from_str(&para.from.content) {
@@ -36,7 +36,7 @@ pub extern fn order_to_item(para: &ConverterParameter) -> ConverterReturned {
 
 #[no_mangle]
 #[allow(unused_attributes)]
-#[allow(improper_ctypes)]
+#[allow(improper_ctypes_definitions)]
 pub extern fn order2item(para: &Instance) -> Result<Instance> {
     let order: Order = serde_json::from_str(&para.content)?;
     let mut content: Vec<(String, u64)> = vec![];

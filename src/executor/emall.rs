@@ -5,7 +5,7 @@ use crate::entry::{Order, OrderAccount, OrderAccountReason, Payment};
 
 #[no_mangle]
 #[allow(unused_attributes)]
-#[allow(improper_ctypes)]
+#[allow(improper_ctypes_definitions)]
 pub extern fn order_receivable(para: &ConverterParameter) -> ConverterReturned {
     let result = serde_json::from_str(&para.from.content);
     if result.is_err() {
@@ -28,7 +28,7 @@ pub extern fn order_receivable(para: &ConverterParameter) -> ConverterReturned {
 
 #[no_mangle]
 #[allow(unused_attributes)]
-#[allow(improper_ctypes)]
+#[allow(improper_ctypes_definitions)]
 pub extern fn pay_count(para: &ConverterParameter) -> ConverterReturned {
     let result = serde_json::from_str(&para.from.content);
     if result.is_err() {
@@ -63,7 +63,7 @@ pub extern fn pay_count(para: &ConverterParameter) -> ConverterReturned {
 
 #[no_mangle]
 #[allow(unused_attributes)]
-#[allow(improper_ctypes)]
+#[allow(improper_ctypes_definitions)]
 pub extern fn stock_out_application(para: &ConverterParameter) -> ConverterReturned {
     // Tn real application need to convert order to store_out_application.
     // but in this demo, we need not do anything.
@@ -73,7 +73,7 @@ pub extern fn stock_out_application(para: &ConverterParameter) -> ConverterRetur
 
 #[no_mangle]
 #[allow(unused_attributes)]
-#[allow(improper_ctypes)]
+#[allow(improper_ctypes_definitions)]
 pub extern fn go_express(para: &ConverterParameter) -> ConverterReturned {
     // "any one" will be correct by Nature after returned
     let mut ins = Instance::new("any one").unwrap();
@@ -86,7 +86,7 @@ pub extern fn go_express(para: &ConverterParameter) -> ConverterReturned {
 
 #[no_mangle]
 #[allow(unused_attributes)]
-#[allow(improper_ctypes)]
+#[allow(improper_ctypes_definitions)]
 pub extern fn auto_sign(_para: &ConverterParameter) -> ConverterReturned {
     // "any one" will be correct by Nature after returned
     let mut ins = Instance::new("any one").unwrap();
@@ -97,7 +97,7 @@ pub extern fn auto_sign(_para: &ConverterParameter) -> ConverterReturned {
 
 #[no_mangle]
 #[allow(unused_attributes)]
-#[allow(improper_ctypes)]
+#[allow(improper_ctypes_definitions)]
 pub extern fn multi_delivery(para: &ConverterParameter) -> ConverterReturned {
     let para: &str = &para.from.para;
     let mut ins = Instance::new("abc").unwrap();
