@@ -11,7 +11,7 @@ wait=true
 
 rtn=$("$path"/get_by_id.sh "$1" "$2" "$3")
 while [ $wait ]; do
-  echo "$0-------------$1 $2 $3 "
+  echo "$0-------------$1 $2 $3"
   if [ -n "$rtn" ]&&[ "$rtn" != "null" ]; then
     break
   fi

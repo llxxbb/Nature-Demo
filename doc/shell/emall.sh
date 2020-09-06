@@ -30,10 +30,10 @@ instance='{
 path=$(dirname "$0")
 
 # submit order to Nature
-rtn1=$("$path"/common/input.sh "B:/sale/order:1" "$instance")
+rtn1=$("$path"/common/input.sh "B:sale/order:1" "$instance")
 
 # cam be reentrant----------------------------------------
-rtn2=$("$path"/common/input.sh "B:/sale/order:1" "$instance")
+rtn2=$("$path"/common/input.sh "B:sale/order:1" "$instance")
 
 if [ "$rtn1" != "$rtn2" ]; then
   echo "should be equal"
@@ -42,6 +42,6 @@ fi
 
 # wait state instance generated----------------------------
 
-"$path"/common/get_by_id_wait.sh "$rtn1" "B:/sale/orderState:1" 1
+"$path"/common/get_by_id_wait.sh "$rtn1" "B:sale/orderState:1" 1
 
 
