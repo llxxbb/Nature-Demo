@@ -5,9 +5,7 @@
 #   meta: $2
 #   state_version: $3
 
-echo "1-------------""$1"
 id=$(echo "obase=16;ibase=10;$1" | bc)
-echo "2-------------""$id"
 
 JSON_STRING=$( jq -n \
                   --arg a "${id,,}" \

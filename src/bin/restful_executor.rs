@@ -15,12 +15,11 @@ use reqwest::blocking::Client as BClient;
 use reqwest::Client;
 
 use nature::common::{ConverterParameter, ConverterReturned, DelayedInstances, Instance, KeyCondition, Result};
-use nature::common::setup_logger;
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
     dotenv().ok();
-    let _ = setup_logger();
+    let _ = env_logger::init();
     start_actrix().await
 }
 

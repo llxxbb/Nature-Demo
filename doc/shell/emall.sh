@@ -42,6 +42,6 @@ fi
 
 # wait state instance generated----------------------------
 
-"$path"/common/get_by_id_wait.sh "$rtn1", "B:/sale/orderState:1", 1
+"$path"/common/get_by_id_wait.sh "$rtn1" "B:/sale/orderState:1" 1
 
 

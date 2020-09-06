@@ -7,7 +7,6 @@ description = "Demo to show how to use Nature"
 repository = "https://github.com/llxxbb/Nature-Demo"
 license = "MIT"
 
-
 [dependencies]
 nature = { path = "../Nature", version = "0.16.0" }
 
@@ -21,7 +20,7 @@ dotenv = "0.15"
 
 # log
 log = "0.4"
-fern = "0.6"        # Simple, efficient logging
+env_logger = "0.7"
 
 # web
 reqwest = { version = "0.10", features = ["blocking", "json"] }
