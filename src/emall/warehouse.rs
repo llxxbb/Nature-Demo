@@ -1,8 +1,8 @@
-use nature::common::{ID, Instance};
+use nature::common::Instance;
 
 use crate::{send_instance, wait_for_order_state};
 
-pub fn outbound(order_id: ID) {
+pub fn outbound(order_id: &str) {
     // for package
     let last = wait_for_order_state(order_id, 3);
     let mut instance = Instance::new("sale/orderState").unwrap();
