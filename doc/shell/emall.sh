@@ -2,7 +2,10 @@
 
 # This shell to simulate the business system client to communicate with Nature.
 
+path=$(dirname "$0")
+
 # generate order-----------------------------------
+
 instance='{
   "user_id":123,
   "price":1000,
@@ -27,21 +30,39 @@ instance='{
   "address":"a.b.c"
 }'
 
-path=$(dirname "$0")
-
 # submit order to Nature
-rtn1=$("$path"/common/input.sh "B:sale/order:1" "$instance")
+orderID=$("$path"/common/input.sh "B:sale/order:1" "$instance")
 
 # cam be reentrant----------------------------------------
 rtn2=$("$path"/common/input.sh "B:sale/order:1" "$instance")
 
-if [ "$rtn1" != "$rtn2" ]; then
+if [ "$orderID" != "$rtn2" ]; then
   echo "should be equal"
   exit 1
 fi
 
-# wait state instance generated----------------------------
+# wait order-account instance generated----------------------------
+"$path"/common/get_by_id_wait.sh "$orderID" "B:finance/orderAccount:1" 1
 
-"$path"/common/get_by_id_wait.sh "$rtn1" "B:sale/orderState:1" 1
+# ============================ pay ============================
+pay () {
+  echo "$1"
+
+  json=$(jq -n \
+    --arg order "$1" \
+    --arg account "$3" \
+    --arg num "$2" \
+    --arg time "$4" \
+    '{"order":$order,"from_account":$account,"paid":$num|tonumber,"pay_time":$time|tonumber}')
+  "$path"/common/input.sh "B:finance/payment:1" "$json"
+}
+
+# pay for the first time----------------------------
+
+time=$(date +%s)"000"
+payFirst=$(pay "$orderID" 100 "a" "$time")
+echo "$payFirst"
+
+
 
 
