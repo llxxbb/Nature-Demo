@@ -12,14 +12,8 @@ Nature 缺省使用  mysql 数据库，请自行准备，下面是自行编译�
 下载下面项目的代码到同一个目录下
 
 - https://github.com/llxxbb/Nature
-- https://github.com/llxxbb/Nature-Common
-- https://github.com/llxxbb/Nature-DB
-- https://github.com/llxxbb/Nature-Retry
 - https://github.com/llxxbb/Nature-Integrate-Test-Executor
 - https://github.com/llxxbb/Nature-Demo
-- https://github.com/llxxbb/Nature-Demo-Executor
-- https://github.com/llxxbb/Nature-Demo-Common
-- https://github.com/llxxbb/Nature-Demo-Executor-Restful
 
 ### 编译项目
 
