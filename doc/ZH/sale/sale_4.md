@@ -38,7 +38,7 @@ VALUES('L', 'sale/money/secondTopLooper', 'top looper' , 1, '', '', '{"multi_met
 INSERT INTO relation
 (from_meta, to_meta, settings)
 VALUES('B:sale/money/second_tag:1', 'L:sale/money/secondTopLooper:1', '{
-"filter_before":[
+"convert_before":[
     {"protocol":"builtIn","url":"task-checker","settings":"{\\"key_gt\\":\\"B:sale/item/money:1|0\\",\\"key_lt\\":\\"B:sale/item/money:1|1\\",\\"time_part\\":[0,1]}"},
     {"protocol":"builtIn","url":"task-checker","settings":"{\\"key_gt\\":\\"B:sale/item/money/tag_second:1|0|(time)/\\",\\"key_lt\\":\\"B:sale/item/money/tag_second:1|0|(time)0\\"}"},
     {"protocol":"builtIn","url":"task-checker","settings":"{\\"key_gt\\":\\"B:sale/item/money/second:1|0|(time)/\\",\\"key_lt\\":\\"B:sale/item/money/second:1|0|(time)0\\",\\"time_part\\":[0,1]}"},
@@ -57,7 +57,7 @@ VALUES('B:sale/money/second_tag:1', 'L:sale/money/secondTopLooper:1', '{
 
 ```json
 {
-	"filter_before":[...],
+	"convert_before":[...],
     "delay_on_para":[2,1],
     "executor":{"protocol":"builtIn","url":"merge","settings":"{\\"key\\":\\"Content\\",\\"sum_all\\":true,\\"top\\":{\\"MaxTop\\":1}}"}}
 ```
@@ -66,7 +66,7 @@ VALUES('B:sale/money/second_tag:1', 'L:sale/money/secondTopLooper:1', '{
 
 - **Nature 要点**：为了能够演示出效果，这里只求 top 1，可依据实际情况进行修改。**注意**：如果上游数据量非常大，请不要使用 `top.None` 模式，该模式会记录所以商品的销售额，因为下游数据只是一条数据，其**容量有限**。 有关merge 请参考：[内置执行器](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/built-in.md)
 
-关系里的上游数据只是一个时间标记而已，用于延时驱动（delay_on_para，前面讲过）本次的统计任务。所以我们还需要借助于 `filter_before` 来加载真正的待统计数据。然而这次的 `filter_before` 内容有点多。
+关系里的上游数据只是一个时间标记而已，用于延时驱动（delay_on_para，前面讲过）本次的统计任务。所以我们还需要借助于 `convert_before` 来加载真正的待统计数据。然而这次的 `convert_before` 内容有点多。
 
 ```json
 {"protocol":"builtIn","url":"task-checker","settings":".1."},

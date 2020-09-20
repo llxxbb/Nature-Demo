@@ -11,18 +11,18 @@ VALUES('B', 'sale/item/money/second', 'second summary of money' , 1, '', '', '')
 
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/item/money/tag_second:1', 'B:sale/item/money/second:1', '{"filter_before":[{"protocol":"builtIn","url":"instance-loader","settings":"{\\"key_gt\\":\\"B:sale/item/money:1|0|(item)/\\",\\"key_lt\\":\\"B:sale/item/money:1|0|(item)0\\",\\"time_part\\":[0,1]}"}],"delay_on_para":[2,1],"executor":{"protocol":"builtIn","url":"merge"}}');
+VALUES('B:sale/item/money/tag_second:1', 'B:sale/item/money/second:1', '{"convert_before":[{"protocol":"builtIn","url":"instance-loader","settings":"{\\"key_gt\\":\\"B:sale/item/money:1|0|(item)/\\",\\"key_lt\\":\\"B:sale/item/money:1|0|(item)0\\",\\"time_part\\":[0,1]}"}],"delay_on_para":[2,1],"executor":{"protocol":"builtIn","url":"merge"}}');
 ```
 
 我们一开始先定义了一个以秒为单位的单品销售额统计项。然后定义了一个`关系，这个关系的 settings 有点复杂，我们将之进行分解并一一说明。主要有两部分，主体部分为 内置转换器：merge，如下：
 
 ```json
-{"filter_before":[],"delay_on_para":[2,1],"executor":{"protocol":"builtIn","url":"merge"}}
+{"convert_before":[],"delay_on_para":[2,1],"executor":{"protocol":"builtIn","url":"merge"}}
 ```
 
 merge 主要统计秒内单品销售额。需要注意：
 
-- **Nature 要点**：tag_second 只是个时间区间是没有数据的，在这里他的作用就是用于驱动统计任务的执行。而真正的数据加载时通过 filter_before 中定义的 `instance-loader` 来完成的。
+- **Nature 要点**：tag_second 只是个时间区间是没有数据的，在这里他的作用就是用于驱动统计任务的执行。而真正的数据加载时通过 convert_before 中定义的 `instance-loader` 来完成的。
 - **Nature 要点**：时间区间数据创建完成后不能立即立即统计的，因为此时该区间有可能还没有结束，所以需要延时执行，这就是 `delay_on_para` 所发挥的作用。它的用意是要在 Instance.para 的某个部分上取一个时间（由`delay_on_para` 的第二个参数决定），并在此基础上延迟指定的时间（由`delay_on_para` 的第一个参数决定，既延时2s）。具体请参考[relation.md](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/relation.md)
 - **Nature 要点**：我们之前应用过 merge 一次，相较于学习成绩统计，这里使用了更高效的方法来对一批数据进行求和。merge支持多种统计模式，可以让你不用写代码就可以完成统计工作，详情请参考：[内置执行器](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/built-in.md)
 

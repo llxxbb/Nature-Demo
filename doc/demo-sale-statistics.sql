@@ -43,7 +43,7 @@ VALUES('B', 'sale/item/money/second', 'second summary of money' , 1, '', '', '')
 
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/item/money/tag_second:1', 'B:sale/item/money/second:1', '{"filter_before":[{"protocol":"builtIn","url":"instance-loader","settings":"{\\"key_gt\\":\\"B:sale/item/money:1|0|(item)/\\",\\"key_lt\\":\\"B:sale/item/money:1|0|(item)0\\",\\"time_part\\":[0,1]}"}],"delay_on_para":[2,1],"executor":{"protocol":"builtIn","url":"merge"}}');
+VALUES('B:sale/item/money/tag_second:1', 'B:sale/item/money/second:1', '{"convert_before":[{"protocol":"builtIn","url":"instance-loader","settings":"{\\"key_gt\\":\\"B:sale/item/money:1|0|(item)/\\",\\"key_lt\\":\\"B:sale/item/money:1|0|(item)0\\",\\"time_part\\":[0,1]}"}],"delay_on_para":[2,1],"executor":{"protocol":"builtIn","url":"merge"}}');
 
 -- top statistics ---------------------------------------------
 
@@ -66,7 +66,7 @@ VALUES('L', 'sale/money/secondTopLooper', 'top looper' , 1, '', '', '{"multi_met
 INSERT INTO relation
 (from_meta, to_meta, settings)
 VALUES('B:sale/money/second_tag:1', 'L:sale/money/secondTopLooper:1', '{
-"filter_before":[
+"convert_before":[
     {"protocol":"builtIn","url":"task-checker","settings":"{\\"key_gt\\":\\"B:sale/item/money:1|0\\",\\"key_lt\\":\\"B:sale/item/money:1|1\\",\\"time_part\\":[0,1]}"},
     {"protocol":"builtIn","url":"task-checker","settings":"{\\"key_gt\\":\\"B:sale/item/money/tag_second:1|0|(time)/\\",\\"key_lt\\":\\"B:sale/item/money/tag_second:1|0|(time)0\\"}"},
     {"protocol":"builtIn","url":"task-checker","settings":"{\\"key_gt\\":\\"B:sale/item/money/second:1|0|(time)/\\",\\"key_lt\\":\\"B:sale/item/money/second:1|0|(time)0\\",\\"time_part\\":[0,1]}"},

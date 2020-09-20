@@ -55,7 +55,7 @@ VALUES('B', 'score/trainee/subject', 'person original score', 1, '', '', '{"mast
 ```mysql
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:score/table:1', 'B:score/trainee/subject:1', '{"executor":{"protocol":"builtIn","url":"scatter"}, "filter_after":[{"protocol":"http","url":"http://127.0.0.1:8082/add_score"},{"protocol":"localRust","url":"nature_demo:name_to_id"}]}');
+VALUES('B:score/table:1', 'B:score/trainee/subject:1', '{"executor":{"protocol":"builtIn","url":"scatter"}, "convert_after":[{"protocol":"http","url":"http://127.0.0.1:8082/add_score"},{"protocol":"localRust","url":"nature_demo:name_to_id"}]}');
 ```
 
 我们先看 executor 的定义 ：
@@ -67,7 +67,7 @@ VALUES('B:score/table:1', 'B:score/trainee/subject:1', '{"executor":{"protocol":
 - **Nature 要点**：`builtIn`是说我们不需要开发这个功能，直接拿来用就好了。Nature 内置了一些执行器，在后续的示例里我们将充分展示。与`自动执行器`不同，`内置执行器`需要在 `url` 属性里设置我们需要用到的功能，而`自动执行器`则不需要。
 - **Nature 要点**：`scatter` 内置执行器的作用是，将`成绩单`中数据表格拆分成一条条独立的`个人学科成绩`。并将 表格数据的第一列放到`个人学科成绩`数据的`Instance.para` 里，而成绩数据则放到`Instance.content`中。请参考[内置执行器](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/built-in.md)
 
-如果忽略`filter_after`的作用（不久我们会讲到），经过`scatter`处理后，`Instance`数据表中应该会看到下面的数据，
+如果忽略`convert_after`的作用（不久我们会讲到），经过`scatter`处理后，`Instance`数据表中应该会看到下面的数据，
 
 | ins_key                                             | content |
 | --------------------------------------------------- | ------- |
@@ -97,13 +97,13 @@ cargo.exe test --color=always --package nature-demo --lib score::score_test
 | B:score/trainee/subject:1\|0\|004/subject2 | 42      |
 | B:score/trainee/subject:1\|0\|005/subject2 | 69      |
 
-`scatter`后的数据怎么会变成这种形式了呢？这就是 `filter_after` 的作用了。我们来详细讲解一下 `filter_after` 的作用，先看一下本示例我们给出的配置：
+`scatter`后的数据怎么会变成这种形式了呢？这就是 `convert_after` 的作用了。我们来详细讲解一下 `convert_after` 的作用，先看一下本示例我们给出的配置：
 
 ```json
-"filter_after":[{"protocol":"http","url":"http://127.0.0.1:8082/add_score"},{"protocol":"localRust","url":"nature_demo:name_to_id"}]
+"convert_after":[{"protocol":"http","url":"http://127.0.0.1:8082/add_score"},{"protocol":"localRust","url":"nature_demo:name_to_id"}]
 ```
 
-- **Nature 要点**：`filter_after` 的作用是在`执行器`执行完后且在 Nature 保存数据前，对数据进行一些修正，特别适合于技术处理，如格式修正等。
+- **Nature 要点**：`convert_after` 的作用是在`执行器`执行完后且在 Nature 保存数据前，对数据进行一些修正，特别适合于技术处理，如格式修正等。
 - **Nature 要点**：`后置过滤器`可以由多个`过滤器` 构成，本示例定义了两个`过滤器`，一个是基于 http 方式调用，用于给所有参加学科2考试的人补分；一个是基于静态链接库调用，用于将 `班级/姓名`替换成学号。 这两个过滤器的实现请自行查看源代码，这里就不贴出来了。
 - **Nature 要点**：每个`过滤器`的配置形式有点类似于`执行情`的配置形式，但其实现形式是不同的，具体请看源代码。
 - **Nature 要点**：我们完全可以定义多个`Relation`来完成`后置过滤器`的功能，之所以使用`后置过滤器`是因为：
