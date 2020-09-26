@@ -1,4 +1,5 @@
 use nature::common::{ConverterParameter, ConverterReturned, Instance, Result};
+
 use crate::entry::Order;
 
 #[no_mangle]
@@ -10,7 +11,7 @@ pub extern fn order_to_item(para: &ConverterParameter) -> ConverterReturned {
         Ok(ord) => ord,
         Err(e) => {
             dbg!(&e);
-            return ConverterReturned::LogicalError(e.to_string());
+            return ConverterReturned::LogicalError { msg: e.to_string() };
         }
     };
     let money = "B:sale/item/money:1";
@@ -31,7 +32,7 @@ pub extern fn order_to_item(para: &ConverterParameter) -> ConverterReturned {
         ins
     }).collect();
 
-    ConverterReturned::Instances(rtn)
+    ConverterReturned::Instances { ins: rtn }
 }
 
 #[no_mangle]

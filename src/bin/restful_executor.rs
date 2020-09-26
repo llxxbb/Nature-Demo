@@ -34,7 +34,7 @@ lazy_static! {
 async fn send_to_warehouse(para: Json<ConverterParameter>) -> HttpResponse {
     thread::spawn(move || send_to_warehouse_thread(para.0));
     // wait 60 seconds to simulate the process of warehouse business.
-    HttpResponse::Ok().json(ConverterReturned::Delay(60))
+    HttpResponse::Ok().json(ConverterReturned::Delay { num: 60 })
 }
 
 async fn add_score(para: Json<Vec<Instance>>) -> HttpResponse {
@@ -65,7 +65,7 @@ pub fn send_to_warehouse_thread(para: ConverterParameter) {
     // send result to Nature
     let rtn = DelayedInstances {
         task_id: para.task_id,
-        result: ConverterReturned::Instances(vec![para.from]),
+        result: ConverterReturned::Instances { ins: vec![para.from] },
     };
     let rtn = BCLIENT.post(&*CALLBACK_ADDRESS).json(&rtn).send();
     let text: String = rtn.unwrap().text().unwrap();
@@ -101,7 +101,7 @@ mod reqwest_test {
         let para = ConverterParameter {
             from: Default::default(),
             last_state: None,
-            task_id: "".to_string(),
+            task_id: 0,
             master: None,
             cfg: "".to_string(),
         };

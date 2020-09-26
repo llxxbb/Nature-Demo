@@ -1,6 +1,7 @@
 use chrono::Local;
 
 use nature::common::{ConverterParameter, ConverterReturned, Instance};
+
 use crate::entry::{Order, OrderAccount, OrderAccountReason, Payment};
 
 #[no_mangle]
@@ -11,7 +12,7 @@ pub extern fn order_receivable(para: &ConverterParameter) -> ConverterReturned {
     if result.is_err() {
         let msg = format!("generate order receivable error: {}, data: {}", result.err().unwrap(), para.from.content);
         dbg!(&msg);
-        return ConverterReturned::LogicalError(msg);
+        return ConverterReturned::LogicalError { msg };
     }
     let order: Order = result.unwrap();
     let oa = OrderAccount {
@@ -23,7 +24,7 @@ pub extern fn order_receivable(para: &ConverterParameter) -> ConverterReturned {
     };
     let mut instance = Instance::default();
     instance.content = serde_json::to_string(&oa).unwrap();
-    ConverterReturned::Instances(vec![instance])
+    ConverterReturned::Instances { ins: vec![instance] }
 }
 
 #[no_mangle]
@@ -33,11 +34,11 @@ pub extern fn pay_count(para: &ConverterParameter) -> ConverterReturned {
     let result = serde_json::from_str(&para.from.content);
     if result.is_err() {
         dbg!(&para.from.content);
-        return ConverterReturned::LogicalError("unknown content".to_string());
+        return ConverterReturned::LogicalError { msg: "unknown content".to_string() };
     }
     let payment: Payment = result.unwrap();
     if para.last_state.is_none() {
-        return ConverterReturned::EnvError("can't find last status instance".to_string());
+        return ConverterReturned::EnvError { msg: "can't find last status instance".to_string() };
     }
     let old = para.last_state.as_ref().unwrap();
     let mut oa: OrderAccount = serde_json::from_str(&old.content).unwrap();
@@ -58,7 +59,7 @@ pub extern fn pay_count(para: &ConverterParameter) -> ConverterReturned {
     let mut instance = Instance::default();
     instance.content = serde_json::to_string(&oa).unwrap();
     instance.states.insert(state);
-    ConverterReturned::Instances(vec![instance])
+    ConverterReturned::Instances { ins: vec![instance] }
 }
 
 #[no_mangle]
@@ -81,7 +82,7 @@ pub extern fn go_express(para: &ConverterParameter) -> ConverterReturned {
     // the follow line simulate the express company name and the waybill id returned
     ins.para = "/ems/".to_owned() + &format!("{:x}", para.from.id);
     // return the waybill
-    ConverterReturned::Instances(vec![ins])
+    ConverterReturned::Instances { ins: vec![ins] }
 }
 
 #[no_mangle]
@@ -92,7 +93,7 @@ pub extern fn auto_sign(_para: &ConverterParameter) -> ConverterReturned {
     let mut ins = Instance::new("any one").unwrap();
     ins.content = format!("type=auto,time={}", Local::now());
     // return the waybill
-    ConverterReturned::Instances(vec![ins])
+    ConverterReturned::Instances { ins: vec![ins] }
 }
 
 #[no_mangle]
@@ -108,6 +109,6 @@ pub extern fn multi_delivery(para: &ConverterParameter) -> ConverterReturned {
         _ => "err2".to_string()
     };
     // return the waybill
-    ConverterReturned::Instances(vec![ins])
+    ConverterReturned::Instances { ins: vec![ins] }
 }
 
