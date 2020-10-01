@@ -15,7 +15,7 @@ VALUES('B', 'finance/payment', 'order payment', 1, '', '', '');
 定义了 `Meta` 后我们就可以向 Nature 输入数据了。输入数据的代码请参考：nature-demo::emall::finance::pay。需要说明的是我们这里用到了`Instance.sys_context`属性，如下：
 
 ```rust
-sys_context.insert("target.id".to_string(), format!("{:x}", id));
+sys_context.insert("target.id".to_string(), format!("{}", id));
 ```
 
 我们在里面放置了一个 `target.id`，其值为**16进制**的订单ID。其作用我们稍后讲。先让我们来看一下demo的运行效果。运行：

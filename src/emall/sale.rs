@@ -21,11 +21,11 @@ pub fn send_order_to_nature() -> String {
 fn wait_until_order_state_is_ready(order_id: &str) -> String {
     loop {
         if let Some(ins) = get_state_instance_by_id(order_id, "B:sale/orderState:1", 1) {
-            assert_eq!(format!("{:x}",ins.id), order_id);
+            assert_eq!(format!("{}",ins.id), order_id);
             assert_eq!(ins.states.contains("new"), true);
             let from = ins.from.as_ref().unwrap();
             assert_eq!(from.meta, "B:sale/order:1");
-            return format!("{:x}",ins.id);
+            return format!("{}",ins.id);
         } else {
             sleep(Duration::from_nanos(200000))
         }

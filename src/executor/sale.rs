@@ -17,7 +17,7 @@ pub extern fn order_to_item(para: &ConverterParameter) -> ConverterReturned {
     let money = "B:sale/item/money:1";
     let count = "B:sale/item/count:1";
     let mut content: Vec<(String, String, u64)> = vec![];
-    let oid = format!("/{:x}", para.from.id);
+    let oid = format!("/{}", para.from.id);
     for one in order.items {
         let para = one.item.id.to_string() + &oid;
         content.push((money.to_string(), para.to_string(), one.num as u64 * one.item.price));
