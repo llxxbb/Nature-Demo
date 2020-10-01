@@ -15,7 +15,7 @@ pub static URL_INPUT: &str = "http://localhost:8080/input";
 pub static URL_GET_BY_ID: &str = "http://localhost:8080/get_by_id";
 pub static URL_GET_BY_META: &str = "http://localhost:8080/get_by_key_range";
 
-pub fn send_instance(ins: &Instance) -> Result<String> {
+pub fn send_instance(ins: &Instance) -> Result<u64> {
     let response = CLIENT.post(URL_INPUT).json(ins).send();
     let id_s: String = response.unwrap().text().unwrap();
     if id_s.contains("Err") {
@@ -37,11 +37,11 @@ pub fn get_by_id(cond: &KeyCondition) -> Option<Instance> {
     }
 }
 
-pub fn send_business_object<T>(meta_key: &str, bo: &T) -> Result<String> where T: Serialize {
+pub fn send_business_object<T>(meta_key: &str, bo: &T) -> Result<u64> where T: Serialize {
     send_business_object_with_sys_context(meta_key, bo, &HashMap::new())
 }
 
-pub fn send_business_object_with_sys_context<T>(meta_key: &str, bo: &T, sys_context: &HashMap<String, String>) -> Result<String> where T: Serialize {
+pub fn send_business_object_with_sys_context<T>(meta_key: &str, bo: &T, sys_context: &HashMap<String, String>) -> Result<u64> where T: Serialize {
     let mut instance = Instance::new(meta_key).unwrap();
     instance.content = serde_json::to_string(bo).unwrap();
     instance.sys_context = sys_context.clone();
