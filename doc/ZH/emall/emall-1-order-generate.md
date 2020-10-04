@@ -90,7 +90,7 @@ VALUES('B', 'sale/orderState', 'order state', 1, 'new|paid|package|outbound|disp
 ```mysql
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/order:1', 'B:sale/orderState:1', '{"target":{"states":{"add":["new"]}}}');
+VALUES('B:sale/order:1', 'B:sale/orderState:1', '{"target":{"state_add":["new"]}}');
 ```
 
 | 字段或属性 | 说明                                                         |
@@ -100,7 +100,7 @@ VALUES('B:sale/order:1', 'B:sale/orderState:1', '{"target":{"states":{"add":["ne
 | settings   | 是一个 `JSON` 形式的配置对象，用于对这个`关系`进行一些附加控制，如`执行器`，`过滤器`以及对上下游实例的一些要求等。请参考[使用 Relation](https://github.com/llxxbb/Nature/blob/master/doc/ZH/help/relation.md) |
 
 - **Nature 要点**：在Nature `关系`是有方向的，这个方向说明了数据的流转方向，上面的`关系`定义说明了数据只能从 B:sale/order:1 流向 B:sale/orderState:1。
-- target.states.add=["new"]：是说在新生成的数据实例（B:sale/orderState:1）上附加上”new“ 状态。这个语法是数组，也就是说我们可以同时附加多个状态。
+- target.state_add=["new"]：是说在新生成的数据实例（B:sale/orderState:1）上附加上”new“ 状态。这个语法是数组，也就是说我们可以同时附加多个状态。
 - **Nature 要点**：这个附加是在上一个版本的状态基础上进行附加的。对于本例来讲上一版本还不存在，则认为上一状态为“[]”。
 
 ## 运行 Demo 并查看生成的订单状态数据
@@ -130,7 +130,7 @@ cargo.exe test --color=always --package nature-demo --lib emall::emall_test
 * **Nature 要点** ：在 Nature 里多个不同元数据实例共享相同的 ID 是一种推荐的做法，这个ID 可以被视为一个**事务ID**。这样**用一个ID就可以把所有相关的数据提取出来**。这要比依赖于外键的传统数据表提取数据有效率的多，而且还减少了关系数据的维护。更重要的是这种处理方式**减少了保障数据一致性的技术复杂度**。
 * **Nature 要点**：`from_key` 是 Nature 自动添加的，可用于**追溯数据**，这会为排查问题提供极大的方便。
 
-同时我们发现`target.states.add=["new"]`也发挥了作用：这条数据的`states`被设置成`["new"]`了。
+同时我们发现`target.state_add=["new"]`也发挥了作用：这条数据的`states`被设置成`["new"]`了。
 
 - **Nature 要点**：对于状态处理我认为是传统编程方式下最复杂、最容易出错和最难维护的部分之一，而 Nature 为此提供了一整套处理机制，程序员基本上无需干预就可以处理好所有状态相关的问题，这在后续demo中会经常得到体现。
 

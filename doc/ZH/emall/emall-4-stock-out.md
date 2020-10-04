@@ -39,7 +39,7 @@ VALUES('B:sale/orderState:1', 'N:warehouse/outApplication:1', '{"selector":{"sta
 -- orderState:paid --> orderState:package
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/orderState:1', 'B:sale/orderState:1', '{"selector":{"state_all":["paid"]},"executor":{"protocol":"http","url":"http://localhost:8082/send_to_warehouse"},"target":{"states":{"add":["package"]}}}');
+VALUES('B:sale/orderState:1', 'B:sale/orderState:1', '{"selector":{"state_all":["paid"]},"executor":{"protocol":"http","url":"http://localhost:8082/send_to_warehouse"},"target":{"state_add":["package"]}}');
 ```
 
 - **Nature 要点**：我们这里看到了一种新的执行器：`http`，借助它 Nature 可以在全球范围内编织一个庞大的系统。

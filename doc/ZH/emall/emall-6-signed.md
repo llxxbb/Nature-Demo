@@ -32,7 +32,7 @@ VALUES('B:sale/orderState:1', 'B:sale/orderSign:1', '{"delay":1, "id_bridge":tru
 -- orderSign --> orderState:signed
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/orderSign:1', 'B:sale/orderState:1', '{"target":{"states":{"add":["signed"]}}}');
+VALUES('B:sale/orderSign:1', 'B:sale/orderState:1', '{"target":{"state_add":["signed"]}}');
 ```
 
 到最后时刻了，请运行下面的内容：

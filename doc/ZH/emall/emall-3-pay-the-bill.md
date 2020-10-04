@@ -84,7 +84,7 @@ cargo.exe test --color=always --package nature-demo --lib emall::emall_test
 -- orderAccount --> orderState
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:finance/orderAccount:1', 'B:sale/orderState:1', '{"selector":{"state_all":["paid"]},"target":{"states":{"add":["paid"]}}}');
+VALUES('B:finance/orderAccount:1', 'B:sale/orderState:1', '{"selector":{"state_all":["paid"]},"target":{"state_add":["paid"]}}');
 ```
 
 很高兴这里没有见到`executor`，也就是说我们又可以省去编码工作了，但我们还是要费点脑筋学点新东西。

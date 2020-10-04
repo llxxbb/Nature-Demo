@@ -55,7 +55,7 @@ cargo.exe test --color=always --package nature-demo --lib emall::emall_test
 -- waybill --> orderState:dispatching
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:third/waybill:1', 'B:sale/orderState:1', '{"target":{"states":{"add":["dispatching"]}}}');
+VALUES('B:third/waybill:1', 'B:sale/orderState:1', '{"target":{"state_add":["dispatching"]}}');
 ```
 
 很高兴，再一次不需要写代码就可以完成任务。让我们看一下运行结果，运行：

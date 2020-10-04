@@ -20,7 +20,7 @@ VALUES('B', 'finance/orderAccount', 'order account', 1, 'unpaid|partial|paid', '
 -- order --> orderAccount
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/order:1', 'B:finance/orderAccount:1', '{"executor":{"protocol":"localRust","url":"nature_demo:order_receivable"},"target":{"states":{"add":["unpaid"]}}}');
+VALUES('B:sale/order:1', 'B:finance/orderAccount:1', '{"executor":{"protocol":"localRust","url":"nature_demo:order_receivable"},"target":{"state_add":["unpaid"]}}');
 ```
 
 我们先认识一下几个新的属性：

@@ -16,7 +16,7 @@ VALUES('B', 'sale/orderState', 'order state', 1, 'new|paid|package|outbound|disp
 -- order --> orderState
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/order:1', 'B:sale/orderState:1', '{"target":{"states":{"add":["new"]}}}');
+VALUES('B:sale/order:1', 'B:sale/orderState:1', '{"target":{"state_add":["new"]}}');
 
 -- pay for the bill  ---------------------------------------------
 INSERT INTO meta
@@ -30,7 +30,7 @@ VALUES('B', 'finance/orderAccount', 'order account', 1, 'unpaid|partial|paid', '
 -- order --> orderAccount
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/order:1', 'B:finance/orderAccount:1', '{"executor":{"protocol":"localRust","url":"nature_demo:order_receivable"},"target":{"states":{"add":["unpaid"]}}}');
+VALUES('B:sale/order:1', 'B:finance/orderAccount:1', '{"executor":{"protocol":"localRust","url":"nature_demo:order_receivable"},"target":{"state_add":["unpaid"]}}');
 
 -- payment --> orderAccount
 INSERT INTO relation
@@ -40,7 +40,7 @@ VALUES('B:finance/payment:1', 'B:finance/orderAccount:1', '{"executor":{"protoco
 -- orderAccount --> orderState
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:finance/orderAccount:1', 'B:sale/orderState:1', '{"selector":{"state_all":["paid"]},"target":{"states":{"add":["paid"]}}}');
+VALUES('B:finance/orderAccount:1', 'B:sale/orderState:1', '{"selector":{"state_all":["paid"]},"target":{"state_add":["paid"]}}');
 
 -- stock out  ---------------------------------------------
 
@@ -52,7 +52,7 @@ VALUES('B:sale/orderState:1', 'N:warehouse/outApplication:1', '{"selector":{"sta
 -- orderState:paid --> orderState:package
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/orderState:1', 'B:sale/orderState:1', '{"selector":{"state_all":["paid"]},"executor":{"protocol":"http","url":"http://localhost:8082/send_to_warehouse"},"target":{"states":{"add":["package"]}}}');
+VALUES('B:sale/orderState:1', 'B:sale/orderState:1', '{"selector":{"state_all":["paid"]},"executor":{"protocol":"http","url":"http://localhost:8082/send_to_warehouse"},"target":{"state_add":["package"]}}');
 
 -- delivery  ---------------------------------------------
 INSERT INTO meta
@@ -67,7 +67,7 @@ VALUES('B:sale/orderState:1', 'B:third/waybill:1', '{"id_bridge":true, "selector
 -- waybill --> orderState:dispatching
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:third/waybill:1', 'B:sale/orderState:1', '{"target":{"states":{"add":["dispatching"]}}}');
+VALUES('B:third/waybill:1', 'B:sale/orderState:1', '{"target":{"state_add":["dispatching"]}}');
 
 -- signed  ---------------------------------------------
 INSERT INTO meta
@@ -82,5 +82,5 @@ VALUES('B:sale/orderState:1', 'B:sale/orderSign:1', '{"delay":1, "id_bridge":tru
 -- orderSign --> orderState:signed
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/orderSign:1', 'B:sale/orderState:1', '{"target":{"states":{"add":["signed"]}}}');
+VALUES('B:sale/orderSign:1', 'B:sale/orderState:1', '{"target":{"state_add":["signed"]}}');
 
