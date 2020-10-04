@@ -33,7 +33,7 @@ VALUES('B', 'sale/item/money/tag_second', 'time range for second' , 1, '', '', '
 
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/item/money:1', 'B:sale/item/money/tag_second:1', '{"target":{"append_para":[0],"context_name":"(item)"},"executor":{"protocol":"builtIn","url":"time_range"}}');
+VALUES('B:sale/item/money:1', 'B:sale/item/money/tag_second:1', '{"target":{"append_para":[0],"dynamic_para":"(item)"},"executor":{"protocol":"builtIn","url":"time_range"}}');
 
 -- second statistics ---------------------------------------------
 
@@ -53,7 +53,7 @@ VALUES('B', 'sale/money/second_tag', 'top of money task' , 1, '', '', '{"cache_s
 
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/item/money/second:1', 'B:sale/money/second_tag:1', '{"target":{"append_para":[0,1],"context_name":"(time)"}}');
+VALUES('B:sale/item/money/second:1', 'B:sale/money/second_tag:1', '{"target":{"append_para":[0,1],"dynamic_para":"(time)"}}');
 
 INSERT INTO meta
 (meta_type, meta_key, description, version, states, fields, config)

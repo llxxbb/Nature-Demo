@@ -15,7 +15,7 @@ VALUES('B', 'sale/money/second_tag', 'top of money task' , 1, '', '', '{"cache_s
 
 INSERT INTO relation
 (from_meta, to_meta, settings)
-VALUES('B:sale/item/money/second:1', 'B:sale/money/second_tag:1', '{"target":{"append_para":[0,1],"context_name":"(time)"}}');
+VALUES('B:sale/item/money/second:1', 'B:sale/money/second_tag:1', '{"target":{"append_para":[0,1],"dynamic_para":"(time)"}}');
 ```
 
 配置里没有新鲜元素，只是依据秒销售额数据生成了新的秒统计任务。请注意，我们之前也定义过一个秒统计任务：`sale/item/money/tag_second` ，两者的区别在于：先前的是针对给定商品的，而这里是针对所有商品的。
