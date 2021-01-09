@@ -1,4 +1,4 @@
-use nature::common::Instance;
+use nature::domain::Instance;
 
 use crate::{loop_get_by_key, send_instance};
 

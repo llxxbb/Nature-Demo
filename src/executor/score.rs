@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
-use nature::common::{Instance, NatureError, Result, SEPARATOR_INS_PARA};
+use nature::domain::{Instance, NatureError, Result};
+use nature::util::*;
 
 #[no_mangle]
 #[allow(unused_attributes)]

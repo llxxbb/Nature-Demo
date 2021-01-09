@@ -1,6 +1,6 @@
 use chrono::Local;
 
-use nature::common::{ConverterParameter, ConverterReturned, Instance};
+use nature::domain::{ConverterParameter, ConverterReturned, Instance};
 
 use crate::entry::{Order, OrderAccount, OrderAccountReason, Payment};
 

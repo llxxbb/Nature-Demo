@@ -1,6 +1,5 @@
-use nature::common::Instance;
-
 use crate::{send_instance, wait_for_order_state};
+use nature::domain::Instance;
 
 pub fn outbound(order_id: u64) {
     // for package

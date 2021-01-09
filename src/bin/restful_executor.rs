@@ -14,7 +14,7 @@ use dotenv::dotenv;
 use reqwest::blocking::Client as BClient;
 use reqwest::Client;
 
-use nature::common::{ConverterParameter, ConverterReturned, DelayedInstances, Instance, KeyCondition, Result};
+use nature::domain::*;
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
@@ -90,7 +90,7 @@ mod reqwest_test {
     use reqwest::{Client, Error};
     use tokio::runtime::Runtime;
 
-    use nature::common::{ConverterParameter, ConverterReturned};
+    use nature::domain::{ConverterParameter, ConverterReturned};
 
     #[test]
     fn reqwest_test() {
