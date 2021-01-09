@@ -39,7 +39,7 @@ DATABASE_URL=mysql://root@localhost/nature
 
 NATURE_SERVER_ADDRESS=http://localhost:8080/redo_task
 
-SERVER_PORT=8080
+SERVER_PORT_NATURE=8080
 ```
 ## 创建数据库
 
